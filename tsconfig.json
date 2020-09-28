@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "ES6",
+        "moduleResolution": "node",
+        "strict": true,
+        "declaration": true,
+        "outDir": "./lib"
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules/**/*"]
+}
