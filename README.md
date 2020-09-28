@@ -1,5 +1,7 @@
 # ioBroker.procon-ip
 
+![CI Workflow](https://github.com/ylabonte/procon-ip/workflows/CI%20Workflow/badge.svg)
+<!--
 [![NPM version](http://img.shields.io/npm/v/procon-ip.svg)](https://www.npmjs.com/package/iobroker.procon-ip)
 [![Downloads](https://img.shields.io/npm/dm/procon-ip.svg)](https://www.npmjs.com/package/iobroker.procon-ip)
 [![Dependency Status](https://img.shields.io/david/ylabonte/procon-ip.svg)](https://david-dm.org/ylabonte/procon-ip)
@@ -7,7 +9,7 @@
 [![Travis-CI](http://img.shields.io/travis/ylabonte/procon-ip/master.svg)](https://travis-ci.org/ylabonte/procon-ip)
 
 [![NPM](https://nodei.co/npm/procon-ip.png?downloads=true)](https://nodei.co/npm/procon-ip/)
-
+-->
 
 ## What's this library for?
 The name of this library refers to the [ProCon.IP pool controller](#what-is-procon-ip). 
@@ -15,8 +17,8 @@ Documentation might follow. Until this please take a look at the sources. I
 tried to keep the interfaces readable. An IDE with proper auto-completion should
 help understand and use the library without further documentation.
 
-For explicit questions, feel free to ask. You can just use a ticket for this, so
-must only be answered once and I know where to focus on.
+Feel free to ask questions by using githubs issues system, so others can take 
+part and are able to find the answer if they have a similar question. Thanks! :)
 
 
 <a name="what-is-procon-ip"></a>
@@ -47,8 +49,8 @@ haven't found an english documentation/information so far):
 
 **Just to be clear: I have nothing to do with the development, sellings,
 marketing or support of the pool controller unit itself. I just developed a 
-solution to integrate such with [ioBroker](/ylabonte/ioBroker.procon-ip) and now 
-decoupled the library part to make it cleaner.**
+solution to integrate such with [ioBroker](https://github.com/ylabonte/ioBroker.procon-ip)
+and now decoupled the library part to make it cleaner.**
 
 
 ## License
