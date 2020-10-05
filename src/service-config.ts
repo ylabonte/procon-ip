@@ -1,6 +1,6 @@
 export interface ServiceConfig {
-  requestHeaders: { [key: string]: string };
-  baseUrl: string;
+  requestHeaders?: { [key: string]: string };
+  controllerUrl: string;
   username: string;
   password: string;
   basicAuth: boolean;
