@@ -17,7 +17,7 @@ export abstract class AbstractService {
   }
 
   public get baseUrl(): string {
-    return this._config.baseUrl;
+    return this._config.controllerUrl;
   }
 
   // public get requestHeaders(): object {
