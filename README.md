@@ -1,8 +1,9 @@
 # procon-ip
-[![NPM](https://nodei.co/npm/@ylabonte/procon-ip.png?mini=true)](https://npmjs.org/package/@ylabonte/procon-ip)
+[![NPM](https://nodei.co/npm/procon-ip.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/procon-ip/)
+<!-- [![NPM](https://nodei.co/npm-dl/procon-ip.png)](https://nodei.co/npm/procon-ip/) -->
 
 Package info  
-[![npm version](https://badge.fury.io/js/%40ylabonte%2Fprocon-ip.svg)](https://badge.fury.io/js/%40ylabonte%2Fprocon-ip)
+[![npm version](https://badge.fury.io/js/procon-ip.svg)](https://badge.fury.io/js/procon-ip)
 [![Dependency Status](https://img.shields.io/david/ylabonte/procon-ip.svg)](https://david-dm.org/ylabonte/procon-ip)
 [![Known Vulnerabilities](https://snyk.io/test/github/ylabonte/procon-ip/badge.svg)](https://snyk.io/test/github/ylabonte/procon-ip)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ylabonte/procon-ip)
@@ -12,11 +13,7 @@ Automation
 ![CI Workflow](https://github.com/ylabonte/procon-ip/workflows/CI%20Workflow/badge.svg)
 ![CodeQL](https://github.com/ylabonte/procon-ip/workflows/CodeQL/badge.svg)
 ![Package release](https://github.com/ylabonte/procon-ip/workflows/Package%20release/badge.svg)
-  
-<!-- 
-[![NPM](https://nodei.co/npm/@ylabonte/procon-ip.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/@ylabonte/procon-ip/)
-[![NPM](https://nodei.co/npm-dl/@ylabonte/procon-ip.png)](https://nodei.co/npm/@ylabonte/procon-ip/)
--->
+
 
 ## What's this library for?
 The name of this library refers to the [ProCon.IP pool controller](#what-is-procon-ip). 
