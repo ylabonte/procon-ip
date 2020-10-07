@@ -1,6 +1,11 @@
 name: CI Workflow
-on: [push, pull_request]
-
+on: 
+  push:
+    branches:
+        - master
+        - develop
+        - "feature/*"
+  pull_request:
 
 jobs:
   build:
