@@ -1,7 +1,7 @@
-name: Github Package release
+name: Github Package Release
 on:
   workflow_run:
-      workflows: ["Package release"]
+      workflows: ["Package Release"]
       types:
           - completed
 jobs:
