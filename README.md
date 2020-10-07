@@ -12,7 +12,8 @@ Package info
 Automation  
 ![CI Workflow](https://github.com/ylabonte/procon-ip/workflows/CI%20Workflow/badge.svg)
 ![CodeQL](https://github.com/ylabonte/procon-ip/workflows/CodeQL/badge.svg)
-![Package release](https://github.com/ylabonte/procon-ip/workflows/Package%20release/badge.svg)
+![Package release](https://github.com/ylabonte/procon-ip/workflows/Package%20Release/badge.svg)
+![Github Package release](https://github.com/ylabonte/procon-ip/workflows/Github%20Package%20Release/badge.svg)
 
 
 ## What's this library for?
