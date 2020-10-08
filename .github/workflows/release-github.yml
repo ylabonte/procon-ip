@@ -13,7 +13,10 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-        registry-url: 'https://npm.pkg.github.com/ylabonte'
+        registry-url: 'https://npm.pkg.github.com'
+    # Rewrite package.json to have the package name scoped for publishing to the github repo.
+    - run: |
+        sed -i .orig "s/\(\"name\": \"\)\(procon-ip\"\)/\1@ylabonte\/\2/" package.json
     - run: npm install
     # Publish to npm
     - run: npm publish
