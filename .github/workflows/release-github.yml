@@ -1,7 +1,7 @@
 name: Github Package Release
 on:
   workflow_run:
-      workflows: ["Package Release"]
+      workflows: ["NPM Package Release"]
       types:
           - completed
 jobs:

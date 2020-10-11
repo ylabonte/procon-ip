@@ -1,4 +1,4 @@
-name: Package Release
+name: NPM Package Release
 on:
   release:
     types: [created]

@@ -4,16 +4,16 @@
 
 Package info  
 [![npm version](https://badge.fury.io/js/procon-ip.svg)](https://badge.fury.io/js/procon-ip)
+![GitHub](https://img.shields.io/github/license/ylabonte/procon-ip)
+![GitHub issues](https://img.shields.io/github/issues-raw/ylabonte/procon-ip)  
 [![Dependency Status](https://img.shields.io/david/ylabonte/procon-ip.svg)](https://david-dm.org/ylabonte/procon-ip)
 [![Known Vulnerabilities](https://snyk.io/test/github/ylabonte/procon-ip/badge.svg)](https://snyk.io/test/github/ylabonte/procon-ip)
-![GitHub issues](https://img.shields.io/github/issues-raw/ylabonte/procon-ip)
-![GitHub](https://img.shields.io/github/license/ylabonte/procon-ip)
-
-Automation  
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ylabonte/procon-ip/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ylabonte/procon-ip/context:javascript)  
 ![CI Workflow](https://github.com/ylabonte/procon-ip/workflows/CI%20Workflow/badge.svg)
 ![CodeQL](https://github.com/ylabonte/procon-ip/workflows/CodeQL/badge.svg)
-![Package release](https://github.com/ylabonte/procon-ip/workflows/Package%20Release/badge.svg)
 ![Github Package release](https://github.com/ylabonte/procon-ip/workflows/Github%20Package%20Release/badge.svg)
+![NPM Package release](https://github.com/ylabonte/procon-ip/workflows/NPM%20Package%20Release/badge.svg)
 
 
 ## What's this library for?
