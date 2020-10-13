@@ -85,6 +85,12 @@
 			<section class="tsd-panel tsd-kind-interface tsd-parent-kind-module">
 				<h3 class="tsd-before-signature">Indexable</h3>
 				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></div>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Configurations might contain any other values/keys, that do not conflict
+						with valid configuration parameters.</p>
+					</div>
+				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
@@ -112,9 +118,14 @@
 					<div class="tsd-signature tsd-kind-icon">basic<wbr>Auth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/service-config.ts#L6">service-config.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/service-config.ts#L31">service-config.ts:31</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Enable HTTP basic auth.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="controllerurl" class="tsd-anchor"></a>
@@ -122,19 +133,32 @@
 					<div class="tsd-signature tsd-kind-icon">controller<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/service-config.ts#L3">service-config.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/service-config.ts#L16">service-config.ts:16</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Controller URL must be a valid URL string with leading protocol scheme
+								(e.g. &#39;http://&#39;) and should point to the ProCon.IP HTTP root. This address
+								will be combined with the endpoint (e.g. <code>&quot;/GetState.csv&quot;</code>) to build the
+							request address. A trailing slash will be added automatically if needed.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="password" class="tsd-anchor"></a>
-					<h3>password</h3>
-					<div class="tsd-signature tsd-kind-icon">password<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> password</h3>
+					<div class="tsd-signature tsd-kind-icon">password<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/service-config.ts#L5">service-config.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/service-config.ts#L26">service-config.ts:26</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>HTTP basic auth pass. Optional.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="requestheaders" class="tsd-anchor"></a>
@@ -142,7 +166,7 @@
 					<div class="tsd-signature tsd-kind-icon">request<wbr>Headers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/service-config.ts#L2">service-config.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/service-config.ts#L9">service-config.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -152,19 +176,29 @@
 					<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/service-config.ts#L7">service-config.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/service-config.ts#L36">service-config.ts:36</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Define request timeout.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="username" class="tsd-anchor"></a>
-					<h3>username</h3>
-					<div class="tsd-signature tsd-kind-icon">username<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> username</h3>
+					<div class="tsd-signature tsd-kind-icon">username<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/service-config.ts#L4">service-config.ts:4</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/service-config.ts#L21">service-config.ts:21</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>HTTP basic auth username. Optional.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>

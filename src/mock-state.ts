@@ -1,3 +1,15 @@
+/**
+ * This file exists for developing purpose only. It contains a CSV format string
+ * (comma seperated values) which once was returned by the `/GetState.csv`
+ * endpoint of the ProCon.IP pool controller.
+ * @packageDocumentation
+ * @deprecated
+ */
+
+ /**
+  * Response payload of the `/GetState.csv` endpoint.
+  * @deprecated
+  */
 export const GETSTATE: string =
   '\n' +
   'SYSINFO,1.7.0,17132,1,65536,99,257,4,4,5\n' +

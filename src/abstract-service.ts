@@ -1,21 +1,84 @@
+/**
+ * This file exports the common basis of the webservice interfaces.
+ * 
+ * This abstract class builds a common basis for the `GetStateService` and 
+ * the `UsrcfgCgiService` classes. These two classes are the actual webservice
+ * interfaces to the ProCon.IP pool controller.
+ * @packageDocumentation
+ */
+
 import { AxiosRequestConfig, Method } from 'axios';
 import { Log } from './logger';
 import { ServiceConfig } from './service-config';
 
+/**
+ * Abstract service implementing the common base setup for the _axios_ requests
+ * of the specific service implementations.
+ */
 export abstract class AbstractService {
   protected _config: ServiceConfig;
+
+  /**
+   * Specific webservice endpoint.
+   * 
+   * An _absolute URL_, which means a path with leading slash ('/') relative to
+   * the `ServiceConfig.controllerUrl` (ProCon.IP base address).
+   */
   abstract _endpoint: string;
+
+  /**
+   * HTTP request method.
+   * 
+   * Must be one of the valid HTTP request methods like _GET_, _POST_, etc.
+   * See _axios/Method_ type:
+   * ```
+   * export type Method =
+   *   | 'get' | 'GET'
+   *   | 'delete' | 'DELETE'
+   *   | 'head' | 'HEAD'
+   *   | 'options' | 'OPTIONS'
+   *   | 'post' | 'POST'
+   *   | 'put' | 'PUT'
+   *   | 'patch' | 'PATCH'
+   *   | 'purge' | 'PURGE'
+   *   | 'link' | 'LINK'
+   *   | 'unlink' | 'UNLINK'
+   * ```
+   */
   abstract _method: Method;
+
+  /**
+   * Custom HTTP headers.
+   * 
+   * Custom headers can be defined in form of a key value pair.
+   * ```
+   * this._requestHeaders["Cache-Control"] = "no-cache";
+   * ```
+   */
   protected _requestHeaders: { [key: string]: string };
 
+  /**
+   * Logger which will be used for all logging events.
+   */
   protected log: Log;
 
+  /**
+   * Constructor.
+   * 
+   * @param config Service config.
+   * @param logger Service logger.
+   */
   protected constructor(config: ServiceConfig, logger: Log) {
     this._requestHeaders = {};
     this._config = config;
     this.log = logger;
   }
 
+  /**
+   * Get the base url.
+   * 
+   * @returns The `ServiceConfig.controllerUrl` string.
+   */
   public get baseUrl(): string {
     return this._config.controllerUrl;
   }
@@ -29,7 +92,10 @@ export abstract class AbstractService {
   // }
 
   /**
+   * Get the webservice url (joined base url and endpoint).
+   * 
    * @throws TypeError [ERR_INVALID_URL]: Invalid URL
+   * @returns URL string (joined base url and endpoint).
    */
   public get url(): string {
     try {
@@ -51,6 +117,9 @@ export abstract class AbstractService {
   //     return atob(`${this._username}:${this._password}`);
   // }
 
+  /**
+   * Get an AxiosRequestConfig object.
+   */
   protected get axiosRequestConfig(): AxiosRequestConfig {
     const config: AxiosRequestConfig = {
       // baseURL: this._baseUrl,
@@ -85,8 +154,8 @@ export abstract class AbstractService {
 
     if (this._config.basicAuth) {
       config.auth = {
-        username: this._config.username,
-        password: this._config.password,
+        username: this._config.username || "",
+        password: this._config.password || "",
       };
     }
 

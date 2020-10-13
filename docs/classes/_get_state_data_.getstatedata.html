@@ -69,6 +69,15 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This class is parser and access helper at once with integrated object
+							representation for the response CSV of the <a href="_get_state_service_.getstateservice.html"><code>GetStateService</code></a>.
+						(<em>This might be changed/split in seperate classes in a future refactoring</em>)</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -80,6 +89,11 @@
 			<section class="tsd-panel tsd-kind-class tsd-parent-kind-module">
 				<h3 class="tsd-before-signature">Indexable</h3>
 				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></div>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Extend the data object instances as you like.</p>
+					</div>
+				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
@@ -142,13 +156,24 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L62">get-state-data.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L198">get-state-data.ts:198</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Initialize new <a href="_get_state_data_.getstatedata.html"><code>GetStateData</code></a> instance.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> rawData: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Plain response string of the <a href="_get_state_service_.getstateservice.html"><code>GetStateService</code></a> or the
+											<code>/GetState.csv</code> API endpoint.</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_get_state_data_.getstatedata.html" class="tsd-signature-type">GetStateData</a></h4>
@@ -164,12 +189,13 @@
 					<div class="tsd-signature tsd-kind-icon">active<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L43">get-state-data.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L123">get-state-data.ts:123</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Indices of all objects not labeled with &#39;n.a.&#39;</p>
+							<p>Lists all indices of objects that are not labeled with &#39;n.a.&#39; and therefore
+							considered to be active.</p>
 						</div>
 					</div>
 				</section>
@@ -179,13 +205,14 @@
 					<div class="tsd-signature tsd-kind-icon">objects<span class="tsd-signature-symbol">:</span> <a href="_get_state_data_object_.getstatedataobject.html" class="tsd-signature-type">GetStateDataObject</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L38">get-state-data.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L117">get-state-data.ts:117</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Actual data objects</p>
+							<p>Actual data objects for further processing.</p>
 						</div>
+						<p>Ordered by CSV column position starting at 0.</p>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
@@ -194,13 +221,24 @@
 					<div class="tsd-signature tsd-kind-icon">parsed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L28">get-state-data.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L102">get-state-data.ts:102</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Csv input parsed to array</p>
+							<p>CSV input parsed to a simple 2-dimensional array.</p>
 						</div>
+						<p>Structure:</p>
+						<pre><code>[
+  <span class="hljs-number">0</span>: [ <span class="hljs-comment">// line one</span>
+    <span class="hljs-number">0</span>: <span class="hljs-comment">// line one, column one</span>
+    <span class="hljs-number">1</span>: <span class="hljs-comment">// line one, column two</span>
+  ],
+  <span class="hljs-number">1</span>: [ <span class="hljs-comment">// line two</span>
+    <span class="hljs-number">0</span>: <span class="hljs-comment">// line two, column one</span>
+    ...
+  ...
+]</code></pre>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
@@ -209,12 +247,12 @@
 					<div class="tsd-signature tsd-kind-icon">raw<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L23">get-state-data.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L83">get-state-data.ts:83</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Raw input string</p>
+							<p>Raw CSV input string (retrieved by the <a href="_get_state_service_.getstateservice.html"><code>GetStateService</code></a>).</p>
 						</div>
 					</div>
 				</section>
@@ -224,13 +262,15 @@
 					<div class="tsd-signature tsd-kind-icon">sys<wbr>Info<span class="tsd-signature-symbol">:</span> <a href="_get_state_data_sys_info_.getstatedatasysinfo.html" class="tsd-signature-type">GetStateDataSysInfo</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L33">get-state-data.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L110">get-state-data.ts:110</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>SysInfo column data</p>
+							<p>SysInfo column data.</p>
 						</div>
+						<p>The first line of the csv has no relation to the rest of the CSV. So it
+						is stored seperately in here.</p>
 					</div>
 				</section>
 			</section>
@@ -246,7 +286,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L186">get-state-data.ts:186</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L340">get-state-data.ts:340</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -263,7 +303,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L199">get-state-data.ts:199</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L353">get-state-data.ts:353</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -286,16 +326,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L85">get-state-data.ts:85</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L233">get-state-data.ts:233</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the category of a data item by its column index.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>index: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Column index</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>Category name or string <code>none</code> if no category could be identified.</p>
 						</li>
 					</ul>
 				</section>
@@ -309,7 +358,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L121">get-state-data.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L275">get-state-data.ts:275</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_relay_data_object_.relaydataobject.html" class="tsd-signature-type">RelayDataObject</a></h4>
@@ -326,7 +375,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L109">get-state-data.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L263">get-state-data.ts:263</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -343,7 +392,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L101">get-state-data.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L255">get-state-data.ts:255</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -366,9 +415,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L95">get-state-data.ts:95</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L249">get-state-data.ts:249</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -376,6 +427,8 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> activeOnly: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_get_state_data_object_.getstatedataobject.html" class="tsd-signature-type">GetStateDataObject</a><span class="tsd-signature-symbol">[]</span></h4>
@@ -392,7 +445,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L105">get-state-data.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L259">get-state-data.ts:259</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -418,7 +471,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L125">get-state-data.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L279">get-state-data.ts:279</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_relay_data_object_.relaydataobject.html" class="tsd-signature-type">RelayDataObject</a></h4>
@@ -435,7 +488,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L113">get-state-data.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L267">get-state-data.ts:267</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -452,7 +505,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L129">get-state-data.ts:129</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L283">get-state-data.ts:283</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_relay_data_object_.relaydataobject.html" class="tsd-signature-type">RelayDataObject</a></h4>
@@ -469,7 +522,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L117">get-state-data.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L271">get-state-data.ts:271</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -486,7 +539,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L133">get-state-data.ts:133</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L287">get-state-data.ts:287</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -509,7 +562,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L141">get-state-data.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L295">get-state-data.ts:295</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -532,7 +585,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L154">get-state-data.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L308">get-state-data.ts:308</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -544,20 +597,23 @@
 				<h2>Object literals</h2>
 				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-class">
 					<a name="categories" class="tsd-anchor"></a>
-					<h3>categories</h3>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> categories</h3>
 					<div class="tsd-signature tsd-kind-icon">categories<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L52">get-state-data.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L135">get-state-data.ts:135</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Data categories as array of objects.</p>
 						</div>
-						<p>Keys: Name of the category
-							Values: List of csv columns (type: numeric or numeric[2]) for that category. Since we are operating on array,
-						columns are counted from 0. Arrays are expected to have two numeric values defining a column slice.</p>
+						<p>Category names as keys and arrays as values. These arrays list columns
+							(referencing the <a href="_get_state_data_.getstatedata.html#parsed"><code>parsed</code></a> CSV) which fall into this category.
+							The array values might contain simple listings of the column positions or
+							another array containing the starting and ending index of a slice/range.
+							Counting columns starts at 0. The value is of type <code>any</code> to simplify
+						dynamic iteration without linting or parsing errors.</p>
 					</div>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="categories.analog" class="tsd-anchor"></a>
@@ -565,9 +621,15 @@
 						<div class="tsd-signature tsd-kind-icon">analog<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [[1, 5]]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L54">get-state-data.ts:54</a></li>
+								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L148">get-state-data.ts:148</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Category for analog channels.</p>
+							</div>
+							<p><em>Read from <strong>column 1 to 5</strong> of the CSV.</em></p>
+						</div>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="categories.canister" class="tsd-anchor"></a>
@@ -575,9 +637,15 @@
 						<div class="tsd-signature tsd-kind-icon">canister<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [[36, 38]]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L60">get-state-data.ts:60</a></li>
+								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L190">get-state-data.ts:190</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Category for canister values.</p>
+							</div>
+							<p><em>Read from <strong>column 36 to 38</strong> of the CSV.</em></p>
+						</div>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="categories.canisterconsumptions" class="tsd-anchor"></a>
@@ -585,9 +653,15 @@
 						<div class="tsd-signature tsd-kind-icon">canister<wbr>Consumptions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [[39, 41]]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L61">get-state-data.ts:61</a></li>
+								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L197">get-state-data.ts:197</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Category for canister consumptions.</p>
+							</div>
+							<p><em>Read from <strong>column 39 to 41</strong> of the CSV.</em></p>
+						</div>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="categories.digitalinput" class="tsd-anchor"></a>
@@ -595,9 +669,15 @@
 						<div class="tsd-signature tsd-kind-icon">digital<wbr>Input<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [[24, 27]]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L58">get-state-data.ts:58</a></li>
+								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L176">get-state-data.ts:176</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Category for digital input values.</p>
+							</div>
+							<p><em>Read from <strong>column 24 to 27</strong> of the CSV.</em></p>
+						</div>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="categories.electrodes" class="tsd-anchor"></a>
@@ -605,9 +685,15 @@
 						<div class="tsd-signature tsd-kind-icon">electrodes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [6, 7]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L55">get-state-data.ts:55</a></li>
+								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L155">get-state-data.ts:155</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Category for electrode readings.</p>
+							</div>
+							<p><em>Read from <strong>columns 6 and 7</strong> of the CSV.</em></p>
+						</div>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="categories.externalrelays" class="tsd-anchor"></a>
@@ -615,9 +701,15 @@
 						<div class="tsd-signature tsd-kind-icon">external<wbr>Relays<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [[28, 35]]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L59">get-state-data.ts:59</a></li>
+								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L183">get-state-data.ts:183</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Category for external relay values.</p>
+							</div>
+							<p><em>Read from <strong>column 28 to 35</strong> of the CSV.</em></p>
+						</div>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="categories.relays" class="tsd-anchor"></a>
@@ -625,9 +717,15 @@
 						<div class="tsd-signature tsd-kind-icon">relays<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [[16, 23]]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L57">get-state-data.ts:57</a></li>
+								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L169">get-state-data.ts:169</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Category for internal relay values.</p>
+							</div>
+							<p><em>Read from <strong>column 16 to 23</strong> of the CSV.</em></p>
+						</div>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="categories.temperatures" class="tsd-anchor"></a>
@@ -635,9 +733,15 @@
 						<div class="tsd-signature tsd-kind-icon">temperatures<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [[8, 15]]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L56">get-state-data.ts:56</a></li>
+								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L162">get-state-data.ts:162</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Category for temperature sensor values.</p>
+							</div>
+							<p><em>Read from <strong>column 8 to 15</strong> of the CSV.</em></p>
+						</div>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="categories.time" class="tsd-anchor"></a>
@@ -645,9 +749,16 @@
 						<div class="tsd-signature tsd-kind-icon">time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [0]</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/get-state-data.ts#L53">get-state-data.ts:53</a></li>
+								<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/get-state-data.ts#L141">get-state-data.ts:141</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Internal time of the ProCon.IP when processing the corresponding request.
+									Hence there is only one item in this category. <em>Read from <strong>column 0</strong>
+								of the CSV.</em></p>
+							</div>
+						</div>
 					</section>
 				</section>
 			</section>

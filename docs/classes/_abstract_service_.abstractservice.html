@@ -69,6 +69,14 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Abstract service implementing the common base setup for the <em>axios</em> requests
+						of the specific service implementations.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -128,16 +136,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/abstract-service.ts#L11">abstract-service.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/abstract-service.ts#L63">abstract-service.ts:63</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Constructor.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>config: <a href="../interfaces/_service_config_.serviceconfig.html" class="tsd-signature-type">ServiceConfig</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Service config.</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>logger: <a href="../interfaces/_logger_.log.html" class="tsd-signature-type">Log</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Service logger.</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_abstract_service_.abstractservice.html" class="tsd-signature-type">AbstractService</a></h4>
@@ -153,7 +176,7 @@
 					<div class="tsd-signature tsd-kind-icon">_config<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_service_config_.serviceconfig.html" class="tsd-signature-type">ServiceConfig</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/abstract-service.ts#L6">abstract-service.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/abstract-service.ts#L19">abstract-service.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -163,9 +186,16 @@
 					<div class="tsd-signature tsd-kind-icon">_endpoint<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/abstract-service.ts#L7">abstract-service.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/abstract-service.ts#L27">abstract-service.ts:27</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Specific webservice endpoint.</p>
+						</div>
+						<p>An <em>absolute URL</em>, which means a path with leading slash (&#39;/&#39;) relative to
+						the <code>ServiceConfig.controllerUrl</code> (ProCon.IP base address).</p>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="_method" class="tsd-anchor"></a>
@@ -173,9 +203,27 @@
 					<div class="tsd-signature tsd-kind-icon">_method<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Method</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/abstract-service.ts#L8">abstract-service.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/abstract-service.ts#L48">abstract-service.ts:48</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>HTTP request method.</p>
+						</div>
+						<p>Must be one of the valid HTTP request methods like <em>GET</em>, <em>POST</em>, etc.
+						See <em>axios/Method</em> type:</p>
+						<pre><code><span class="hljs-builtin-name">export</span><span class="hljs-built_in"> type </span>Method =
+  | <span class="hljs-string">&#x27;get&#x27;</span> | <span class="hljs-string">&#x27;GET&#x27;</span>
+  | <span class="hljs-string">&#x27;delete&#x27;</span> | <span class="hljs-string">&#x27;DELETE&#x27;</span>
+  | <span class="hljs-string">&#x27;head&#x27;</span> | <span class="hljs-string">&#x27;HEAD&#x27;</span>
+  | <span class="hljs-string">&#x27;options&#x27;</span> | <span class="hljs-string">&#x27;OPTIONS&#x27;</span>
+  | <span class="hljs-string">&#x27;post&#x27;</span> | <span class="hljs-string">&#x27;POST&#x27;</span>
+  | <span class="hljs-string">&#x27;put&#x27;</span> | <span class="hljs-string">&#x27;PUT&#x27;</span>
+  | <span class="hljs-string">&#x27;patch&#x27;</span> | <span class="hljs-string">&#x27;PATCH&#x27;</span>
+  | <span class="hljs-string">&#x27;purge&#x27;</span> | <span class="hljs-string">&#x27;PURGE&#x27;</span>
+  | <span class="hljs-string">&#x27;link&#x27;</span> | <span class="hljs-string">&#x27;LINK&#x27;</span>
+  | <span class="hljs-string">&#x27;unlink&#x27;</span> | <span class="hljs-string">&#x27;UNLINK&#x27;</span></code></pre>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_requestheaders" class="tsd-anchor"></a>
@@ -183,9 +231,16 @@
 					<div class="tsd-signature tsd-kind-icon">_request<wbr>Headers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/abstract-service.ts#L9">abstract-service.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/abstract-service.ts#L58">abstract-service.ts:58</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Custom HTTP headers.</p>
+						</div>
+						<p>Custom headers can be defined in form of a key value pair.</p>
+						<pre><code><span class="hljs-keyword">this</span>._requestHeaders[<span class="hljs-string">&quot;Cache-Control&quot;</span>] = <span class="hljs-string">&quot;no-cache&quot;</span>;</code></pre>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
@@ -201,9 +256,14 @@
 					<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_logger_.log.html" class="tsd-signature-type">Log</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/abstract-service.ts#L11">abstract-service.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/abstract-service.ts#L63">abstract-service.ts:63</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Logger which will be used for all logging events.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -218,9 +278,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/abstract-service.ts#L54">abstract-service.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/abstract-service.ts#L123">abstract-service.ts:123</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get an AxiosRequestConfig object.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AxiosRequestConfig</span></h4>
 						</li>
 					</ul>
@@ -235,10 +300,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/abstract-service.ts#L19">abstract-service.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/abstract-service.ts#L82">abstract-service.ts:82</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the base url.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>The <code>ServiceConfig.controllerUrl</code> string.</p>
 						</li>
 					</ul>
 				</section>
@@ -252,10 +323,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8fa1781/src/abstract-service.ts#L34">abstract-service.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/92e4c94/src/abstract-service.ts#L100">abstract-service.ts:100</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the webservice url (joined base url and endpoint).</p>
+								</div>
 								<dl class="tsd-comment-tags">
 									<dt>throws</dt>
 									<dd><p>TypeError [ERR_INVALID_URL]: Invalid URL</p>
@@ -263,6 +337,7 @@
 								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<p>URL string (joined base url and endpoint).</p>
 						</li>
 					</ul>
 				</section>
