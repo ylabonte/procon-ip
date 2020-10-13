@@ -1,4 +1,5 @@
 # procon-ip
+
 [![NPM](https://nodei.co/npm/procon-ip.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/procon-ip/)
 <!-- [![NPM](https://nodei.co/npm-dl/procon-ip.png)](https://nodei.co/npm/procon-ip/) -->
 
@@ -15,20 +16,26 @@ Package info
 ![Github Package release](https://github.com/ylabonte/procon-ip/workflows/Github%20Package%20Release/badge.svg)
 ![NPM Package release](https://github.com/ylabonte/procon-ip/workflows/NPM%20Package%20Release/badge.svg)
 
+## Overview
 
-## What's this library for?
-The name of this library refers to the [ProCon.IP pool controller](#what-is-procon-ip). 
+* [Introduction (_What is this library for?_)](#introduction)
+* [A brief description of the ProCon.IP pool controller](#a-brief-description-of-the-proconip-pool-controller)
+* [API documentation](https://ylabonte.github.io/procon-ip/)
+
+---
+
+## Introduction
+
+The name of this library refers to the [ProCon.IP pool controller](#what-is-procon-ip).
 Documentation might follow. Until this please take a look at the sources. I
 tried to keep the interfaces readable. An IDE with proper auto-completion should
 help understand and use the library without further documentation.
 
-Feel free to ask questions by using githubs issues system, so others can take 
+Feel free to ask questions by using githubs issues system, so others can take
 part and are able to find the answer if they have a similar question. Thanks! :)
 
+## A brief description of the ProCon.IP pool controller
 
-<a name="what-is-procon-ip"></a>
-
-## What is the ProCon.IP pool controller?
 ![Picture from pooldigital.de](https://www.pooldigital.de/shop/media/image/66/47/a5/ProConIP1_720x600.png)
 
 The ProCon.IP pool controller is a low budget network attached control unit for
@@ -49,6 +56,7 @@ switching the relays).
 
 For more information see the following link (sorry it's only in german;
 haven't found an english documentation/information so far):
+
 * [pooldigital.de webshop](https://www.pooldigital.de/shop/poolsteuerungen/procon.ip/35/procon.ip-webbasierte-poolsteuerung-/-dosieranlage)
 * [pooldigital.de forum](http://forum.pooldigital.de/)
 
