@@ -49,7 +49,7 @@ export interface Log {
  * This logger uses the `console.log` method and simply prepends a timestamp
  * plus the used log level in uppercase. You can write your own custom logger 
  * or pass any other (e.g. ioBroker has a suitable logger on board), that 
- * matches the `Log` interface.
+ * matches the [[`Log`]] interface.
  */
 export class Logger implements Log {
   /**

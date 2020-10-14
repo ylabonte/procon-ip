@@ -1,9 +1,9 @@
 /**
  * This file exports the common basis of the webservice interfaces.
  * 
- * This abstract class builds a common basis for the `GetStateService` and 
- * the `UsrcfgCgiService` classes. These two classes are the actual webservice
- * interfaces to the ProCon.IP pool controller.
+ * This abstract class builds a common basis for the [[`GetStateService`]] and 
+ * the [[`UsrcfgCgiService`]] classes. These two classes are the actual
+ * webservice interfaces to the ProCon.IP pool controller.
  * @packageDocumentation
  */
 
@@ -22,7 +22,7 @@ export abstract class AbstractService {
    * Specific webservice endpoint.
    * 
    * An _absolute URL_, which means a path with leading slash ('/') relative to
-   * the `ServiceConfig.controllerUrl` (ProCon.IP base address).
+   * the [[`ServiceConfig.controllerUrl`]] (ProCon.IP base address).
    */
   abstract _endpoint: string;
 
@@ -30,7 +30,7 @@ export abstract class AbstractService {
    * HTTP request method.
    * 
    * Must be one of the valid HTTP request methods like _GET_, _POST_, etc.
-   * See _axios/Method_ type:
+   * See `axios/Method` type:
    * ```
    * export type Method =
    *   | 'get' | 'GET'
@@ -77,7 +77,7 @@ export abstract class AbstractService {
   /**
    * Get the base url.
    * 
-   * @returns The `ServiceConfig.controllerUrl` string.
+   * @returns The [[`ServiceConfig.controllerUrl`]] string.
    */
   public get baseUrl(): string {
     return this._config.controllerUrl;
@@ -118,7 +118,7 @@ export abstract class AbstractService {
   // }
 
   /**
-   * Get an AxiosRequestConfig object.
+   * Get an `axios/AxiosRequestConfig` object.
    */
   protected get axiosRequestConfig(): AxiosRequestConfig {
     const config: AxiosRequestConfig = {

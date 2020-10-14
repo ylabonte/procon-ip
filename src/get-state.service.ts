@@ -1,6 +1,6 @@
 /**
- * This file exports the `GetStateService` as central status update service and
- * the corresponding `GetStateServiceConfig`.
+ * This file exports the [[`GetStateService`]] as central status update service
+ * and the corresponding [[`GetStateServiceConfig`]].
  * @packageDocumentation
  */
 
@@ -11,7 +11,7 @@ import { Log } from './logger';
 import { ServiceConfig } from './service-config';
 
 /**
- * Extend common `ServiceConfig` with special parameters that only apply to
+ * Extend common [[`ServiceConfig`]] with special parameters that only apply to
  * the polling characteristics of this service.
  */
 export interface GetStateServiceConfig extends ServiceConfig {
@@ -27,13 +27,14 @@ export interface GetStateServiceConfig extends ServiceConfig {
 }
 
 /**
- * The `GetStateService` implements the `AbstractService` for 
+ * The [[`GetStateService`]] implements the [[`AbstractService`]] for the 
+ * `/GetState.csv` endpoint.
  */
 export class GetStateService extends AbstractService {
   /**
    * Specific service endpoint.
    * 
-   * A path relative to the `ServiceConfig.controllerUrl`.
+   * A path relative to the [[`ServiceConfig.controllerUrl`]].
    */
   public _endpoint = '/GetState.csv';
 
@@ -85,7 +86,7 @@ export class GetStateService extends AbstractService {
   private _recentError: any;
 
   /**
-   * Initialize a new `GetStateService`.
+   * Initialize a new [[`GetStateService`]].
    * 
    * @param config Service configuration.
    * @param logger Service logger.
@@ -147,8 +148,8 @@ export class GetStateService extends AbstractService {
   /**
    * Recursive wrapper for the polling mechanism. The next request/interval 
    * starts after the preceding one has ended. That means a big timeout 
-   * (`GetStateServiceConfig.timeout`) could cause an actual higher update
-   * interval (`GetStateServiceConfig.updateInterval`).
+   * ([[`GetStateServiceConfig.timeout`]]) could cause an actual higher update
+   * interval ([[`GetStateServiceConfig.updateInterval`]]).
    */
   public autoUpdate(): void {
     this.update();
@@ -164,7 +165,7 @@ export class GetStateService extends AbstractService {
 
   /**
    * Update data. This method will be triggered periodically once the service
-   * has been started (`this.start((data) => {...})`).
+   * has been started (see [[`GetStateService.start`]]).
    */
   public update(): void {
     this.getData().then(

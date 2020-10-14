@@ -241,10 +241,10 @@ export class GetStateData {
   }
 
   /**
+   * Get [[`GetStateDataObject`]] objects by index.
    * 
-   * 
-   * @param indices 
-   * @param activeOnly 
+   * @param indices An array of object indices specifying the return objects.
+   * @param activeOnly Optionally filter for active objects only.
    */
   public getDataObjects(indices: number[], activeOnly = false): GetStateDataObject[] {
     return activeOnly
@@ -252,38 +252,70 @@ export class GetStateData {
       : this.objects.filter((obj, idx) => indices.indexOf(idx) >= 0);
   }
 
+  /**
+   * Get a single [[`GetStateDataObject`]] by id aka column index.
+   * 
+   * @param id Object column index.
+   */
   public getDataObject(id: number): GetStateDataObject {
     return this.objects[id] ? this.objects[id] : new GetStateDataObject(id, '', '', '', '', '');
   }
 
+  /**
+   * Get all data objects of a given category.
+   * 
+   * @param category A valid category string (see [[`GetStateCategory`]])
+   * @param activeOnly Optionally filter for active objects only.
+   */
   public getDataObjectsByCategory(category: string, activeOnly = false): GetStateDataObject[] {
     return this.getDataObjects(this.categories[category as GetStateCategory], activeOnly);
   }
 
+  /**
+   * Get the object id aka column index of the chlorine dosage control relay.
+   */
   public getChlorineDosageControlId(): number {
     return Math.min(...this.categories.relays) + Number(this.sysInfo.chlorineDosageRelais);
   }
 
+  /**
+   * Get the object id aka column index of the pH minus dosage control relay.
+   */
   public getPhMinusDosageControlId(): number {
     return Math.min(...this.categories.relays) + Number(this.sysInfo.phMinusDosageRelais);
   }
 
+  /**
+   * Get the object id aka column index of the pH plus dosage control relay.
+   */
   public getPhPlusDosageControlId(): number {
     return Math.min(...this.categories.relays) + Number(this.sysInfo.phPlusDosageRelais);
   }
 
+  /**
+   * Get the chlorine dosage control [[`RelayDataObject`]].
+   */
   public getChlorineDosageControl(): RelayDataObject {
     return new RelayDataObject(this.getDataObject(this.getChlorineDosageControlId()));
   }
 
+  /**
+   * Get the pH- dosage control [[`RelayDataObject`]].
+   */
   public getPhMinusDosageControl(): RelayDataObject {
     return new RelayDataObject(this.getDataObject(this.getPhMinusDosageControlId()));
   }
 
+  /**
+   * Get the pH+ dosage control [[`RelayDataObject`]].
+   */
   public getPhPlusDosageControl(): RelayDataObject {
     return new RelayDataObject(this.getDataObject(this.getPhPlusDosageControlId()));
   }
 
+  /**
+   * Check whether the given id refers to a dosage control [[`RelayDataObject`]].
+   */
   public isDosageControl(id: number): boolean {
     return (
       [this.getChlorineDosageControlId(), this.getPhMinusDosageControlId(), this.getPhPlusDosageControlId()].indexOf(
@@ -292,6 +324,12 @@ export class GetStateData {
     );
   }
 
+  /**
+   * Parse the CSV string into a 2-dimensional array structure and into
+   * [[`GetStateDataObject`]] and [[`RelayDataObject`]] objects.
+   * 
+   * @param csv Raw CSV input string (response of the `/GetState.csv` endpoint)
+   */
   public parseCsv(csv: string): void {
     // Save raw input string.
     this.raw = csv;
@@ -305,6 +343,9 @@ export class GetStateData {
     this.resolveObjects();
   }
 
+  /**
+   * @internal
+   */
   private resolveObjects(): void {
     // Iterate data columns.
     this.active.length = 0;
@@ -337,6 +378,9 @@ export class GetStateData {
     this.categorize();
   }
 
+  /**
+   * @internal
+   */
   private categorize(): void {
     Object.keys(this.categories).forEach((category) => {
       let catId = 1;
@@ -350,6 +394,10 @@ export class GetStateData {
     });
   }
 
+  /**
+   * @param input 
+   * @internal
+   */
   private expandSlice(input: number[][]): number[] {
     const output = new Array<number>();
     input.forEach((def) => {
