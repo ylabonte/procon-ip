@@ -69,6 +69,14 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The <a href="_relay_data_interpreter_.relaydatainterpreter.html"><code>RelayDataInterpreter</code></a> is a helper for all the binary operations
+						that are necessary to read and write relay states.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -90,7 +98,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_relay_data_interpreter_.relaydatainterpreter.html#bytestate" class="tsd-kind-icon">byte<wbr>State</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_relay_data_interpreter_.relaydatainterpreter.html#bitstates" class="tsd-kind-icon">bit<wbr>States</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_relay_data_interpreter_.relaydatainterpreter.html#log" class="tsd-kind-icon">log</a></li>
 							</ul>
 						</section>
@@ -122,13 +130,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L22">relay-data-interpreter.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L39">relay-data-interpreter.ts:39</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Initialize a new <a href="_relay_data_interpreter_.relaydatainterpreter.html"><code>RelayDataInterpreter</code></a>.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>logger: <a href="../interfaces/_logger_.log.html" class="tsd-signature-type">Log</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_relay_data_interpreter_.relaydatainterpreter.html" class="tsd-signature-type">RelayDataInterpreter</a></h4>
@@ -139,14 +156,20 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="bytestate" class="tsd-anchor"></a>
-					<h3>byte<wbr>State</h3>
-					<div class="tsd-signature tsd-kind-icon">byte<wbr>State<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></div>
+					<a name="bitstates" class="tsd-anchor"></a>
+					<h3>bit<wbr>States</h3>
+					<div class="tsd-signature tsd-kind-icon">bit<wbr>States<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L21">relay-data-interpreter.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L37">relay-data-interpreter.ts:37</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A pair of bit patterns in decimal representation according to the way the
+							<code>/usrcfg.cgi</code> endpoints wants its values.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="log" class="tsd-anchor"></a>
@@ -154,7 +177,7 @@
 					<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_logger_.log.html" class="tsd-signature-type">Log</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L22">relay-data-interpreter.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L39">relay-data-interpreter.ts:39</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -171,13 +194,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L28">relay-data-interpreter.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L63">relay-data-interpreter.ts:63</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Evaluate the current relay states and set the [[<code>byteState</code>]] accordingly.</p>
+								</div>
+								<p>The determined values are used to set the switching parameters. Therefore
+									the input values should be as up-to-date as possible. Otherwise a change
+								on one relay will reset all other relays based on the <code>stateData</code>.</p>
+								<p><strong>Important</strong>
+									This method should be called before using any of the set operations
+								(<a href="_relay_data_interpreter_.relaydatainterpreter.html#seton"><code>setOn</code></a>, <a href="_relay_data_interpreter_.relaydatainterpreter.html#setoff"><code>setOff</code></a>, <a href="_relay_data_interpreter_.relaydatainterpreter.html#setauto"><code>setAuto</code></a>).</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>stateData: <a href="_get_state_data_.getstatedata.html" class="tsd-signature-type">GetStateData</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The most recent <a href="_get_state_data_.getstatedata.html"><code>GetStateData</code></a> instance.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_relay_data_interpreter_.relaydatainterpreter.html" class="tsd-signature-type">RelayDataInterpreter</a></h4>
@@ -194,13 +231,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L67">relay-data-interpreter.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L126">relay-data-interpreter.ts:126</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>True if the given relay (<a href="_get_state_data_object_.getstatedataobject.html"><code>GetStateDataObject</code></a>) is currently in auto
+									mode.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>relay: <a href="_get_state_data_object_.getstatedataobject.html" class="tsd-signature-type">GetStateDataObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -217,13 +262,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L61">relay-data-interpreter.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L114">relay-data-interpreter.ts:114</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>True if the given relay (<a href="_get_state_data_object_.getstatedataobject.html"><code>GetStateDataObject</code></a>) is currently not in
+									auto mode.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>relay: <a href="_get_state_data_object_.getstatedataobject.html" class="tsd-signature-type">GetStateDataObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -240,13 +293,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L57">relay-data-interpreter.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L104">relay-data-interpreter.ts:104</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>True if the given relay (<a href="_get_state_data_object_.getstatedataobject.html"><code>GetStateDataObject</code></a>) is currently switched
+									off.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>relay: <a href="_get_state_data_object_.getstatedataobject.html" class="tsd-signature-type">GetStateDataObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -263,13 +324,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L51">relay-data-interpreter.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L92">relay-data-interpreter.ts:92</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>True if the given relay (<a href="_get_state_data_object_.getstatedataobject.html"><code>GetStateDataObject</code></a>) is currently switched
+									on.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>relay: <a href="_get_state_data_object_.getstatedataobject.html" class="tsd-signature-type">GetStateDataObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -286,13 +355,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L93">relay-data-interpreter.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L170">relay-data-interpreter.ts:170</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return the appropriate bit patterns for the <code>/usrcfg.cgi</code> endpoint to
+									switch the given relay (<a href="_get_state_data_object_.getstatedataobject.html"><code>GetStateDataObject</code></a>) into auto mode.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>relay: <a href="_get_state_data_object_.getstatedataobject.html" class="tsd-signature-type">GetStateDataObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></h4>
@@ -309,13 +386,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L82">relay-data-interpreter.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L153">relay-data-interpreter.ts:153</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return the appropriate bit patterns for the <code>/usrcfg.cgi</code> endpoint to
+									switch the given relay (<a href="_get_state_data_object_.getstatedataobject.html"><code>GetStateDataObject</code></a>) off.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>relay: <a href="_get_state_data_object_.getstatedataobject.html" class="tsd-signature-type">GetStateDataObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></h4>
@@ -332,13 +417,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/858ea07/src/relay-data-interpreter.ts#L71">relay-data-interpreter.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/f3c0f8f/src/relay-data-interpreter.ts#L136">relay-data-interpreter.ts:136</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return the appropriate bit patterns for the <code>/usrcfg.cgi</code> endpoint to
+									switch the given relay (<a href="_get_state_data_object_.getstatedataobject.html"><code>GetStateDataObject</code></a>) on.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>relay: <a href="_get_state_data_object_.getstatedataobject.html" class="tsd-signature-type">GetStateDataObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></h4>
@@ -402,7 +495,7 @@
 								<a href="_relay_data_interpreter_.relaydatainterpreter.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_relay_data_interpreter_.relaydatainterpreter.html#bytestate" class="tsd-kind-icon">byte<wbr>State</a>
+								<a href="_relay_data_interpreter_.relaydatainterpreter.html#bitstates" class="tsd-kind-icon">bit<wbr>States</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_relay_data_interpreter_.relaydatainterpreter.html#log" class="tsd-kind-icon">log</a>
