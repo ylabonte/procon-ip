@@ -4,9 +4,11 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
-
+| 1.x     | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
-Please email to yannic.labonte@gmail.com
+If you identify a vulnerability, please consider that this may affect other
+people/projects as well. This in mind please email me (Yannic Labonte
+<yannic.labonte@gmail.com>) first, so I can react and maybe fix the issue,
+before publishing it to the public (e.g. in a github issue).
