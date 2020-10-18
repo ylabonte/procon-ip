@@ -19,8 +19,9 @@ Package info
 ## Overview
 
 * [Introduction (_What is this library for?_)](#introduction)
-* [A brief description of the ProCon.IP pool controller](#a-brief-description-of-the-proconip-pool-controller)
-* [API documentation](https://ylabonte.github.io/procon-ip/)
+  * [A brief description of the ProCon.IP pool controller](#a-brief-description-of-the-proconip-pool-controller)
+  * [Disclaimer](#disclaimer)
+* [Full API docs](#full-api-docs)
 
 ---
 
@@ -34,7 +35,7 @@ help understand and use the library without further documentation.
 Feel free to ask questions by using githubs issues system, so others can take
 part and are able to find the answer if they have a similar question. Thanks! :)
 
-## A brief description of the ProCon.IP pool controller
+### A brief description of the ProCon.IP pool controller
 
 ![Picture from pooldigital.de](https://www.pooldigital.de/shop/media/image/66/47/a5/ProConIP1_720x600.png)
 
@@ -60,7 +61,14 @@ haven't found an english documentation/information so far):
 * [pooldigital.de webshop](https://www.pooldigital.de/shop/poolsteuerungen/procon.ip/35/procon.ip-webbasierte-poolsteuerung-/-dosieranlage)
 * [pooldigital.de forum](http://forum.pooldigital.de/)
 
+### Disclaimer
+
 **Just to be clear: I have nothing to do with the development, sellings,
-marketing or support of the pool controller unit itself. I just developed a 
+marketing or support of the pool controller unit itself. I just developed a
 solution to integrate such with [ioBroker](https://github.com/ylabonte/ioBroker.procon-ip)
 and now decoupled the library part to make it cleaner.**
+
+## Full API docs
+
+Find the [full API documentation](https://ylabonte.github.io/procon-ip/)
+published via Github Pages.
