@@ -131,7 +131,7 @@ export class GetStateService extends AbstractService {
    * 
    * @param callable 
    */
-  public start(callable: (data: GetStateData) => any): void {
+  public start(callable: (data: GetStateData) => void): void {
     this._updateCallback = callable;
     this.autoUpdate();
   }
