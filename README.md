@@ -19,6 +19,8 @@ Package info
 
 * [Introduction (_What is this library for?_)](#introduction)
 * [Examples](#examples)
+  * [Requesting data](#requesting-data)
+  * [Switching relays](#switching-relays)
 * [Full API docs](#full-api-docs)
 * [A brief description of the ProCon.IP pool controller](#a-brief-description-of-the-proconip-pool-controller)
 * [Disclaimer](#disclaimer)
@@ -36,6 +38,119 @@ Feel free to ask questions by using githubs issues system, so others can take
 part and are able to find the answer if they have a similar question. Thanks! :)
 
 ## Examples
+
+### Requesting data
+
+First you have to initialize the `GetStateService`, which is responsible for
+receiving information from the ProCon.IP controller.
+
+```javascript
+const GetStateService = require('procon-ip/lib/get-state.service').GetStateService
+const GetStateCategory = require('procon-ip/lib/get-state-data').GetStateCategory
+const Logger = require('procon-ip/lib/logger').Logger
+
+const logger = new Logger();
+const config = {
+    "controllerUrl": "http://192.168.2.3", // <-- replace with your pool controller's address
+    "basicAuth": true,
+    "username": "admin",
+    "password": "admin",
+    "updateInterval": 5000,
+    "timeout": 5000,
+    "errorTolerance": 2
+}
+
+const dataSource = new GetStateService(config, logger)
+```
+
+In **TypeScript** you would write the following instead.
+
+```typescript
+import { GetStateService } from 'procon-ip/lib/get-state.service'
+import { GetStateCategory } from 'procon-ip/lib/get-state-data'
+import { Logger } from 'procon-ip/lib/logger'
+
+// Just continue as in the snippet above...
+```
+
+You will have to replace the `controllerUrl` with the one pointing at your
+ProCon.IP device, but except that it should just work.
+
+With the `GetStateService` initialized you can simply request fresh data by
+calling the `update()` or `start()` methods.
+
+```javascript
+// You can easily request fresh data on demand using the update...
+dataSource.update().then((data) => {
+    logger.info(`Uptime: ${data.sysInfo.uptime}`)
+})
+
+// ...or periodically
+dataSource.start((data) => {
+    logger.info("Got new data from pool controller")
+    data.getDataObjectsByCategory(GetStateCategory.ELECTRODES).forEach((dataObject) => {
+        logger.info(`${dataObject.label}: ${dataObject.displayValue}`)
+    })
+})
+```
+
+Be aware of the the asynchronous character of this functions. Executing the
+code above might produce an output like this:
+
+```shell
+(2020-10-31T03:19:36.844Z) INFO: Got new data from pool controller
+(2020-10-31T03:19:36.847Z) INFO: Redox: 927.75 mV
+(2020-10-31T03:19:36.847Z) INFO: pH: 3.43 pH
+(2020-10-31T03:19:36.847Z) INFO: Uptime: 1105292
+(2020-10-31T03:19:36.848Z) INFO: Got new data from pool controller
+(2020-10-31T03:19:36.848Z) INFO: Redox: 927.88 mV
+(2020-10-31T03:19:36.848Z) INFO: pH: 3.43 pH
+```
+
+Actually I got this output during a test run ensuring the exmaple code would
+work.
+
+### Switching relays
+
+```javascript
+const UsrcfgCgiService = require('../lib/usrcfg-cgi.service').UsrcfgCgiService
+const RelayDataInterpreter = require('../lib/relay-data-interpreter').RelayDataInterpreter
+const GetStateCategory = require('../lib/get-state-data').GetStateCategory
+const GetStateService = require('../lib/get-state.service').GetStateService
+const Logger = require('../lib/logger').Logger
+
+const logger = new Logger();
+const config = {
+    "controllerUrl": "http://192.168.2.3",
+    "basicAuth": true,
+    "username": "admin",
+    "password": "admin",
+    "timeout": 5000,
+    "updateInterval": 5000,
+    "errorTolerance": 2
+}
+
+const interpreter = new RelayDataInterpreter(logger)
+const dataSource = new GetStateService(config, logger)
+const relaySwitcher = new UsrcfgCgiService(config, logger, dataSource, interpreter)
+
+dataSource.update().then(data => {
+    // Let's just switch the chlorine dosage relay off to keep it easy...
+    relaySwitcher.setOff(data.getChlorineDosageControl()).then(r => {
+        logger.info(`Chlorine dosage control has been turned off (response code: ${r})`)
+    })
+
+    // ...to switch arbitrary relays you will have to determine the acutal
+    // object id of the relay you want to switch (e.g. by its label):
+    data.getDataObjectsByCategory(GetStateCategory.RELAYS).forEach(relay => {
+        if (relay.label === "Gartenlicht") {
+            relaySwitcher.setAuto(relay).then(r => {
+                logger.info(`${relay.label} has been turned on (response code: ${r})`)
+            })
+        }
+    })
+})
+```
 
 ## Full API docs
 

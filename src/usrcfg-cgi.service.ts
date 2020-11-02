@@ -113,13 +113,15 @@ export class UsrcfgCgiService extends AbstractService {
     for (let errors = 0; errors < 3; errors++) {
       try {
         const returnValue = await this._setState(relay, state);
-        return new Promise<number>(() => returnValue);
+        // return new Promise<number>(() => returnValue);
+        return returnValue;
       } catch (e) {
         this.log.debug(`Error sending relay control command: ${e}`);
       }
     }
 
-    return new Promise<number>(() => -1);
+    // return new Promise<number>(() => -1);
+    return -1;
   }
 
   private async _setState(relay: GetStateDataObject, state: SetStateValue | number): Promise<number> {

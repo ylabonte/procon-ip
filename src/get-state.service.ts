@@ -179,35 +179,36 @@ export class GetStateService extends AbstractService {
    * includes the part responsible for the execution of the 
    * [[`_updateCallback`]] (see [[`start`]]).
    */
-  public update(): void {
-    this.getData().then(
-      (response) => {
-        this._consecutiveFails = 0;
+  public async update(): Promise<GetStateData> {
+    try {
+      const response = await this.getData();
+      this._consecutiveFails = 0;
+      this._recentError = null;
+      this.data = new GetStateData(response.data);
+      this._hasData = true;
+      if (this._updateCallback !== undefined) {
+        this._updateCallback(this.data);
+      }
+    } catch (e) {
+      this._consecutiveFails += 1;
+      if (this._consecutiveFails % this._consecutiveFailsLimit === 0 && this._recentError === e.response) {
+        this.log.warn(`${this._consecutiveFails} consecutive requests failed: ${e.response ? e.response : e}`);
         this._recentError = null;
-        this.data = new GetStateData(response.data);
-        this._hasData = true;
-        if (this._updateCallback !== undefined) {
-          this._updateCallback(this.data);
-        }
-      },
-      (e) => {
-        this._consecutiveFails += 1;
-        if (this._consecutiveFails % this._consecutiveFailsLimit === 0 && this._recentError === e.response) {
-          this.log.warn(`${this._consecutiveFails} consecutive requests failed: ${e.response ? e.response : e}`);
-          this._recentError = null;
-          this._hasData = false;
-          this._consecutiveFails = 0;
+        this._hasData = false;
+        this._consecutiveFails = 0;
+        throw new Error(`Unable to request data from ${this.url}`);
+      } else {
+        if (this._recentError !== e.response) {
+          this.log.info(`${this._consecutiveFails} request(s) failed: ${e.response ? e.response : e}`);
+          this._recentError = e.response;
+          this._consecutiveFails = 1;
         } else {
-          if (this._recentError !== e.response) {
-            this.log.info(`${this._consecutiveFails} request(s) failed: ${e.response ? e.response : e}`);
-            this._recentError = e.response;
-            this._consecutiveFails = 1;
-          } else {
-            this.log.debug(`${this._consecutiveFails} request(s) failed: ${e.response ? e.response : e}`);
-          }
+          this.log.debug(`${this._consecutiveFails} request(s) failed: ${e.response ? e.response : e}`);
         }
-      },
-    );
+      }
+    }
+
+    return this.data;
   }
 
   /**

@@ -8,6 +8,13 @@
  * @packageDocumentation
  */
 
+export enum LogLevel {
+  DEBUG = 1,
+  INFO = 2,
+  WARN = 3,
+  ERROR = 4,
+}
+
 /**
  * Interface for compatible loggers.
  * 
@@ -53,12 +60,40 @@ export interface Log {
  */
 export class Logger implements Log {
   /**
+   * @internal
+   */
+  private _level: LogLevel;
+
+  /**
+   * Initialize a new Logger.
+   * 
+   * @param logLevel Optionally define a custom log level.
+   */
+  public constructor(logLevel?: LogLevel) {
+    this._level = logLevel === undefined ? LogLevel.INFO : logLevel;
+  }
+
+  /**
+   * Set the actual log level
+   * 
+   * Method calls to lower log levels than the one defined here, will not 
+   * generate any output.
+   * 
+   * @param logLevel 
+   */
+  public setLogLevel(logLevel: LogLevel): void {
+    this._level = logLevel;
+  }
+
+  /**
    * Log a message with severity `debug` to console.
    * 
    * @param message The debug message.
    */
   public debug(message: string): void {
-    console.log(`(${this.timestamp}) DEBUG: ${message}`); // tslint:disable-line: no-console
+    if (this._level <= LogLevel.DEBUG) {
+      console.log(`(${this.timestamp}) DEBUG: ${message}`); // tslint:disable-line: no-console
+    }
   }
 
   /**
@@ -67,7 +102,9 @@ export class Logger implements Log {
    * @param message The information.
    */
   public info(message: string): void {
-    console.log(`(${this.timestamp}) INFO: ${message}`); // tslint:disable-line: no-console
+    if (this._level <= LogLevel.INFO) {
+      console.log(`(${this.timestamp}) INFO: ${message}`); // tslint:disable-line: no-console
+    }
   }
 
   /**
@@ -76,7 +113,9 @@ export class Logger implements Log {
    * @param message The warning.
    */
   public warn(message: string): void {
-    console.log(`(${this.timestamp}) WARNING: ${message}`); // tslint:disable-line: no-console
+    if (this._level <= LogLevel.WARN) {
+      console.log(`(${this.timestamp}) WARNING: ${message}`); // tslint:disable-line: no-console
+    }
   }
 
   /**
@@ -85,7 +124,9 @@ export class Logger implements Log {
    * @param message The error message.
    */
   public error(message: string): void {
-    console.error(`(${this.timestamp}) ERROR: ${message}`); // tslint:disable-line: no-console
+    if (this._level <= LogLevel.ERROR) {
+      console.error(`(${this.timestamp}) ERROR: ${message}`); // tslint:disable-line: no-console
+    }
   }
 
   /**
