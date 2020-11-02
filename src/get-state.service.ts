@@ -61,12 +61,14 @@ export class GetStateService extends AbstractService {
   private next?: number;
 
   /**
-   * @internal
+   * Initially set via [[`GetStateServiceConfig`]].
+   * Can be adjusted using the [[`setUpdateInterval`]] method.
    */
   private _updateInterval: number;
 
   /**
-   * @internal
+   * An optional callback, that can be passed when calling the
+   * [[`start`]] method.
    */
   private _updateCallback?: (data: GetStateData) => any;
 
@@ -129,10 +131,16 @@ export class GetStateService extends AbstractService {
   /**
    * Start the service.
    * 
-   * @param callable 
+   * This will periodically update the internal data and invoke the optional
+   * `callable` each time new data is received. 
+   * 
+   * @param callable Will be set as [[`_updateCallback`]] and triggered 
+   *  periodically ([[`_updateInterval`]]) and 
    */
-  public start(callable: (data: GetStateData) => void): void {
-    this._updateCallback = callable;
+  public start(callable?: (data: GetStateData) => void): void {
+    if (callable !== undefined) {
+      this._updateCallback = callable;
+    }
     this.autoUpdate();
   }
 
@@ -164,8 +172,12 @@ export class GetStateService extends AbstractService {
   }
 
   /**
-   * Update data. This method will be triggered periodically once the service
-   * has been started (see [[`GetStateService.start`]]).
+   * Update data by staging a HTTP request to the pool controller.
+   * 
+   * This method will be triggered periodically once the service
+   * has been started (see [[`GetStateService.start`]]). It also 
+   * includes the part responsible for the execution of the 
+   * [[`_updateCallback`]] (see [[`start`]]).
    */
   public update(): void {
     this.getData().then(
