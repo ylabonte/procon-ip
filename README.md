@@ -152,6 +152,8 @@ dataSource.update().then(data => {
 })
 ```
 
+The examples above can also be found in the `examples` directory of this repository.
+
 ## Full API docs
 
 Find the [full API documentation](https://ylabonte.github.io/procon-ip/)

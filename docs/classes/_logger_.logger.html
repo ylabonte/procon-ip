@@ -98,6 +98,12 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_logger_.logger.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section tsd-is-private-protected">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
@@ -110,10 +116,47 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_logger_.logger.html#debug" class="tsd-kind-icon">debug</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_logger_.logger.html#error" class="tsd-kind-icon">error</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_logger_.logger.html#info" class="tsd-kind-icon">info</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_logger_.logger.html#setloglevel" class="tsd-kind-icon">set<wbr>Log<wbr>Level</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_logger_.logger.html#warn" class="tsd-kind-icon">warn</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Logger<span class="tsd-signature-symbol">(</span>logLevel<span class="tsd-signature-symbol">?: </span><a href="../enums/_logger_.loglevel.html" class="tsd-signature-type">LogLevel</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_logger_.logger.html" class="tsd-signature-type">Logger</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/0dd32eb/src/logger.ts#L65">logger.ts:65</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Initialize a new Logger.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> logLevel: <a href="../enums/_logger_.loglevel.html" class="tsd-signature-type">LogLevel</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Optionally define a custom log level. Default is <code>LogLevel.INFO</code>.</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_logger_.logger.html" class="tsd-signature-type">Logger</a></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
@@ -128,7 +171,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8987c8c/src/logger.ts#L96">logger.ts:96</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/0dd32eb/src/logger.ts#L137">logger.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -155,7 +198,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_logger_.log.html">Log</a>.<a href="../interfaces/_logger_.log.html#debug">debug</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8987c8c/src/logger.ts#L60">logger.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/0dd32eb/src/logger.ts#L93">logger.ts:93</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -187,7 +230,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_logger_.log.html">Log</a>.<a href="../interfaces/_logger_.log.html#error">error</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8987c8c/src/logger.ts#L87">logger.ts:87</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/0dd32eb/src/logger.ts#L126">logger.ts:126</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -219,7 +262,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_logger_.log.html">Log</a>.<a href="../interfaces/_logger_.log.html#info">info</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8987c8c/src/logger.ts#L69">logger.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/0dd32eb/src/logger.ts#L104">logger.ts:104</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -241,6 +284,38 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setloglevel" class="tsd-anchor"></a>
+					<h3>set<wbr>Log<wbr>Level</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Log<wbr>Level<span class="tsd-signature-symbol">(</span>logLevel<span class="tsd-signature-symbol">: </span><a href="../enums/_logger_.loglevel.html" class="tsd-signature-type">LogLevel</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/0dd32eb/src/logger.ts#L84">logger.ts:84</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set the actual log level</p>
+								</div>
+								<p>Method calls to lower log levels than the one defined here, will not
+								generate any output.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>logLevel: <a href="../enums/_logger_.loglevel.html" class="tsd-signature-type">LogLevel</a></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="warn" class="tsd-anchor"></a>
 					<h3>warn</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -251,7 +326,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_logger_.log.html">Log</a>.<a href="../interfaces/_logger_.log.html#warn">warn</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/8987c8c/src/logger.ts#L78">logger.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/0dd32eb/src/logger.ts#L115">logger.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -317,11 +392,17 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/_logger_.loglevel.html" class="tsd-kind-icon">Log<wbr>Level</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
 						<a href="_logger_.logger.html" class="tsd-kind-icon">Logger</a>
 						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="_logger_.logger.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-protected">
 								<a href="_logger_.logger.html#timestamp" class="tsd-kind-icon">timestamp</a>
 							</li>
@@ -333,6 +414,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_logger_.logger.html#info" class="tsd-kind-icon">info</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_logger_.logger.html#setloglevel" class="tsd-kind-icon">set<wbr>Log<wbr>Level</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_logger_.logger.html#warn" class="tsd-kind-icon">warn</a>
@@ -355,6 +439,7 @@
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">

@@ -82,7 +82,11 @@
 				</a>
 				<ul>
 					<li><a href="#introduction">Introduction (<em>What is this library for?</em>)</a></li>
-					<li><a href="#examples">Examples</a></li>
+					<li><a href="#examples">Examples</a><ul>
+							<li><a href="#requesting-data">Requesting data</a></li>
+							<li><a href="#switching-relays">Switching relays</a></li>
+						</ul>
+					</li>
 					<li><a href="#full-api-docs">Full API docs</a></li>
 					<li><a href="#a-brief-description-of-the-proconip-pool-controller">A brief description of the ProCon.IP pool controller</a></li>
 					<li><a href="#disclaimer">Disclaimer</a></li>
@@ -100,6 +104,101 @@
 				<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
 					<h2>Examples</h2>
 				</a>
+				<a href="#requesting-data" id="requesting-data" style="color: inherit; text-decoration: none;">
+					<h3>Requesting data</h3>
+				</a>
+				<p>First you have to initialize the <code>GetStateService</code>, which is responsible for
+				receiving information from the ProCon.IP controller.</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> GetStateService = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;procon-ip/lib/get-state.service&#x27;</span>).GetStateService
+<span class="hljs-keyword">const</span> GetStateCategory = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;procon-ip/lib/get-state-data&#x27;</span>).GetStateCategory
+<span class="hljs-keyword">const</span> Logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;procon-ip/lib/logger&#x27;</span>).Logger
+
+<span class="hljs-keyword">const</span> logger = <span class="hljs-keyword">new</span> Logger();
+<span class="hljs-keyword">const</span> config = {
+    <span class="hljs-string">&quot;controllerUrl&quot;</span>: <span class="hljs-string">&quot;http://192.168.2.3&quot;</span>, <span class="hljs-comment">// &lt;-- replace with your pool controller&#x27;s address</span>
+    <span class="hljs-string">&quot;basicAuth&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-string">&quot;username&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,
+    <span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,
+    <span class="hljs-string">&quot;updateInterval&quot;</span>: <span class="hljs-number">5000</span>,
+    <span class="hljs-string">&quot;timeout&quot;</span>: <span class="hljs-number">5000</span>,
+    <span class="hljs-string">&quot;errorTolerance&quot;</span>: <span class="hljs-number">2</span>
+}
+
+<span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> GetStateService(config, logger)</code></pre>
+				<p>In <strong>TypeScript</strong> you would write the following instead.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { GetStateService } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;procon-ip/lib/get-state.service&#x27;</span>
+<span class="hljs-keyword">import</span> { GetStateCategory } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;procon-ip/lib/get-state-data&#x27;</span>
+<span class="hljs-keyword">import</span> { Logger } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;procon-ip/lib/logger&#x27;</span>
+
+<span class="hljs-comment">// Just continue as in the snippet above...</span></code></pre>
+				<p>You will have to replace the <code>controllerUrl</code> with the one pointing at your
+				ProCon.IP device, but except that it should just work.</p>
+				<p>With the <code>GetStateService</code> initialized you can simply request fresh data by
+				calling the <code>update()</code> or <code>start()</code> methods.</p>
+				<pre><code class="language-javascript"><span class="hljs-comment">// You can easily request fresh data on demand using the update...</span>
+dataSource.update().then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+    logger.info(<span class="hljs-string">`Uptime: <span class="hljs-subst">${data.sysInfo.uptime}</span>`</span>)
+})
+
+<span class="hljs-comment">// ...or periodically</span>
+dataSource.start(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+    logger.info(<span class="hljs-string">&quot;Got new data from pool controller&quot;</span>)
+    data.getDataObjectsByCategory(GetStateCategory.ELECTRODES).forEach(<span class="hljs-function">(<span class="hljs-params">dataObject</span>) =&gt;</span> {
+        logger.info(<span class="hljs-string">`<span class="hljs-subst">${dataObject.label}</span>: <span class="hljs-subst">${dataObject.displayValue}</span>`</span>)
+    })
+})</code></pre>
+				<p>Be aware of the the asynchronous character of this functions. Executing the
+				code above might produce an output like this:</p>
+				<pre><code class="language-shell">(2020-10-31T03:19:36.844Z) INFO: Got new data from pool controller
+(2020-10-31T03:19:36.847Z) INFO: Redox: 927.75 mV
+(2020-10-31T03:19:36.847Z) INFO: pH: 3.43 pH
+(2020-10-31T03:19:36.847Z) INFO: Uptime: 1105292
+(2020-10-31T03:19:36.848Z) INFO: Got new data from pool controller
+(2020-10-31T03:19:36.848Z) INFO: Redox: 927.88 mV
+(2020-10-31T03:19:36.848Z) INFO: pH: 3.43 pH</code></pre>
+				<p>Actually I got this output during a test run ensuring the exmaple code would
+				work.</p>
+				<a href="#switching-relays" id="switching-relays" style="color: inherit; text-decoration: none;">
+					<h3>Switching relays</h3>
+				</a>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> UsrcfgCgiService = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../lib/usrcfg-cgi.service&#x27;</span>).UsrcfgCgiService
+<span class="hljs-keyword">const</span> RelayDataInterpreter = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../lib/relay-data-interpreter&#x27;</span>).RelayDataInterpreter
+<span class="hljs-keyword">const</span> GetStateCategory = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../lib/get-state-data&#x27;</span>).GetStateCategory
+<span class="hljs-keyword">const</span> GetStateService = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../lib/get-state.service&#x27;</span>).GetStateService
+<span class="hljs-keyword">const</span> Logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../lib/logger&#x27;</span>).Logger
+
+<span class="hljs-keyword">const</span> logger = <span class="hljs-keyword">new</span> Logger();
+<span class="hljs-keyword">const</span> config = {
+    <span class="hljs-string">&quot;controllerUrl&quot;</span>: <span class="hljs-string">&quot;http://192.168.2.3&quot;</span>,
+    <span class="hljs-string">&quot;basicAuth&quot;</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-string">&quot;username&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,
+    <span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,
+    <span class="hljs-string">&quot;timeout&quot;</span>: <span class="hljs-number">5000</span>,
+    <span class="hljs-string">&quot;updateInterval&quot;</span>: <span class="hljs-number">5000</span>,
+    <span class="hljs-string">&quot;errorTolerance&quot;</span>: <span class="hljs-number">2</span>
+}
+
+<span class="hljs-keyword">const</span> interpreter = <span class="hljs-keyword">new</span> RelayDataInterpreter(logger)
+<span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> GetStateService(config, logger)
+<span class="hljs-keyword">const</span> relaySwitcher = <span class="hljs-keyword">new</span> UsrcfgCgiService(config, logger, dataSource, interpreter)
+
+dataSource.update().then(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> {
+    <span class="hljs-comment">// Let&#x27;s just switch the chlorine dosage relay off to keep it easy...</span>
+    relaySwitcher.setOff(data.getChlorineDosageControl()).then(<span class="hljs-function"><span class="hljs-params">r</span> =&gt;</span> {
+        logger.info(<span class="hljs-string">`Chlorine dosage control has been turned off (response code: <span class="hljs-subst">${r}</span>)`</span>)
+    })
+
+    <span class="hljs-comment">// ...to switch arbitrary relays you will have to determine the acutal</span>
+    <span class="hljs-comment">// object id of the relay you want to switch (e.g. by its label):</span>
+    data.getDataObjectsByCategory(GetStateCategory.RELAYS).forEach(<span class="hljs-function"><span class="hljs-params">relay</span> =&gt;</span> {
+        <span class="hljs-keyword">if</span> (relay.label === <span class="hljs-string">&quot;Gartenlicht&quot;</span>) {
+            relaySwitcher.setAuto(relay).then(<span class="hljs-function"><span class="hljs-params">r</span> =&gt;</span> {
+                logger.info(<span class="hljs-string">`<span class="hljs-subst">${relay.label}</span> has been turned on (response code: <span class="hljs-subst">${r}</span>)`</span>)
+            })
+        }
+    })
+})</code></pre>
+				<p>The examples above can also be found in the <code>examples</code> directory of this repository.</p>
 				<a href="#full-api-docs" id="full-api-docs" style="color: inherit; text-decoration: none;">
 					<h2>Full API docs</h2>
 				</a>
