@@ -17,7 +17,7 @@ jobs:
     # Rewrite package.json to have the package name scoped for publishing to the github repo.
     - run: |
         sed -i.orig "s/\(\"name\": \"\)\(procon-ip\"\)/\1@ylabonte\/\2/" package.json
-    - run: npm install
+    - run: npm ci
     # Publish to npm
     - run: npm publish
       env:
