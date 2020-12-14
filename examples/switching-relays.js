@@ -3,8 +3,7 @@
  * appropriate environment vars manually.
  */
 
-const { GetStateCategory } = require('../lib/get-state-data');
-
+const GetStateCategory = require('../lib/get-state-data').GetStateCategory;
 const UsrcfgCgiService = require('../lib/usrcfg-cgi.service').UsrcfgCgiService
 const RelayDataInterpreter = require('../lib/relay-data-interpreter').RelayDataInterpreter
 const GetStateService = require('../lib/get-state.service').GetStateService

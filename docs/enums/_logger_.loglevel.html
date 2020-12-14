@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>SetStateValue | procon-ip</title>
+	<title>LogLevel | procon-ip</title>
 	<meta name="description" content="Documentation for procon-ip">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,28 +56,19 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_usrcfg_cgi_service_.html">&quot;usrcfg-cgi.service&quot;</a>
+					<a href="../modules/_logger_.html">&quot;logger&quot;</a>
 				</li>
 				<li>
-					<a href="_usrcfg_cgi_service_.setstatevalue.html">SetStateValue</a>
+					<a href="_logger_.loglevel.html">LogLevel</a>
 				</li>
 			</ul>
-			<h1>Enumeration SetStateValue</h1>
+			<h1>Enumeration LogLevel</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>This enum can be used with the <a href="../classes/_usrcfg_cgi_service_.usrcfgcgiservice.html#setstate"><code>UsrcfgCgiService.setState</code></a> method. But
-							there are also shorthand wrappers for all states (<a href="../classes/_relay_data_interpreter_.relaydatainterpreter.html#seton"><code>setOn</code></a>, <a href="../classes/_relay_data_interpreter_.relaydatainterpreter.html#setoff"><code>setOff</code></a>,
-						<a href="../classes/_relay_data_interpreter_.relaydatainterpreter.html#setauto"><code>setAuto</code></a>) that can be used.</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
@@ -85,9 +76,10 @@
 						<section class="tsd-index-section ">
 							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_usrcfg_cgi_service_.setstatevalue.html#auto" class="tsd-kind-icon">AUTO</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_usrcfg_cgi_service_.setstatevalue.html#off" class="tsd-kind-icon">OFF</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_usrcfg_cgi_service_.setstatevalue.html#on" class="tsd-kind-icon">ON</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_logger_.loglevel.html#debug" class="tsd-kind-icon">DEBUG</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_logger_.loglevel.html#error" class="tsd-kind-icon">ERROR</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_logger_.loglevel.html#info" class="tsd-kind-icon">INFO</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_logger_.loglevel.html#warn" class="tsd-kind-icon">WARN</a></li>
 							</ul>
 						</section>
 					</div>
@@ -96,32 +88,42 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Enumeration members</h2>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="auto" class="tsd-anchor"></a>
-					<h3>AUTO</h3>
-					<div class="tsd-signature tsd-kind-icon">AUTO<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 2</span></div>
+					<a name="debug" class="tsd-anchor"></a>
+					<h3>DEBUG</h3>
+					<div class="tsd-signature tsd-kind-icon">DEBUG<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/usrcfg-cgi.service.ts#L25">usrcfg-cgi.service.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L12">logger.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="off" class="tsd-anchor"></a>
-					<h3>OFF</h3>
-					<div class="tsd-signature tsd-kind-icon">OFF<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 0</span></div>
+					<a name="error" class="tsd-anchor"></a>
+					<h3>ERROR</h3>
+					<div class="tsd-signature tsd-kind-icon">ERROR<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 4</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/usrcfg-cgi.service.ts#L23">usrcfg-cgi.service.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L15">logger.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="on" class="tsd-anchor"></a>
-					<h3>ON</h3>
-					<div class="tsd-signature tsd-kind-icon">ON<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 1</span></div>
+					<a name="info" class="tsd-anchor"></a>
+					<h3>INFO</h3>
+					<div class="tsd-signature tsd-kind-icon">INFO<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 2</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/usrcfg-cgi.service.ts#L24">usrcfg-cgi.service.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L13">logger.ts:13</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="warn" class="tsd-anchor"></a>
+					<h3>WARN</h3>
+					<div class="tsd-signature tsd-kind-icon">WARN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 3</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L14">logger.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -151,7 +153,7 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/_i_service_config_.html">&quot;i-<wbr>service-<wbr>config&quot;</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/_logger_.html">&quot;logger&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -163,7 +165,7 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/_relay_data_object_.html">&quot;relay-<wbr>data-<wbr>object&quot;</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/_usrcfg_cgi_service_.html">&quot;usrcfg-<wbr>cgi.service&quot;</a>
 					</li>
 				</ul>
@@ -173,23 +175,29 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-enum tsd-parent-kind-module">
-						<a href="_usrcfg_cgi_service_.setstatevalue.html" class="tsd-kind-icon">Set<wbr>State<wbr>Value</a>
+						<a href="_logger_.loglevel.html" class="tsd-kind-icon">Log<wbr>Level</a>
 						<ul>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_usrcfg_cgi_service_.setstatevalue.html#auto" class="tsd-kind-icon">AUTO</a>
+								<a href="_logger_.loglevel.html#debug" class="tsd-kind-icon">DEBUG</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_usrcfg_cgi_service_.setstatevalue.html#off" class="tsd-kind-icon">OFF</a>
+								<a href="_logger_.loglevel.html#error" class="tsd-kind-icon">ERROR</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_usrcfg_cgi_service_.setstatevalue.html#on" class="tsd-kind-icon">ON</a>
+								<a href="_logger_.loglevel.html#info" class="tsd-kind-icon">INFO</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="_logger_.loglevel.html#warn" class="tsd-kind-icon">WARN</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_usrcfg_cgi_service_.usrcfgcgiservice.html" class="tsd-kind-icon">Usrcfg<wbr>Cgi<wbr>Service</a>
+						<a href="../classes/_logger_.logger.html" class="tsd-kind-icon">Logger</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_logger_.ilogger.html" class="tsd-kind-icon">ILogger</a>
 					</li>
 				</ul>
 			</nav>

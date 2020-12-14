@@ -1,34 +1,34 @@
 /**
  * This file exports the common basis of the webservice interfaces.
- * 
- * This abstract class builds a common basis for the [[`GetStateService`]] and 
+ *
+ * This abstract class builds a common basis for the [[`GetStateService`]] and
  * the [[`UsrcfgCgiService`]] classes. These two classes are the actual
  * webservice interfaces to the ProCon.IP pool controller.
  * @packageDocumentation
  */
 
 import { AxiosRequestConfig, Method } from 'axios';
-import { Log } from './logger';
-import { ServiceConfig } from './service-config';
+import { ILogger } from './logger';
+import { IServiceConfig } from './i-service-config';
 
 /**
  * Abstract service implementing the common base setup for the _axios_ requests
  * of the specific service implementations.
  */
 export abstract class AbstractService {
-  protected _config: ServiceConfig;
+  protected _config: IServiceConfig;
 
   /**
    * Specific webservice endpoint.
-   * 
+   *
    * An _absolute URL_, which means a path with leading slash ('/') relative to
-   * the [[`ServiceConfig.controllerUrl`]] (ProCon.IP base address).
+   * the [[`IServiceConfig.controllerUrl`]] (ProCon.IP base address).
    */
   abstract _endpoint: string;
 
   /**
    * HTTP request method.
-   * 
+   *
    * Must be one of the valid HTTP request methods like _GET_, _POST_, etc.
    * See `axios/Method` type:
    * ```
@@ -49,7 +49,7 @@ export abstract class AbstractService {
 
   /**
    * Custom HTTP headers.
-   * 
+   *
    * Custom headers can be defined in form of a key value pair.
    * ```
    * this._requestHeaders["Cache-Control"] = "no-cache";
@@ -60,15 +60,15 @@ export abstract class AbstractService {
   /**
    * Logger which will be used for all logging events.
    */
-  protected log: Log;
+  protected log: ILogger;
 
   /**
    * Constructor.
-   * 
+   *
    * @param config Service config.
    * @param logger Service logger.
    */
-  protected constructor(config: ServiceConfig, logger: Log) {
+  protected constructor(config: IServiceConfig, logger: ILogger) {
     this._requestHeaders = {};
     this._config = config;
     this.log = logger;
@@ -76,8 +76,8 @@ export abstract class AbstractService {
 
   /**
    * Get the base url.
-   * 
-   * @returns The [[`ServiceConfig.controllerUrl`]] string.
+   *
+   * @returns The [[`IServiceConfig.controllerUrl`]] string.
    */
   public get baseUrl(): string {
     return this._config.controllerUrl;
@@ -93,7 +93,7 @@ export abstract class AbstractService {
 
   /**
    * Get the webservice url (joined base url and endpoint).
-   * 
+   *
    * @throws TypeError [ERR_INVALID_URL]: Invalid URL
    * @returns URL string (joined base url and endpoint).
    */

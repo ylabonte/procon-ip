@@ -1,20 +1,20 @@
 /**
  * This file exports the [[`GetStateService`]] as central status update service
- * and the corresponding [[`GetStateServiceConfig`]].
+ * and the corresponding [[`IGetStateServiceConfig`]].
  * @packageDocumentation
  */
 
 import axios, { AxiosPromise, Method } from 'axios';
 import { AbstractService } from './abstract-service';
 import { GetStateData } from './get-state-data';
-import { Log } from './logger';
-import { ServiceConfig } from './service-config';
+import { ILogger } from './logger';
+import { IServiceConfig } from './i-service-config';
 
 /**
- * Extend common [[`ServiceConfig`]] with special parameters that only apply to
+ * Extend common [[`IServiceConfig`]] with special parameters that only apply to
  * the polling characteristics of this service.
  */
-export interface GetStateServiceConfig extends ServiceConfig {
+export interface IGetStateServiceConfig extends IServiceConfig {
   /**
    * Interval [ms] between two webservice polling requests.
    */
@@ -27,14 +27,14 @@ export interface GetStateServiceConfig extends ServiceConfig {
 }
 
 /**
- * The [[`GetStateService`]] implements the [[`AbstractService`]] for the 
+ * The [[`GetStateService`]] implements the [[`AbstractService`]] for the
  * `/GetState.csv` endpoint.
  */
 export class GetStateService extends AbstractService {
   /**
    * Specific service endpoint.
-   * 
-   * A path relative to the [[`ServiceConfig.controllerUrl`]].
+   *
+   * A path relative to the [[`IServiceConfig.controllerUrl`]].
    */
   public _endpoint = '/GetState.csv';
 
@@ -61,7 +61,7 @@ export class GetStateService extends AbstractService {
   private next?: number;
 
   /**
-   * Initially set via [[`GetStateServiceConfig`]].
+   * Initially set via [[`IGetStateServiceConfig`]].
    * Can be adjusted using the [[`setUpdateInterval`]] method.
    */
   private _updateInterval: number;
@@ -89,11 +89,11 @@ export class GetStateService extends AbstractService {
 
   /**
    * Initialize a new [[`GetStateService`]].
-   * 
+   *
    * @param config Service configuration.
    * @param logger Service logger.
    */
-  public constructor(config: GetStateServiceConfig, logger: Log) {
+  public constructor(config: IGetStateServiceConfig, logger: ILogger) {
     super(config, logger);
     this._updateInterval = config.updateInterval;
     this._consecutiveFailsLimit = config.errorTolerance;
@@ -114,7 +114,7 @@ export class GetStateService extends AbstractService {
 
   /**
    * Set the update interval.
-   * 
+   *
    * @param milliseconds Update interval in milliseconds [ms].
    */
   public setUpdateInterval(milliseconds: number): void {
@@ -130,12 +130,12 @@ export class GetStateService extends AbstractService {
 
   /**
    * Start the service.
-   * 
+   *
    * This will periodically update the internal data and invoke the optional
-   * `callable` each time new data is received. 
-   * 
-   * @param callable Will be set as [[`_updateCallback`]] and triggered 
-   *  periodically ([[`_updateInterval`]]) and 
+   * `callable` each time new data is received.
+   *
+   * @param callable Will be set as [[`_updateCallback`]] and triggered
+   *  periodically ([[`_updateInterval`]]) and
    */
   public start(callable?: (data: GetStateData) => void): void {
     if (callable !== undefined) {
@@ -154,10 +154,10 @@ export class GetStateService extends AbstractService {
   }
 
   /**
-   * Recursive wrapper for the polling mechanism. The next request/interval 
-   * starts after the preceding one has ended. That means a big timeout 
-   * ([[`GetStateServiceConfig.timeout`]]) could cause an actual higher update
-   * interval ([[`GetStateServiceConfig.updateInterval`]]).
+   * Recursive wrapper for the polling mechanism. The next request/interval
+   * starts after the preceding one has ended. That means a big timeout
+   * ([[`IGetStateServiceConfig.timeout`]]) could cause an actual higher update
+   * interval ([[`IGetStateServiceConfig.updateInterval`]]).
    */
   public autoUpdate(): void {
     this.update();
@@ -173,10 +173,10 @@ export class GetStateService extends AbstractService {
 
   /**
    * Update data by staging a HTTP request to the pool controller.
-   * 
+   *
    * This method will be triggered periodically once the service
-   * has been started (see [[`GetStateService.start`]]). It also 
-   * includes the part responsible for the execution of the 
+   * has been started (see [[`GetStateService.start`]]). It also
+   * includes the part responsible for the execution of the
    * [[`_updateCallback`]] (see [[`start`]]).
    */
   public async update(): Promise<GetStateData> {
@@ -220,7 +220,7 @@ export class GetStateService extends AbstractService {
 
   /**
    * Tells you whether the service has most recent status information or not.
-   * 
+   *
    * More accurately it tells you whether the most recent request succeeded or
    * not. So it will return `true` if the reuqest succeeded and your data is
    * up to date. It will return `false` until the service retrieved its first

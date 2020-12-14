@@ -7,13 +7,13 @@
 import { GetStateCategory, GetStateData } from './get-state-data';
 import { RelayDataObject } from './relay-data-object';
 import { GetStateDataObject } from './get-state-data-object';
-import { Log } from './logger';
+import { ILogger } from './logger';
 
 /**
  * The relay state is a two bit value in decimal representation:
  * - lsb: 0 = off, 1 = on
  * - msb: 0 = auto, 1 = manual
- * 
+ *
  * It is used by the [[`RelayDataInterpreter`]] and the [[`UsrcfgCgiService`]].
  */
 export enum RelayStateBitMask {
@@ -36,28 +36,28 @@ export class RelayDataInterpreter {
    */
   public bitStates!: [number, number];
 
-  private log: Log;
+  private log: ILogger;
 
   /**
    * Initialize a new [[`RelayDataInterpreter`]].
-   * 
+   *
    * @param logger
    */
-  public constructor(logger: Log) {
+  public constructor(logger: ILogger) {
     this.log = logger;
   }
 
   /**
    * Evaluate the current relay states and set the [[`byteState`]] accordingly.
-   * 
+   *
    * The determined values are used to set the switching parameters. Therefore
    * the input values should be as up-to-date as possible. Otherwise a change
    * on one relay will reset all other relays based on the `stateData`.
-   * 
+   *
    * **Important**
    * This method should be called before using any of the set operations
    * ([[`setOn`]], [[`setOff`]], [[`setAuto`]]).
-   * 
+   *
    * @param stateData The most recent [[`GetStateData`]] instance.
    */
   public evaluate(stateData: GetStateData): RelayDataInterpreter {
@@ -86,8 +86,8 @@ export class RelayDataInterpreter {
   /**
    * True if the given relay ([[`GetStateDataObject`]]) is currently switched
    * on.
-   * 
-   * @param relay 
+   *
+   * @param relay
    */
   public isOn(relay: GetStateDataObject): boolean {
     /* tslint:disable: no-bitwise */
@@ -98,8 +98,8 @@ export class RelayDataInterpreter {
   /**
    * True if the given relay ([[`GetStateDataObject`]]) is currently switched
    * off.
-   * 
-   * @param relay 
+   *
+   * @param relay
    */
   public isOff(relay: GetStateDataObject): boolean {
     return !this.isOn(relay);
@@ -108,8 +108,8 @@ export class RelayDataInterpreter {
   /**
    * True if the given relay ([[`GetStateDataObject`]]) is currently not in
    * auto mode.
-   * 
-   * @param relay 
+   *
+   * @param relay
    */
   public isManual(relay: GetStateDataObject): boolean {
     /* tslint:disable: no-bitwise */
@@ -120,8 +120,8 @@ export class RelayDataInterpreter {
   /**
    * True if the given relay ([[`GetStateDataObject`]]) is currently in auto
    * mode.
-   * 
-   * @param relay 
+   *
+   * @param relay
    */
   public isAuto(relay: GetStateDataObject): boolean {
     return !this.isManual(relay);
@@ -130,8 +130,8 @@ export class RelayDataInterpreter {
   /**
    * Return the appropriate bit patterns for the `/usrcfg.cgi` endpoint to
    * switch the given relay ([[`GetStateDataObject`]]) on.
-   * 
-   * @param relay 
+   *
+   * @param relay
    */
   public setOn(relay: GetStateDataObject): [number, number] {
     this.log.debug(`Relay byte sate: ${JSON.stringify(this.bitStates)}`);
@@ -147,8 +147,8 @@ export class RelayDataInterpreter {
   /**
    * Return the appropriate bit patterns for the `/usrcfg.cgi` endpoint to
    * switch the given relay ([[`GetStateDataObject`]]) off.
-   * 
-   * @param relay 
+   *
+   * @param relay
    */
   public setOff(relay: GetStateDataObject): [number, number] {
     this.log.debug(`Relay byte sate: ${JSON.stringify(this.bitStates)}`);
@@ -164,8 +164,8 @@ export class RelayDataInterpreter {
   /**
    * Return the appropriate bit patterns for the `/usrcfg.cgi` endpoint to
    * switch the given relay ([[`GetStateDataObject`]]) into auto mode.
-   * 
-   * @param relay 
+   *
+   * @param relay
    */
   public setAuto(relay: GetStateDataObject): [number, number] {
     this.log.debug(`Relay byte sate: ${JSON.stringify(this.bitStates)}`);

@@ -11,8 +11,8 @@ import { GetStateService } from './get-state.service';
 import { GetStateData } from './get-state-data';
 import { GetStateDataObject } from './get-state-data-object';
 import { RelayDataInterpreter, RelayStateBitMask } from './relay-data-interpreter';
-import { ServiceConfig } from './service-config';
-import { Log } from './logger';
+import { IServiceConfig } from './i-service-config';
+import { ILogger } from './logger';
 
 /**
  * This enum can be used with the [[`UsrcfgCgiService.setState`]] method. But
@@ -28,17 +28,17 @@ export enum SetStateValue {
 /**
  * The [[`UsrcfgCgiService`]] uses the `/usrcfg.cgi` endpoint of the ProCon.IP
  * pool controller to switch its relay states.
- * 
+ *
  * It uses two bit patterns in decimal representation, to set on/off and auto
  * states for all relays at once. This means considering the states of all
- * relays, those which states should be changed as well as the ones which 
+ * relays, those which states should be changed as well as the ones which
  * states not gonna to be changed.
  */
 export class UsrcfgCgiService extends AbstractService {
   /**
    * Specific service endpoint.
-   * 
-   * A path relative to the [[`ServiceConfig.controllerUrl`]].
+   *
+   * A path relative to the [[`IServiceConfig.controllerUrl`]].
    */
   public _endpoint = '/usrcfg.cgi';
 
@@ -56,7 +56,7 @@ export class UsrcfgCgiService extends AbstractService {
 
   /**
    * Initialize a new [[`UsrcfgCgiService`]]
-   * 
+   *
    * @param config The service config.
    * @param logger The service logger.
    * @param getStateService A corresponding [[`GetStateService`]] (must address
@@ -64,8 +64,8 @@ export class UsrcfgCgiService extends AbstractService {
    * @param relayDataInterpreter An instance of [[`RelayDataInterpreter`]].
    */
   public constructor(
-    config: ServiceConfig,
-    logger: Log,
+    config: IServiceConfig,
+    logger: ILogger,
     getStateService: GetStateService,
     relayDataInterpreter: RelayDataInterpreter,
   ) {
@@ -77,8 +77,8 @@ export class UsrcfgCgiService extends AbstractService {
   }
 
   /**
-   * Switch the given relay on. 
-   * 
+   * Switch the given relay on.
+   *
    * @param relayData Relay data object.
    */
   public async setOn(relayData: GetStateDataObject): Promise<number> {
@@ -87,7 +87,7 @@ export class UsrcfgCgiService extends AbstractService {
 
   /**
    * Switch the given relay off.
-   * 
+   *
    * @param relayData Relay data object.
    */
   public async setOff(relayData: GetStateDataObject): Promise<number> {
@@ -96,7 +96,7 @@ export class UsrcfgCgiService extends AbstractService {
 
   /**
    * Set the given relay in auto mode.
-   * 
+   *
    * @param relayData Relay data object.
    */
   public async setAuto(relayData: GetStateDataObject): Promise<number> {
@@ -105,7 +105,7 @@ export class UsrcfgCgiService extends AbstractService {
 
   /**
    * Set the desired relay state.
-   * 
+   *
    * @param relay Relay data object.
    * @param state The desired state.
    */

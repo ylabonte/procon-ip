@@ -1,2 +1,7 @@
+# Project specific excludes
 node_modules
+.env
 /lib
+
+# IDE specific excludes
+.idea

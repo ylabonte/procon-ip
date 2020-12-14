@@ -20,30 +20,30 @@ export enum LogLevel {
  *
  * Must at least support the log levels `debug`, `info`, `warn` and `error`.
  */
-export interface Log {
+export interface ILogger {
   /**
-   * Log a message with severity `debug`.
+   * ILogger a message with severity `debug`.
    *
    * @param message The debug message.
    */
   debug(message: string): void;
 
   /**
-   * Log a message with severity `info`.
+   * ILogger a message with severity `info`.
    *
    * @param message The information.
    */
   info(message: string): void;
 
   /**
-   * Log a message with severity `warn`.
+   * ILogger a message with severity `warn`.
    *
    * @param message The warning.
    */
   warn(message: string): void;
 
   /**
-   * Log a message with severity `error`.
+   * ILogger a message with severity `error`.
    *
    * @param message The error message.
    */
@@ -56,9 +56,9 @@ export interface Log {
  * This logger uses the `console.log` method and simply prepends a timestamp
  * plus the used log level in uppercase. You can write your own custom logger
  * or pass any other (e.g. ioBroker has a suitable logger on board), that
- * matches the [[`Log`]] interface.
+ * matches the [[`ILogger`]] interface.
  */
-export class Logger implements Log {
+export class Logger implements ILogger {
   /**
    * @internal
    */
@@ -86,7 +86,7 @@ export class Logger implements Log {
   }
 
   /**
-   * Log a message with severity `debug` to console.
+   * ILogger a message with severity `debug` to console.
    *
    * @param message The debug message.
    */
@@ -97,7 +97,7 @@ export class Logger implements Log {
   }
 
   /**
-   * Log a message with severity `info`.
+   * ILogger a message with severity `info`.
    *
    * @param message The information.
    */
@@ -108,7 +108,7 @@ export class Logger implements Log {
   }
 
   /**
-   * Log a message with severity `warn` to console.
+   * ILogger a message with severity `warn` to console.
    *
    * @param message The warning.
    */
@@ -119,7 +119,7 @@ export class Logger implements Log {
   }
 
   /**
-   * Log a message with severity `error` to console.
+   * ILogger a message with severity `error` to console.
    *
    * @param message The error message.
    */

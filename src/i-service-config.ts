@@ -5,7 +5,7 @@
  * @packageDocumentation
  */
 
-export interface ServiceConfig {
+export interface IServiceConfig {
   requestHeaders?: { [key: string]: string };
   /**
    * Controller URL must be a valid URL string with leading protocol scheme
