@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for procon-ip">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -40,8 +41,6 @@
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
 							<input type="checkbox" id="tsd-filter-externals" checked />
 							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -51,11 +50,6 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<ul class="tsd-breadcrumb">
-				<li>
-					<a href="globals.html">Globals</a>
-				</li>
-			</ul>
 			<h1>procon-ip</h1>
 		</div>
 	</div>
@@ -109,95 +103,100 @@
 				</a>
 				<p>First you have to initialize the <code>GetStateService</code>, which is responsible for
 				receiving information from the ProCon.IP controller.</p>
-				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> GetStateService = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;procon-ip/lib/get-state.service&#x27;</span>).GetStateService
-<span class="hljs-keyword">const</span> GetStateCategory = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;procon-ip/lib/get-state-data&#x27;</span>).GetStateCategory
-<span class="hljs-keyword">const</span> Logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;procon-ip/lib/logger&#x27;</span>).Logger
+				<pre><code class="language-javascript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">GetStateService</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;procon-ip/lib/get-state.service&#039;</span><span style="color: #000000">).</span><span style="color: #001080">GetStateService</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">GetStateCategory</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;procon-ip/lib/get-state-data&#039;</span><span style="color: #000000">).</span><span style="color: #001080">GetStateCategory</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">Logger</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;procon-ip/lib/logger&#039;</span><span style="color: #000000">).</span><span style="color: #001080">Logger</span>
 
-<span class="hljs-keyword">const</span> logger = <span class="hljs-keyword">new</span> Logger();
-<span class="hljs-keyword">const</span> config = {
-    <span class="hljs-string">&quot;controllerUrl&quot;</span>: <span class="hljs-string">&quot;http://192.168.2.3&quot;</span>, <span class="hljs-comment">// &lt;-- replace with your pool controller&#x27;s address</span>
-    <span class="hljs-string">&quot;basicAuth&quot;</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-string">&quot;username&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,
-    <span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,
-    <span class="hljs-string">&quot;updateInterval&quot;</span>: <span class="hljs-number">5000</span>,
-    <span class="hljs-string">&quot;timeout&quot;</span>: <span class="hljs-number">5000</span>,
-    <span class="hljs-string">&quot;errorTolerance&quot;</span>: <span class="hljs-number">2</span>
-}
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">logger</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Logger</span><span style="color: #000000">();</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">config</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;controllerUrl&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;http://192.168.2.3&quot;</span><span style="color: #000000">, </span><span style="color: #008000">// &lt;-- replace with your pool controller&#039;s address</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;basicAuth&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;username&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;admin&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;password&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;admin&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;updateInterval&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">5000</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;timeout&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">5000</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;errorTolerance&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span>
+<span style="color: #000000">}</span>
 
-<span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> GetStateService(config, logger)</code></pre>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dataSource</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">GetStateService</span><span style="color: #000000">(</span><span style="color: #001080">config</span><span style="color: #000000">, </span><span style="color: #001080">logger</span><span style="color: #000000">)</span>
+</code></pre>
 				<p>In <strong>TypeScript</strong> you would write the following instead.</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { GetStateService } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;procon-ip/lib/get-state.service&#x27;</span>
-<span class="hljs-keyword">import</span> { GetStateCategory } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;procon-ip/lib/get-state-data&#x27;</span>
-<span class="hljs-keyword">import</span> { Logger } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;procon-ip/lib/logger&#x27;</span>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">GetStateService</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;procon-ip/lib/get-state.service&#039;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">GetStateCategory</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;procon-ip/lib/get-state-data&#039;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Logger</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;procon-ip/lib/logger&#039;</span>
 
-<span class="hljs-comment">// Just continue as in the snippet above...</span></code></pre>
+<span style="color: #008000">// Just continue as in the snippet above...</span>
+</code></pre>
 				<p>You will have to replace the <code>controllerUrl</code> with the one pointing at your
 				ProCon.IP device, but except that it should just work.</p>
 				<p>With the <code>GetStateService</code> initialized you can simply request fresh data by
 				calling the <code>update()</code> or <code>start()</code> methods.</p>
-				<pre><code class="language-javascript"><span class="hljs-comment">// You can easily request fresh data on demand using the update...</span>
-dataSource.update().then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
-    logger.info(<span class="hljs-string">`Uptime: <span class="hljs-subst">${data.sysInfo.uptime}</span>`</span>)
-})
+				<pre><code class="language-javascript"><span style="color: #008000">// You can easily request fresh data on demand using the update...</span>
+<span style="color: #001080">dataSource</span><span style="color: #000000">.</span><span style="color: #795E26">update</span><span style="color: #000000">().</span><span style="color: #795E26">then</span><span style="color: #000000">((</span><span style="color: #001080">data</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">`Uptime: </span><span style="color: #0000FF">${</span><span style="color: #001080">data</span><span style="color: #000000FF">.</span><span style="color: #001080">sysInfo</span><span style="color: #000000FF">.</span><span style="color: #001080">uptime</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
+<span style="color: #000000">})</span>
 
-<span class="hljs-comment">// ...or periodically</span>
-dataSource.start(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
-    logger.info(<span class="hljs-string">&quot;Got new data from pool controller&quot;</span>)
-    data.getDataObjectsByCategory(GetStateCategory.ELECTRODES).forEach(<span class="hljs-function">(<span class="hljs-params">dataObject</span>) =&gt;</span> {
-        logger.info(<span class="hljs-string">`<span class="hljs-subst">${dataObject.label}</span>: <span class="hljs-subst">${dataObject.displayValue}</span>`</span>)
-    })
-})</code></pre>
+<span style="color: #008000">// ...or periodically</span>
+<span style="color: #001080">dataSource</span><span style="color: #000000">.</span><span style="color: #795E26">start</span><span style="color: #000000">((</span><span style="color: #001080">data</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;Got new data from pool controller&quot;</span><span style="color: #000000">)</span>
+<span style="color: #000000">    </span><span style="color: #001080">data</span><span style="color: #000000">.</span><span style="color: #795E26">getDataObjectsByCategory</span><span style="color: #000000">(</span><span style="color: #001080">GetStateCategory</span><span style="color: #000000">.</span><span style="color: #0070C1">ELECTRODES</span><span style="color: #000000">).</span><span style="color: #795E26">forEach</span><span style="color: #000000">((</span><span style="color: #001080">dataObject</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">`</span><span style="color: #0000FF">${</span><span style="color: #001080">dataObject</span><span style="color: #000000FF">.</span><span style="color: #001080">label</span><span style="color: #0000FF">}</span><span style="color: #A31515">: </span><span style="color: #0000FF">${</span><span style="color: #001080">dataObject</span><span style="color: #000000FF">.</span><span style="color: #001080">displayValue</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
+<span style="color: #000000">    })</span>
+<span style="color: #000000">})</span>
+</code></pre>
 				<p>Be aware of the the asynchronous character of this functions. Executing the
 				code above might produce an output like this:</p>
-				<pre><code class="language-shell">(2020-10-31T03:19:36.844Z) INFO: Got new data from pool controller
-(2020-10-31T03:19:36.847Z) INFO: Redox: 927.75 mV
-(2020-10-31T03:19:36.847Z) INFO: pH: 3.43 pH
-(2020-10-31T03:19:36.847Z) INFO: Uptime: 1105292
-(2020-10-31T03:19:36.848Z) INFO: Got new data from pool controller
-(2020-10-31T03:19:36.848Z) INFO: Redox: 927.88 mV
-(2020-10-31T03:19:36.848Z) INFO: pH: 3.43 pH</code></pre>
+				<pre><code class="language-shell"><span style="color: #000000">(2020-10-31T03:19:36.844Z) INFO: Got new data from pool controller</span>
+<span style="color: #000000">(2020-10-31T03:19:36.847Z) INFO: Redox: 927.75 mV</span>
+<span style="color: #000000">(2020-10-31T03:19:36.847Z) INFO: pH: 3.43 pH</span>
+<span style="color: #000000">(2020-10-31T03:19:36.847Z) INFO: Uptime: 1105292</span>
+<span style="color: #000000">(2020-10-31T03:19:36.848Z) INFO: Got new data from pool controller</span>
+<span style="color: #000000">(2020-10-31T03:19:36.848Z) INFO: Redox: 927.88 mV</span>
+<span style="color: #000000">(2020-10-31T03:19:36.848Z) INFO: pH: 3.43 pH</span>
+</code></pre>
 				<p>Actually I got this output during a test run ensuring the exmaple code would
 				work.</p>
 				<a href="#switching-relays" id="switching-relays" style="color: inherit; text-decoration: none;">
 					<h3>Switching relays</h3>
 				</a>
-				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> UsrcfgCgiService = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../lib/usrcfg-cgi.service&#x27;</span>).UsrcfgCgiService
-<span class="hljs-keyword">const</span> RelayDataInterpreter = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../lib/relay-data-interpreter&#x27;</span>).RelayDataInterpreter
-<span class="hljs-keyword">const</span> GetStateCategory = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../lib/get-state-data&#x27;</span>).GetStateCategory
-<span class="hljs-keyword">const</span> GetStateService = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../lib/get-state.service&#x27;</span>).GetStateService
-<span class="hljs-keyword">const</span> Logger = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;../lib/logger&#x27;</span>).Logger
+				<pre><code class="language-javascript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">UsrcfgCgiService</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;../lib/usrcfg-cgi.service&#039;</span><span style="color: #000000">).</span><span style="color: #001080">UsrcfgCgiService</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">RelayDataInterpreter</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;../lib/relay-data-interpreter&#039;</span><span style="color: #000000">).</span><span style="color: #001080">RelayDataInterpreter</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">GetStateCategory</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;../lib/get-state-data&#039;</span><span style="color: #000000">).</span><span style="color: #001080">GetStateCategory</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">GetStateService</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;../lib/get-state.service&#039;</span><span style="color: #000000">).</span><span style="color: #001080">GetStateService</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">Logger</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;../lib/logger&#039;</span><span style="color: #000000">).</span><span style="color: #001080">Logger</span>
 
-<span class="hljs-keyword">const</span> logger = <span class="hljs-keyword">new</span> Logger();
-<span class="hljs-keyword">const</span> config = {
-    <span class="hljs-string">&quot;controllerUrl&quot;</span>: <span class="hljs-string">&quot;http://192.168.2.3&quot;</span>,
-    <span class="hljs-string">&quot;basicAuth&quot;</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-string">&quot;username&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,
-    <span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,
-    <span class="hljs-string">&quot;timeout&quot;</span>: <span class="hljs-number">5000</span>,
-    <span class="hljs-string">&quot;updateInterval&quot;</span>: <span class="hljs-number">5000</span>,
-    <span class="hljs-string">&quot;errorTolerance&quot;</span>: <span class="hljs-number">2</span>
-}
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">logger</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Logger</span><span style="color: #000000">();</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">config</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;controllerUrl&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;http://192.168.2.3&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;basicAuth&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;username&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;admin&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;password&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;admin&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;timeout&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">5000</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;updateInterval&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">5000</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&quot;errorTolerance&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span>
+<span style="color: #000000">}</span>
 
-<span class="hljs-keyword">const</span> interpreter = <span class="hljs-keyword">new</span> RelayDataInterpreter(logger)
-<span class="hljs-keyword">const</span> dataSource = <span class="hljs-keyword">new</span> GetStateService(config, logger)
-<span class="hljs-keyword">const</span> relaySwitcher = <span class="hljs-keyword">new</span> UsrcfgCgiService(config, logger, dataSource, interpreter)
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">interpreter</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">RelayDataInterpreter</span><span style="color: #000000">(</span><span style="color: #001080">logger</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dataSource</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">GetStateService</span><span style="color: #000000">(</span><span style="color: #001080">config</span><span style="color: #000000">, </span><span style="color: #001080">logger</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">relaySwitcher</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">UsrcfgCgiService</span><span style="color: #000000">(</span><span style="color: #001080">config</span><span style="color: #000000">, </span><span style="color: #001080">logger</span><span style="color: #000000">, </span><span style="color: #001080">dataSource</span><span style="color: #000000">, </span><span style="color: #001080">interpreter</span><span style="color: #000000">)</span>
 
-dataSource.update().then(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> {
-    <span class="hljs-comment">// Let&#x27;s just switch the chlorine dosage relay off to keep it easy...</span>
-    relaySwitcher.setOff(data.getChlorineDosageControl()).then(<span class="hljs-function"><span class="hljs-params">r</span> =&gt;</span> {
-        logger.info(<span class="hljs-string">`Chlorine dosage control has been turned off (response code: <span class="hljs-subst">${r}</span>)`</span>)
-    })
+<span style="color: #001080">dataSource</span><span style="color: #000000">.</span><span style="color: #795E26">update</span><span style="color: #000000">().</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Let&#039;s just switch the chlorine dosage relay off to keep it easy...</span>
+<span style="color: #000000">    </span><span style="color: #001080">relaySwitcher</span><span style="color: #000000">.</span><span style="color: #795E26">setOff</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">.</span><span style="color: #795E26">getChlorineDosageControl</span><span style="color: #000000">()).</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #001080">r</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">`Chlorine dosage control has been turned off (response code: </span><span style="color: #0000FF">${</span><span style="color: #001080">r</span><span style="color: #0000FF">}</span><span style="color: #A31515">)`</span><span style="color: #000000">)</span>
+<span style="color: #000000">    })</span>
 
-    <span class="hljs-comment">// ...to switch arbitrary relays you will have to determine the acutal</span>
-    <span class="hljs-comment">// object id of the relay you want to switch (e.g. by its label):</span>
-    data.getDataObjectsByCategory(GetStateCategory.RELAYS).forEach(<span class="hljs-function"><span class="hljs-params">relay</span> =&gt;</span> {
-        <span class="hljs-keyword">if</span> (relay.label === <span class="hljs-string">&quot;Gartenlicht&quot;</span>) {
-            relaySwitcher.setAuto(relay).then(<span class="hljs-function"><span class="hljs-params">r</span> =&gt;</span> {
-                logger.info(<span class="hljs-string">`<span class="hljs-subst">${relay.label}</span> has been turned on (response code: <span class="hljs-subst">${r}</span>)`</span>)
-            })
-        }
-    })
-})</code></pre>
+<span style="color: #000000">    </span><span style="color: #008000">// ...to switch arbitrary relays you will have to determine the acutal</span>
+<span style="color: #000000">    </span><span style="color: #008000">// object id of the relay you want to switch (e.g. by its label):</span>
+<span style="color: #000000">    </span><span style="color: #001080">data</span><span style="color: #000000">.</span><span style="color: #795E26">getDataObjectsByCategory</span><span style="color: #000000">(</span><span style="color: #001080">GetStateCategory</span><span style="color: #000000">.</span><span style="color: #0070C1">RELAYS</span><span style="color: #000000">).</span><span style="color: #795E26">forEach</span><span style="color: #000000">(</span><span style="color: #001080">relay</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">        </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">relay</span><span style="color: #000000">.</span><span style="color: #001080">label</span><span style="color: #000000"> === </span><span style="color: #A31515">&quot;Gartenlicht&quot;</span><span style="color: #000000">) {</span>
+<span style="color: #000000">            </span><span style="color: #001080">relaySwitcher</span><span style="color: #000000">.</span><span style="color: #795E26">setAuto</span><span style="color: #000000">(</span><span style="color: #001080">relay</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #001080">r</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">                </span><span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">`</span><span style="color: #0000FF">${</span><span style="color: #001080">relay</span><span style="color: #000000FF">.</span><span style="color: #001080">label</span><span style="color: #0000FF">}</span><span style="color: #A31515"> has been turned on (response code: </span><span style="color: #0000FF">${</span><span style="color: #001080">r</span><span style="color: #0000FF">}</span><span style="color: #A31515">)`</span><span style="color: #000000">)</span>
+<span style="color: #000000">            })</span>
+<span style="color: #000000">        }</span>
+<span style="color: #000000">    })</span>
+<span style="color: #000000">})</span>
+</code></pre>
 				<p>The examples above can also be found in the <code>examples</code> directory of this repository.</p>
 				<a href="#full-api-docs" id="full-api-docs" style="color: inherit; text-decoration: none;">
 					<h2>Full API docs</h2>
@@ -241,38 +240,38 @@ dataSource.update().then(<span class="hljs-function"><span class="hljs-params">d
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_abstract_service_.html">&quot;abstract-<wbr>service&quot;</a>
+						<a href="modules/abstract_service.html">abstract-<wbr>service</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_get_state_data_.html">&quot;get-<wbr>state-<wbr>data&quot;</a>
+						<a href="modules/get_state_data.html">get-<wbr>state-<wbr>data</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_get_state_data_object_.html">&quot;get-<wbr>state-<wbr>data-<wbr>object&quot;</a>
+						<a href="modules/get_state_data_object.html">get-<wbr>state-<wbr>data-<wbr>object</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_get_state_data_sys_info_.html">&quot;get-<wbr>state-<wbr>data-<wbr>sys-<wbr>info&quot;</a>
+						<a href="modules/get_state_data_sys_info.html">get-<wbr>state-<wbr>data-<wbr>sys-<wbr>info</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_get_state_service_.html">&quot;get-<wbr>state.service&quot;</a>
+						<a href="modules/get_state_service.html">get-<wbr>state.service</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_logger_.html">&quot;logger&quot;</a>
+						<a href="modules/logger.html">logger</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_mock_state_.html">&quot;mock-<wbr>state&quot;</a>
+						<a href="modules/mock_state.html">mock-<wbr>state</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_relay_data_interpreter_.html">&quot;relay-<wbr>data-<wbr>interpreter&quot;</a>
+						<a href="modules/relay_data_interpreter.html">relay-<wbr>data-<wbr>interpreter</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_relay_data_object_.html">&quot;relay-<wbr>data-<wbr>object&quot;</a>
+						<a href="modules/relay_data_object.html">relay-<wbr>data-<wbr>object</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/_usrcfg_cgi_service_.html">&quot;usrcfg-<wbr>cgi.service&quot;</a>
+						<a href="modules/usrcfg_cgi_service.html">usrcfg-<wbr>cgi.service</a>
 					</li>
 				</ul>
 			</nav>
