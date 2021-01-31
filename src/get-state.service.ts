@@ -5,10 +5,9 @@
  */
 
 import axios, { AxiosPromise, Method } from 'axios';
-import { AbstractService } from './abstract-service';
+import { AbstractService, IServiceConfig } from './abstract-service';
 import { GetStateData } from './get-state-data';
 import { ILogger } from './logger';
-import { IServiceConfig } from './i-service-config';
 
 /**
  * Extend common [[`IServiceConfig`]] with special parameters that only apply to
