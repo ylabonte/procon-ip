@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for procon-ip">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -40,8 +41,6 @@
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
 							<input type="checkbox" id="tsd-filter-externals" checked />
 							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -53,13 +52,13 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../modules.html">procon-ip</a>
 				</li>
 				<li>
-					<a href="../modules/_logger_.html">&quot;logger&quot;</a>
+					<a href="../modules/logger.html">logger</a>
 				</li>
 				<li>
-					<a href="_logger_.logger.html">Logger</a>
+					<a href="logger.logger-1.html">Logger</a>
 				</li>
 			</ul>
 			<h1>Class Logger</h1>
@@ -77,7 +76,7 @@
 					<p>This logger uses the <code>console.log</code> method and simply prepends a timestamp
 						plus the used log level in uppercase. You can write your own custom logger
 						or pass any other (e.g. ioBroker has a suitable logger on board), that
-					matches the <a href="../interfaces/_logger_.ilogger.html"><code>ILogger</code></a> interface.</p>
+					matches the <a href="../interfaces/logger.ilogger.html"><code>ILogger</code></a> interface.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -91,7 +90,7 @@
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/_logger_.ilogger.html" class="tsd-signature-type">ILogger</a></li>
+					<li><a href="../interfaces/logger.ilogger.html" class="tsd-signature-type" data-tsd-kind="Interface">ILogger</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -101,23 +100,29 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_logger_.logger.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="logger.logger-1.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-private-protected">
+						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="logger.logger-1.html#_level" class="tsd-kind-icon">_level</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-protected"><a href="_logger_.logger.html#timestamp" class="tsd-kind-icon">timestamp</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="logger.logger-1.html#timestamp" class="tsd-kind-icon">timestamp</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_logger_.logger.html#debug" class="tsd-kind-icon">debug</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_logger_.logger.html#error" class="tsd-kind-icon">error</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_logger_.logger.html#info" class="tsd-kind-icon">info</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_logger_.logger.html#setloglevel" class="tsd-kind-icon">set<wbr>Log<wbr>Level</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_logger_.logger.html#warn" class="tsd-kind-icon">warn</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="logger.logger-1.html#debug" class="tsd-kind-icon">debug</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="logger.logger-1.html#error" class="tsd-kind-icon">error</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="logger.logger-1.html#info" class="tsd-kind-icon">info</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="logger.logger-1.html#setloglevel" class="tsd-kind-icon">set<wbr>Log<wbr>Level</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="logger.logger-1.html#warn" class="tsd-kind-icon">warn</a></li>
 							</ul>
 						</section>
 					</div>
@@ -129,13 +134,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Logger<span class="tsd-signature-symbol">(</span>logLevel<span class="tsd-signature-symbol">?: </span><a href="../enums/_logger_.loglevel.html" class="tsd-signature-type">LogLevel</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_logger_.logger.html" class="tsd-signature-type">Logger</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Logger<span class="tsd-signature-symbol">(</span>logLevel<span class="tsd-signature-symbol">?: </span><a href="../enums/logger.loglevel.html#debug" class="tsd-signature-type" data-tsd-kind="Enumeration member">DEBUG</a><span class="tsd-signature-symbol"> | </span><a href="../enums/logger.loglevel.html#info" class="tsd-signature-type" data-tsd-kind="Enumeration member">INFO</a><span class="tsd-signature-symbol"> | </span><a href="../enums/logger.loglevel.html#warn" class="tsd-signature-type" data-tsd-kind="Enumeration member">WARN</a><span class="tsd-signature-symbol"> | </span><a href="../enums/logger.loglevel.html#error" class="tsd-signature-type" data-tsd-kind="Enumeration member">ERROR</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="logger.logger-1.html" class="tsd-signature-type" data-tsd-kind="Class">Logger</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L65">logger.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/be6e387/src/logger.ts#L65">logger.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -146,32 +151,49 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> logLevel: <a href="../enums/_logger_.loglevel.html" class="tsd-signature-type">LogLevel</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> logLevel: <a href="../enums/logger.loglevel.html#debug" class="tsd-signature-type" data-tsd-kind="Enumeration member">DEBUG</a><span class="tsd-signature-symbol"> | </span><a href="../enums/logger.loglevel.html#info" class="tsd-signature-type" data-tsd-kind="Enumeration member">INFO</a><span class="tsd-signature-symbol"> | </span><a href="../enums/logger.loglevel.html#warn" class="tsd-signature-type" data-tsd-kind="Enumeration member">WARN</a><span class="tsd-signature-symbol"> | </span><a href="../enums/logger.loglevel.html#error" class="tsd-signature-type" data-tsd-kind="Enumeration member">ERROR</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Optionally define a custom log level. Default is <code>LogLevel.INFO</code>.</p>
-										</div>
+										<p>Optionally define a custom log level. Default is <code>LogLevel.INFO</code>.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_logger_.logger.html" class="tsd-signature-type">Logger</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="logger.logger-1.html" class="tsd-signature-type" data-tsd-kind="Class">Logger</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
+			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_level" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _level</h3>
+					<div class="tsd-signature tsd-kind-icon">_level<span class="tsd-signature-symbol">:</span> <a href="../enums/logger.loglevel.html" class="tsd-signature-type" data-tsd-kind="Enumeration">LogLevel</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/be6e387/src/logger.ts#L65">logger.ts:65</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>internal</dt>
+							<dd></dd>
+						</dl>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
 					<a name="timestamp" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> timestamp</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-protected">
+					<h3>timestamp</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> timestamp<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L137">logger.ts:137</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/be6e387/src/logger.ts#L137">logger.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -196,9 +218,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_logger_.ilogger.html">ILogger</a>.<a href="../interfaces/_logger_.ilogger.html#debug">debug</a></p>
+								<p>Implementation of <a href="../interfaces/logger.ilogger.html">ILogger</a>.<a href="../interfaces/logger.ilogger.html#debug">debug</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L93">logger.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/be6e387/src/logger.ts#L93">logger.ts:93</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -228,9 +250,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_logger_.ilogger.html">ILogger</a>.<a href="../interfaces/_logger_.ilogger.html#error">error</a></p>
+								<p>Implementation of <a href="../interfaces/logger.ilogger.html">ILogger</a>.<a href="../interfaces/logger.ilogger.html#error">error</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L126">logger.ts:126</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/be6e387/src/logger.ts#L126">logger.ts:126</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -260,9 +282,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_logger_.ilogger.html">ILogger</a>.<a href="../interfaces/_logger_.ilogger.html#info">info</a></p>
+								<p>Implementation of <a href="../interfaces/logger.ilogger.html">ILogger</a>.<a href="../interfaces/logger.ilogger.html#info">info</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L104">logger.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/be6e387/src/logger.ts#L104">logger.ts:104</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -287,13 +309,13 @@
 					<a name="setloglevel" class="tsd-anchor"></a>
 					<h3>set<wbr>Log<wbr>Level</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Log<wbr>Level<span class="tsd-signature-symbol">(</span>logLevel<span class="tsd-signature-symbol">: </span><a href="../enums/_logger_.loglevel.html" class="tsd-signature-type">LogLevel</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Log<wbr>Level<span class="tsd-signature-symbol">(</span>logLevel<span class="tsd-signature-symbol">: </span><a href="../enums/logger.loglevel.html" class="tsd-signature-type" data-tsd-kind="Enumeration">LogLevel</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L84">logger.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/be6e387/src/logger.ts#L84">logger.ts:84</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -306,7 +328,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>logLevel: <a href="../enums/_logger_.loglevel.html" class="tsd-signature-type">LogLevel</a></h5>
+									<h5>logLevel: <a href="../enums/logger.loglevel.html" class="tsd-signature-type" data-tsd-kind="Enumeration">LogLevel</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
@@ -324,9 +346,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_logger_.ilogger.html">ILogger</a>.<a href="../interfaces/_logger_.ilogger.html#warn">warn</a></p>
+								<p>Implementation of <a href="../interfaces/logger.ilogger.html">ILogger</a>.<a href="../interfaces/logger.ilogger.html#warn">warn</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/logger.ts#L115">logger.ts:115</a></li>
+									<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/be6e387/src/logger.ts#L115">logger.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -352,81 +374,81 @@
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_abstract_service_.html">&quot;abstract-<wbr>service&quot;</a>
+						<a href="../modules/abstract_service.html">abstract-<wbr>service</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_get_state_data_.html">&quot;get-<wbr>state-<wbr>data&quot;</a>
+						<a href="../modules/get_state_data.html">get-<wbr>state-<wbr>data</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_get_state_data_object_.html">&quot;get-<wbr>state-<wbr>data-<wbr>object&quot;</a>
+						<a href="../modules/get_state_data_object.html">get-<wbr>state-<wbr>data-<wbr>object</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_get_state_data_sys_info_.html">&quot;get-<wbr>state-<wbr>data-<wbr>sys-<wbr>info&quot;</a>
+						<a href="../modules/get_state_data_sys_info.html">get-<wbr>state-<wbr>data-<wbr>sys-<wbr>info</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_get_state_service_.html">&quot;get-<wbr>state.service&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/_i_service_config_.html">&quot;i-<wbr>service-<wbr>config&quot;</a>
+						<a href="../modules/get_state_service.html">get-<wbr>state.service</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/_logger_.html">&quot;logger&quot;</a>
+						<a href="../modules/logger.html">logger</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_mock_state_.html">&quot;mock-<wbr>state&quot;</a>
+						<a href="../modules/mock_state.html">mock-<wbr>state</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_relay_data_interpreter_.html">&quot;relay-<wbr>data-<wbr>interpreter&quot;</a>
+						<a href="../modules/relay_data_interpreter.html">relay-<wbr>data-<wbr>interpreter</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_relay_data_object_.html">&quot;relay-<wbr>data-<wbr>object&quot;</a>
+						<a href="../modules/relay_data_object.html">relay-<wbr>data-<wbr>object</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_usrcfg_cgi_service_.html">&quot;usrcfg-<wbr>cgi.service&quot;</a>
+						<a href="../modules/usrcfg_cgi_service.html">usrcfg-<wbr>cgi.service</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum tsd-parent-kind-module">
-						<a href="../enums/_logger_.loglevel.html" class="tsd-kind-icon">Log<wbr>Level</a>
+						<a href="../enums/logger.loglevel.html" class="tsd-kind-icon">Log<wbr>Level</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="_logger_.logger.html" class="tsd-kind-icon">Logger</a>
+						<a href="logger.logger-1.html" class="tsd-kind-icon">Logger</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="_logger_.logger.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="logger.logger-1.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-protected">
-								<a href="_logger_.logger.html#timestamp" class="tsd-kind-icon">timestamp</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="logger.logger-1.html#_level" class="tsd-kind-icon">_level</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_logger_.logger.html#debug" class="tsd-kind-icon">debug</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_logger_.logger.html#error" class="tsd-kind-icon">error</a>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="logger.logger-1.html#timestamp" class="tsd-kind-icon">timestamp</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_logger_.logger.html#info" class="tsd-kind-icon">info</a>
+								<a href="logger.logger-1.html#debug" class="tsd-kind-icon">debug</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_logger_.logger.html#setloglevel" class="tsd-kind-icon">set<wbr>Log<wbr>Level</a>
+								<a href="logger.logger-1.html#error" class="tsd-kind-icon">error</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_logger_.logger.html#warn" class="tsd-kind-icon">warn</a>
+								<a href="logger.logger-1.html#info" class="tsd-kind-icon">info</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="logger.logger-1.html#setloglevel" class="tsd-kind-icon">set<wbr>Log<wbr>Level</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="logger.logger-1.html#warn" class="tsd-kind-icon">warn</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/_logger_.ilogger.html" class="tsd-kind-icon">ILogger</a>
+						<a href="../interfaces/logger.ilogger.html" class="tsd-kind-icon">ILogger</a>
 					</li>
 				</ul>
 			</nav>
@@ -450,6 +472,9 @@
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
 			</ul>
 		</div>
 	</div>
