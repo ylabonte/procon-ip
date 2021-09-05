@@ -146,7 +146,7 @@ export abstract class AbstractService {
         (this.baseUrl.endsWith('/') ? this.baseUrl : `${this.baseUrl}/`) +
           (this._endpoint.startsWith('/') ? this._endpoint.substr(1) : this._endpoint),
       ).href;
-    } catch (e) {
+    } catch (e: any) {
       this.log.error(e);
       return this._endpoint;
     }
@@ -197,8 +197,8 @@ export abstract class AbstractService {
 
     if (this._config.basicAuth) {
       config.auth = {
-        username: this._config.username || "",
-        password: this._config.password || "",
+        username: this._config.username || '',
+        password: this._config.password || '',
       };
     }
 

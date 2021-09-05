@@ -63,7 +63,7 @@ export class GetStateDataObject {
 
   /**
    * Sub-index for each category.
-   * 
+   *
    * Starts counting from `0` at the first object of the instances category.
    * Used to determine e.g. the relay IDs.
    */
@@ -71,14 +71,14 @@ export class GetStateDataObject {
 
   /**
    * Indicates whether the object is considered to be active.
-   * 
+   *
    * Indeed this only means the name is not '_n.a._'.
    */
   public active!: boolean;
 
   /**
    * Passthru all parameters to [[`GetStateDataObject.set`]].
-   * 
+   *
    * @param index Column id/index
    * @param name Column or data portion name
    * @param unit Column or data portion unit (if applicable in any way)
@@ -92,10 +92,10 @@ export class GetStateDataObject {
 
   /**
    * Set object values based on the raw input values.
-   * 
-   * The input values correspond to the data rows of the represented column 
+   *
+   * The input values correspond to the data rows of the represented column
    * (except the `index` paramter which indeed is the column id/index itself).
-   * 
+   *
    * @param index Column id/index
    * @param name Column or data portion name
    * @param unit Column or data portion unit (if applicable in any way)
@@ -148,7 +148,7 @@ export class GetStateDataObject {
 
   /**
    * Iterate all fields of this object.
-   * 
+   *
    * @param callback A user-defined callback.
    */
   public forFields(callback: (field: string) => any): void {

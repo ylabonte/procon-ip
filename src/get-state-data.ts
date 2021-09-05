@@ -11,11 +11,11 @@ import { GetStateDataSysInfo } from './get-state-data-sys-info';
 import { RelayDataObject } from './relay-data-object';
 
 /**
- * Enum of valid categories that can be used with 
+ * Enum of valid categories that can be used with
  * [[`GetStateData.getDataObjectsByCategory`]].
- * 
+ *
  * Categories are based on the official API documentation.
- * 
+ *
  * See manual (search for _GetState.csv_): http://www.pooldigital.de/trm/TRM_ProConIP.pdf
  */
 export enum GetStateCategory {
@@ -67,7 +67,7 @@ export enum GetStateCategory {
 }
 
 /**
- * This class is parser and access helper at once with integrated object 
+ * This class is parser and access helper at once with integrated object
  * representation for the response CSV of the [[`GetStateService`]].
  * (_This might be changed/split in seperate classes in a future refactoring_)
  */
@@ -84,7 +84,7 @@ export class GetStateData {
 
   /**
    * CSV input parsed to a simple 2-dimensional array.
-   * 
+   *
    * Structure:
    * ```
    * [
@@ -103,7 +103,7 @@ export class GetStateData {
 
   /**
    * SysInfo column data.
-   * 
+   *
    * The first line of the csv has no relation to the rest of the CSV. So it
    * is stored seperately in here.
    */
@@ -111,7 +111,7 @@ export class GetStateData {
 
   /**
    * Actual data objects for further processing.
-   * 
+   *
    * Ordered by CSV column position starting at 0.
    */
   public objects: GetStateDataObject[];
@@ -125,7 +125,7 @@ export class GetStateData {
   /**
    * Data categories as array of objects.
    *
-   * Category names as keys and arrays as values. These arrays list columns 
+   * Category names as keys and arrays as values. These arrays list columns
    * (referencing the [[`parsed`]] CSV) which fall into this category.
    * The array values might contain simple listings of the column positions or
    * another array containing the starting and ending index of a slice/range.
@@ -142,56 +142,56 @@ export class GetStateData {
 
     /**
      * Category for analog channels.
-     * 
+     *
      * _Read from **column 1 to 5** of the CSV._
      */
     analog: [[1, 5]],
 
     /**
      * Category for electrode readings.
-     * 
+     *
      * _Read from **columns 6 and 7** of the CSV._
      */
     electrodes: [6, 7],
 
     /**
      * Category for temperature sensor values.
-     * 
+     *
      * _Read from **column 8 to 15** of the CSV._
      */
     temperatures: [[8, 15]],
 
     /**
      * Category for internal relay values.
-     * 
+     *
      * _Read from **column 16 to 23** of the CSV._
      */
     relays: [[16, 23]],
 
     /**
      * Category for digital input values.
-     * 
+     *
      * _Read from **column 24 to 27** of the CSV._
      */
     digitalInput: [[24, 27]],
 
     /**
      * Category for external relay values.
-     * 
+     *
      * _Read from **column 28 to 35** of the CSV._
      */
     externalRelays: [[28, 35]],
 
     /**
      * Category for canister values.
-     * 
+     *
      * _Read from **column 36 to 38** of the CSV._
      */
     canister: [[36, 38]],
 
     /**
      * Category for canister consumptions.
-     * 
+     *
      * _Read from **column 39 to 41** of the CSV._
      */
     canisterConsumptions: [[39, 41]],
@@ -199,8 +199,8 @@ export class GetStateData {
 
   /**
    * Initialize new [[`GetStateData`]] instance.
-   * 
-   * @param rawData Plain response string of the [[`GetStateService`]] or the 
+   *
+   * @param rawData Plain response string of the [[`GetStateService`]] or the
    *                `/GetState.csv` API endpoint.
    */
   public constructor(rawData?: string) {
@@ -226,7 +226,7 @@ export class GetStateData {
 
   /**
    * Get the category of a data item by its column index.
-   * 
+   *
    * @param index Column index
    * @returns Category name or string `none` if no category could be identified.
    */
@@ -242,7 +242,7 @@ export class GetStateData {
 
   /**
    * Get [[`GetStateDataObject`]] objects by index.
-   * 
+   *
    * @param indices An array of object indices specifying the return objects.
    * @param activeOnly Optionally filter for active objects only.
    */
@@ -254,7 +254,7 @@ export class GetStateData {
 
   /**
    * Get a single [[`GetStateDataObject`]] by id aka column index.
-   * 
+   *
    * @param id Object column index.
    */
   public getDataObject(id: number): GetStateDataObject {
@@ -263,7 +263,7 @@ export class GetStateData {
 
   /**
    * Get all data objects of a given category.
-   * 
+   *
    * @param category A valid category string (see [[`GetStateCategory`]])
    * @param activeOnly Optionally filter for active objects only.
    */
@@ -327,7 +327,7 @@ export class GetStateData {
   /**
    * Parse the CSV string into a 2-dimensional array structure and into
    * [[`GetStateDataObject`]] and [[`RelayDataObject`]] objects.
-   * 
+   *
    * @param csv Raw CSV input string (response of the `/GetState.csv` endpoint)
    */
   public parseCsv(csv: string): void {
@@ -395,7 +395,7 @@ export class GetStateData {
   }
 
   /**
-   * @param input 
+   * @param input
    * @internal
    */
   private expandSlice(input: number[][]): number[] {

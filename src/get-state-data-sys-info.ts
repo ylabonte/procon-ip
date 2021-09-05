@@ -20,7 +20,7 @@ export class GetStateDataSysInfo {
   [key: string]: any;
 
   /**
-   * 
+   *
    */
   public time!: string;
 
@@ -36,7 +36,7 @@ export class GetStateDataSysInfo {
 
   /**
    * Reset root cause.
-   * 
+   *
    * Values are documented bitwise as follows:
    *  - Bit 4: External reset
    *  - Bit 3: PowerUp reset
@@ -50,7 +50,7 @@ export class GetStateDataSysInfo {
 
   /**
    * NTP fault state.
-   * 
+   *
    * Values are documented bitwise as follows:
    *  - Bit 16: NTP available
    *  - Bit 15..3: reserved
@@ -64,7 +64,7 @@ export class GetStateDataSysInfo {
 
   /**
    * Other config flags.
-   * 
+   *
    * Values are documented bitwise as follows:
    *  - Bit 8: Extension an SPI (`0`) oder DMX (`1`)
    *  - Bit 7: Repeated Mails
@@ -82,7 +82,7 @@ export class GetStateDataSysInfo {
 
   /**
    * Dosage control information flags.
-   * 
+   *
    * Values are documented bitwise as follows:
    *  - Bit 12: pH+ enabled
    *  - Bit 11..9: reserved
@@ -113,8 +113,8 @@ export class GetStateDataSysInfo {
 
   /**
    * Initialize a new [[`GetStateDataSysInfo`]] object.
-   * 
-   * @param data Parsed response CSV of the `/GetState.csv` endpoint as 
+   *
+   * @param data Parsed response CSV of the `/GetState.csv` endpoint as
    *             2-dimensional array (see: [[`GetStateData.parsed`]])
    */
   public constructor(data?: string[][]) {
@@ -125,8 +125,8 @@ export class GetStateDataSysInfo {
 
   /**
    * Set values from based on a 2-dimensional array structure.
-   * 
-   * @param data Parsed response CSV of the `/GetState.csv` endpoint as 
+   *
+   * @param data Parsed response CSV of the `/GetState.csv` endpoint as
    *             2-dimensional array (see: [[`GetStateData.parsed`]])
    */
   public setValuesFromArray(data: string[][]): void {
@@ -184,7 +184,7 @@ export class GetStateDataSysInfo {
   /**
    * Check whether the given [[`GetStateDataObject`]] object is a dosage control
    * relay.
-   * 
+   *
    * @param object The [[`GetStateDataObject`]] to check.
    */
   public isDosageEnabled(object: GetStateDataObject): boolean {

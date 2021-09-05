@@ -74,6 +74,11 @@ export class GetStateService extends AbstractService {
   /**
    * @internal
    */
+  private _errorCallback?: (e: Error) => any;
+
+  /**
+   * @internal
+   */
   private _consecutiveFailsLimit = 10;
 
   /**
@@ -136,9 +141,12 @@ export class GetStateService extends AbstractService {
    * @param callable Will be set as [[`_updateCallback`]] and triggered
    *  periodically ([[`_updateInterval`]]) and
    */
-  public start(callable?: (data: GetStateData) => void): void {
+  public start(callable?: (data: GetStateData) => void, errorCallback?: (e: Error) => void): void {
     if (callable !== undefined) {
       this._updateCallback = callable;
+    }
+    if (errorCallback !== undefined) {
+      this._errorCallback = errorCallback;
     }
     this.autoUpdate();
   }
@@ -159,7 +167,9 @@ export class GetStateService extends AbstractService {
    * interval ([[`IGetStateServiceConfig.updateInterval`]]).
    */
   public autoUpdate(): void {
-    this.update();
+    this.update().catch((e) => {
+      if (this._errorCallback !== undefined) this._errorCallback(e);
+    });
     if (this.next === undefined) {
       this.next = Number(
         setTimeout(() => {
@@ -188,7 +198,7 @@ export class GetStateService extends AbstractService {
       if (this._updateCallback !== undefined) {
         this._updateCallback(this.data);
       }
-    } catch (e) {
+    } catch (e: any) {
       this._consecutiveFails += 1;
       if (this._consecutiveFails % this._consecutiveFailsLimit === 0 && this._recentError === e.response) {
         this.log.warn(`${this._consecutiveFails} consecutive requests failed: ${e.response ? e.response : e}`);
