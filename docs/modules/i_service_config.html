@@ -3,10 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;mock-state&quot; | procon-ip</title>
+	<title>i-service-config | procon-ip</title>
 	<meta name="description" content="Documentation for procon-ip">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -40,8 +41,6 @@
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
 							<input type="checkbox" id="tsd-filter-externals" checked />
 							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -53,13 +52,13 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../modules.html">procon-ip</a>
 				</li>
 				<li>
-					<a href="_mock_state_.html">&quot;mock-state&quot;</a>
+					<a href="i_service_config.html">i-service-config</a>
 				</li>
 			</ul>
-			<h1>Module &quot;mock-state&quot;</h1>
+			<h1>Module i-service-config</h1>
 		</div>
 	</div>
 </header>
@@ -69,14 +68,10 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>This file exists for developing purpose only. It contains a CSV format string
-							(comma seperated values) which once was returned by the <code>/GetState.csv</code>
-						endpoint of the ProCon.IP pool controller.</p>
+						<p>Shared service configuration. In this context <em>service</em> means a web service
+							or endpoint of the ProCon.IP pool controller. The following parameters are
+						those that all services (in this library) have in common.</p>
 					</div>
-					<dl class="tsd-comment-tags">
-						<dt>deprecated</dt>
-						<dd></dd>
-					</dl>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -84,33 +79,11 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Variables</h3>
+							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="_mock_state_.html#getstate" class="tsd-kind-icon">GETSTATE</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/i_service_config.iserviceconfig.html" class="tsd-kind-icon">IService<wbr>Config</a></li>
 							</ul>
 						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
-					<a name="getstate" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> GETSTATE</h3>
-					<div class="tsd-signature tsd-kind-icon">GETSTATE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &#x27;\n&#x27; +&#x27;SYSINFO,1.7.0,17132,1,65536,99,257,4,4,5\n&#x27; +&#x27;Time,n.a.,n.a.,Filterdruck,Chlor,CPU Temp,Redox,pH,Pumpe,Absorber,Rücklauf,Aussen,n.a.,n.a.,n.a.,n.a.,&#x27; +&#x27;Terassenbeleuchtung,n.a.,n.a.,Gartenbeleuchtung,pH minus,Chlor,Bachlauf,Filterpumpe,Anströmung,&#x27; +&#x27;TASTER2,TASTER3,TASTER4,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,&#x27; +&#x27;Cl Rest,pH- Rest,pH+ Rest,Cl consumption,pH- consumption,pH+ consumption\n&#x27; +&#x27;h,mV,mV,Bar,ppm,C,mV,pH,C,C,C,C,C,C,C,C,--,--,--,--,--,--,--,--,cm/s,--,--,--,--,--,--,--,--,--,--,--,%,%,%,ml,ml,ml\n&#x27; +&#x27;0,0,0,-0.400,-0.957446808,147.5,0.0,0.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\n&#x27; +&#x27;1,0.0625,0.0625,0.0000125,0.0000997340,-0.00468750,0.0625,0.0078125,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,&#x27; +&#x27;1,1,1,1,1,1,1,1,0.001617183658,1,1,1,1,1,1,1,1,1,1,1,0.1,0.1,0.1,1,1,1\n&#x27; +&#x27;519,0,0,0,0,24011,8894,952,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,713,941,975,0,0,0&#x27;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/52448b8/src/mock-state.ts#L13">mock-state.ts:13</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Response payload of the <code>/GetState.csv</code> endpoint.</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>deprecated</dt>
-							<dd></dd>
-						</dl>
 					</div>
 				</section>
 			</section>
@@ -118,48 +91,48 @@
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_abstract_service_.html">&quot;abstract-<wbr>service&quot;</a>
+						<a href="abstract_service.html">abstract-<wbr>service</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_get_state_data_.html">&quot;get-<wbr>state-<wbr>data&quot;</a>
+						<a href="get_state_data.html">get-<wbr>state-<wbr>data</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_get_state_data_object_.html">&quot;get-<wbr>state-<wbr>data-<wbr>object&quot;</a>
+						<a href="get_state_data_object.html">get-<wbr>state-<wbr>data-<wbr>object</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_get_state_data_sys_info_.html">&quot;get-<wbr>state-<wbr>data-<wbr>sys-<wbr>info&quot;</a>
+						<a href="get_state_data_sys_info.html">get-<wbr>state-<wbr>data-<wbr>sys-<wbr>info</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_get_state_service_.html">&quot;get-<wbr>state.service&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="_i_service_config_.html">&quot;i-<wbr>service-<wbr>config&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="_logger_.html">&quot;logger&quot;</a>
+						<a href="get_state_service.html">get-<wbr>state.service</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="_mock_state_.html">&quot;mock-<wbr>state&quot;</a>
+						<a href="i_service_config.html">i-<wbr>service-<wbr>config</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_relay_data_interpreter_.html">&quot;relay-<wbr>data-<wbr>interpreter&quot;</a>
+						<a href="logger.html">logger</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_relay_data_object_.html">&quot;relay-<wbr>data-<wbr>object&quot;</a>
+						<a href="mock_state.html">mock-<wbr>state</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="_usrcfg_cgi_service_.html">&quot;usrcfg-<wbr>cgi.service&quot;</a>
+						<a href="relay_data_interpreter.html">relay-<wbr>data-<wbr>interpreter</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="relay_data_object.html">relay-<wbr>data-<wbr>object</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="usrcfg_cgi_service.html">usrcfg-<wbr>cgi.service</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="_mock_state_.html#getstate" class="tsd-kind-icon">GETSTATE</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/i_service_config.iserviceconfig.html" class="tsd-kind-icon">IService<wbr>Config</a>
 					</li>
 				</ul>
 			</nav>

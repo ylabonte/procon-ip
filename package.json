@@ -1,6 +1,6 @@
 {
   "name": "procon-ip",
-  "version": "1.0.2",
+  "version": "1.2.1",
   "description": "Library for the ProCon.IP pool controller",
   "license": "MIT",
   "homepage": "https://github.com/ylabonte/procon-ip#readme",
@@ -18,10 +18,10 @@
   ],
   "scripts": {
     "test": "",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "tslint -p tsconfig.json",
-    "build": "tsc",
-    "build:docs": "typedoc --stripInternal --out docs/ src/ && touch docs/.nojekyll",
+    "format": "npx prettier --write \"src/**/*.ts\"",
+    "lint": "npx tslint -p tsconfig.json",
+    "build": "npx tsc",
+    "build:docs": "npx typedoc --excludeInternal --out docs/ src/ && touch docs/.nojekyll",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint"
   },

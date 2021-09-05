@@ -154,8 +154,8 @@ export abstract class AbstractService {
 
     if (this._config.basicAuth) {
       config.auth = {
-        username: this._config.username || "",
-        password: this._config.password || "",
+        username: this._config.username || '',
+        password: this._config.password || '',
       };
     }
 
