@@ -199,7 +199,7 @@ export class GetStateService extends AbstractService {
       if (this._updateCallback !== undefined) {
         this._updateCallback(this.data);
       }
-    } catch (e) {
+    } catch (e: any) {
       this._consecutiveFails += 1;
       if (this._consecutiveFails % this._consecutiveFailsLimit === 0 && this._recentError === e.response) {
         this.log.warn(`${this._consecutiveFails} consecutive requests failed: ${e.response ? e.response : e}`);

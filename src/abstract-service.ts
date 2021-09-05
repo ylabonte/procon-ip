@@ -103,7 +103,7 @@ export abstract class AbstractService {
         (this.baseUrl.endsWith('/') ? this.baseUrl : `${this.baseUrl}/`) +
           (this._endpoint.startsWith('/') ? this._endpoint.substr(1) : this._endpoint),
       ).href;
-    } catch (e) {
+    } catch (e: any) {
       this.log.error(e);
       return this._endpoint;
     }
