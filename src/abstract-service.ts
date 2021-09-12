@@ -13,7 +13,6 @@
 import { AxiosRequestConfig, Method } from 'axios';
 import { ILogger } from './logger';
 
-
 export interface IServiceConfig {
   requestHeaders?: { [key: string]: string };
   /**
@@ -52,7 +51,6 @@ export interface IServiceConfig {
   // key as a variable...
   [key: string]: any;
 }
-
 
 /**
  * Abstract service implementing the common base setup for the _axios_ requests
