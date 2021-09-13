@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>LogLevel | procon-ip</title>
+	<title>RelayStateBitMask | procon-ip</title>
 	<meta name="description" content="Documentation for procon-ip">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,19 +55,31 @@
 					<a href="../modules.html">procon-ip</a>
 				</li>
 				<li>
-					<a href="../modules/logger.html">logger</a>
+					<a href="../modules/relay_data_interpreter.html">relay-data-interpreter</a>
 				</li>
 				<li>
-					<a href="logger.LogLevel.html">LogLevel</a>
+					<a href="relay_data_interpreter.RelayStateBitMask.html">RelayStateBitMask</a>
 				</li>
 			</ul>
-			<h1>Enumeration LogLevel</h1>
+			<h1>Enumeration RelayStateBitMask</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The relay state is a two bit value in decimal representation:</p>
+						<ul>
+							<li>lsb: 0 = off, 1 = on</li>
+							<li>msb: 0 = auto, 1 = manual</li>
+						</ul>
+					</div>
+					<p>It is used by the <a href="../classes/relay_data_interpreter.RelayDataInterpreter.html"><code>RelayDataInterpreter</code></a> and the <a href="../classes/usrcfg_cgi_service.UsrcfgCgiService.html"><code>UsrcfgCgiService</code></a>.</p>
+				</div>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
@@ -75,10 +87,8 @@
 						<section class="tsd-index-section ">
 							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="logger.LogLevel.html#DEBUG" class="tsd-kind-icon">DEBUG</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="logger.LogLevel.html#ERROR" class="tsd-kind-icon">ERROR</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="logger.LogLevel.html#INFO" class="tsd-kind-icon">INFO</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="logger.LogLevel.html#WARN" class="tsd-kind-icon">WARN</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="relay_data_interpreter.RelayStateBitMask.html#manual" class="tsd-kind-icon">manual</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="relay_data_interpreter.RelayStateBitMask.html#on" class="tsd-kind-icon">on</a></li>
 							</ul>
 						</section>
 					</div>
@@ -87,42 +97,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Enumeration members</h2>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="DEBUG" class="tsd-anchor"></a>
-					<h3>DEBUG</h3>
-					<div class="tsd-signature tsd-kind-icon">DEBUG<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 1</span></div>
+					<a name="manual" class="tsd-anchor"></a>
+					<h3>manual</h3>
+					<div class="tsd-signature tsd-kind-icon">manual<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 2</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/2335167/src/logger.ts#L12">logger.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/b6f182d/src/relay-data-interpreter.ts#L21">relay-data-interpreter.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="ERROR" class="tsd-anchor"></a>
-					<h3>ERROR</h3>
-					<div class="tsd-signature tsd-kind-icon">ERROR<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 4</span></div>
+					<a name="on" class="tsd-anchor"></a>
+					<h3>on</h3>
+					<div class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/2335167/src/logger.ts#L15">logger.ts:15</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="INFO" class="tsd-anchor"></a>
-					<h3>INFO</h3>
-					<div class="tsd-signature tsd-kind-icon">INFO<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 2</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/2335167/src/logger.ts#L13">logger.ts:13</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="WARN" class="tsd-anchor"></a>
-					<h3>WARN</h3>
-					<div class="tsd-signature tsd-kind-icon">WARN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 3</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/2335167/src/logger.ts#L14">logger.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/b6f182d/src/relay-data-interpreter.ts#L20">relay-data-interpreter.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -149,13 +139,13 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/get_state_service.html">get-<wbr>state.service</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/logger.html">logger</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/mock_state.html">mock-<wbr>state</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/relay_data_interpreter.html">relay-<wbr>data-<wbr>interpreter</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -171,29 +161,20 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-enum tsd-parent-kind-module">
-						<a href="logger.LogLevel.html" class="tsd-kind-icon">Log<wbr>Level</a>
+						<a href="relay_data_interpreter.RelayStateBitMask.html" class="tsd-kind-icon">Relay<wbr>State<wbr>Bit<wbr>Mask</a>
 						<ul>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="logger.LogLevel.html#DEBUG" class="tsd-kind-icon">DEBUG</a>
+								<a href="relay_data_interpreter.RelayStateBitMask.html#manual" class="tsd-kind-icon">manual</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="logger.LogLevel.html#ERROR" class="tsd-kind-icon">ERROR</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="logger.LogLevel.html#INFO" class="tsd-kind-icon">INFO</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="logger.LogLevel.html#WARN" class="tsd-kind-icon">WARN</a>
+								<a href="relay_data_interpreter.RelayStateBitMask.html#on" class="tsd-kind-icon">on</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/logger.Logger.html" class="tsd-kind-icon">Logger</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/logger.ILogger.html" class="tsd-kind-icon">ILogger</a>
+						<a href="../classes/relay_data_interpreter.RelayDataInterpreter.html" class="tsd-kind-icon">Relay<wbr>Data<wbr>Interpreter</a>
 					</li>
 				</ul>
 			</nav>

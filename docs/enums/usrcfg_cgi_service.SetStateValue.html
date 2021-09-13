@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RelayStateBitMask | procon-ip</title>
+	<title>SetStateValue | procon-ip</title>
 	<meta name="description" content="Documentation for procon-ip">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">procon-ip</a>
 				</li>
 				<li>
-					<a href="../modules/relay_data_interpreter.html">relay-data-interpreter</a>
+					<a href="../modules/usrcfg_cgi_service.html">usrcfg-cgi.service</a>
 				</li>
 				<li>
-					<a href="relay_data_interpreter.RelayStateBitMask.html">RelayStateBitMask</a>
+					<a href="usrcfg_cgi_service.SetStateValue.html">SetStateValue</a>
 				</li>
 			</ul>
-			<h1>Enumeration RelayStateBitMask</h1>
+			<h1>Enumeration SetStateValue</h1>
 		</div>
 	</div>
 </header>
@@ -71,13 +71,10 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The relay state is a two bit value in decimal representation:</p>
-						<ul>
-							<li>lsb: 0 = off, 1 = on</li>
-							<li>msb: 0 = auto, 1 = manual</li>
-						</ul>
+						<p>This enum can be used with the <a href="../classes/usrcfg_cgi_service.UsrcfgCgiService.html#setState"><code>UsrcfgCgiService.setState</code></a> method. But
+							there are also shorthand wrappers for all states (<a href="../classes/relay_data_interpreter.RelayDataInterpreter.html#setOn"><code>setOn</code></a>, <a href="../classes/relay_data_interpreter.RelayDataInterpreter.html#setOff"><code>setOff</code></a>,
+						<a href="../classes/relay_data_interpreter.RelayDataInterpreter.html#setAuto"><code>setAuto</code></a>) that can be used.</p>
 					</div>
-					<p>It is used by the <a href="../classes/relay_data_interpreter.RelayDataInterpreter.html"><code>RelayDataInterpreter</code></a> and the <a href="../classes/usrcfg_cgi_service.UsrcfgCgiService.html"><code>UsrcfgCgiService</code></a>.</p>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -87,8 +84,9 @@
 						<section class="tsd-index-section ">
 							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="relay_data_interpreter.RelayStateBitMask.html#manual" class="tsd-kind-icon">manual</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="relay_data_interpreter.RelayStateBitMask.html#on" class="tsd-kind-icon">on</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="usrcfg_cgi_service.SetStateValue.html#AUTO" class="tsd-kind-icon">AUTO</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="usrcfg_cgi_service.SetStateValue.html#OFF" class="tsd-kind-icon">OFF</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="usrcfg_cgi_service.SetStateValue.html#ON" class="tsd-kind-icon">ON</a></li>
 							</ul>
 						</section>
 					</div>
@@ -97,22 +95,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Enumeration members</h2>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="manual" class="tsd-anchor"></a>
-					<h3>manual</h3>
-					<div class="tsd-signature tsd-kind-icon">manual<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 2</span></div>
+					<a name="AUTO" class="tsd-anchor"></a>
+					<h3>AUTO</h3>
+					<div class="tsd-signature tsd-kind-icon">AUTO<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 2</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/2335167/src/relay-data-interpreter.ts#L21">relay-data-interpreter.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/b6f182d/src/usrcfg-cgi.service.ts#L24">usrcfg-cgi.service.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="on" class="tsd-anchor"></a>
-					<h3>on</h3>
-					<div class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 1</span></div>
+					<a name="OFF" class="tsd-anchor"></a>
+					<h3>OFF</h3>
+					<div class="tsd-signature tsd-kind-icon">OFF<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/2335167/src/relay-data-interpreter.ts#L20">relay-data-interpreter.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/b6f182d/src/usrcfg-cgi.service.ts#L22">usrcfg-cgi.service.ts:22</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="ON" class="tsd-anchor"></a>
+					<h3>ON</h3>
+					<div class="tsd-signature tsd-kind-icon">ON<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 1</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/ylabonte/procon-ip/blob/b6f182d/src/usrcfg-cgi.service.ts#L23">usrcfg-cgi.service.ts:23</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -145,13 +153,13 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/mock_state.html">mock-<wbr>state</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/relay_data_interpreter.html">relay-<wbr>data-<wbr>interpreter</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/relay_data_object.html">relay-<wbr>data-<wbr>object</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/usrcfg_cgi_service.html">usrcfg-<wbr>cgi.service</a>
 					</li>
 				</ul>
@@ -161,20 +169,23 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-enum tsd-parent-kind-module">
-						<a href="relay_data_interpreter.RelayStateBitMask.html" class="tsd-kind-icon">Relay<wbr>State<wbr>Bit<wbr>Mask</a>
+						<a href="usrcfg_cgi_service.SetStateValue.html" class="tsd-kind-icon">Set<wbr>State<wbr>Value</a>
 						<ul>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="relay_data_interpreter.RelayStateBitMask.html#manual" class="tsd-kind-icon">manual</a>
+								<a href="usrcfg_cgi_service.SetStateValue.html#AUTO" class="tsd-kind-icon">AUTO</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="relay_data_interpreter.RelayStateBitMask.html#on" class="tsd-kind-icon">on</a>
+								<a href="usrcfg_cgi_service.SetStateValue.html#OFF" class="tsd-kind-icon">OFF</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="usrcfg_cgi_service.SetStateValue.html#ON" class="tsd-kind-icon">ON</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/relay_data_interpreter.RelayDataInterpreter.html" class="tsd-kind-icon">Relay<wbr>Data<wbr>Interpreter</a>
+						<a href="../classes/usrcfg_cgi_service.UsrcfgCgiService.html" class="tsd-kind-icon">Usrcfg<wbr>Cgi<wbr>Service</a>
 					</li>
 				</ul>
 			</nav>
