@@ -164,6 +164,15 @@ export class GetStateDataSysInfo {
   }
 
   /**
+   * Checks if the chlorine dosage device is configured as an electrolysis cell or a pump..
+   */
+   public isElectrolysis(): boolean {
+    /* tslint:disable: no-bitwise */
+    return (this.dosageControl & 16) === 16;
+    /* tslint:enable: no-bitwise */
+  }
+
+  /**
    * Check whether the automated pH- dosage is enabled.
    */
   public isPhMinusDosageEnabled(): boolean {
