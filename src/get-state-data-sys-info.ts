@@ -97,17 +97,17 @@ export class GetStateDataSysInfo {
   public dosageControl!: number;
 
   /**
-   * pH+ dosgage relay id.
+   * pH+ dosage relay id.
    */
   public phPlusDosageRelais!: number;
 
   /**
-   * pH- dosgage relay id.
+   * pH- dosage relay id.
    */
   public phMinusDosageRelais!: number;
 
   /**
-   * Chlorine dosgage relay id.
+   * Chlorine dosage relay id.
    */
   public chlorineDosageRelais!: number;
 
