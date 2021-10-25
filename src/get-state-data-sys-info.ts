@@ -213,11 +213,63 @@ export class GetStateDataSysInfo {
   }
 
   /**
+   * Returns the configured dosage relais for a given
+   * [[`GetStateDataObject`]] object.
+   *
+   * @param object The [[`GetStateDataObject`]] to check, should be a
+   * [[`GetStateData.categories.canister`]] or a
+   * [[`GetStateData.categories.canisterConsumptions`]] object.
+   */
+  public getDosageRelais(object: GetStateDataObject): number {;
+    switch (object.id) {
+      case 36:
+      case 39:
+        return this.chlorineDosageRelais;
+      case 37:
+      case 40:
+        return this.phMinusDosageRelais;
+      case 38:
+      case 41:
+        return this.phPlusDosageRelais;
+      default:
+        return 0;
+    }
+  }
+
+  /**
+   * Check whether generation of an avatar image is enabled  or not.
+   */
+   public isAvatarEnabled(): boolean {
+    /* tslint:disable: no-bitwise */
+    return (this.configOtherEnable & 8) === 8;
+    /* tslint:enable: no-bitwise */
+  }
+
+  /**
    * Check whether external relays are enabled or not.
    */
-  public isExtRelaysEnabled(): boolean {
+   public isExtRelaysEnabled(): boolean {
     /* tslint:disable: no-bitwise */
     return (this.configOtherEnable & 16) === 16;
+    /* tslint:enable: no-bitwise */
+  }
+
+  /**
+   * Check whether the digitial input 0 is configured as a flow sensor
+   * or not.
+   */
+   public isFlowSensorEnabled(): boolean {
+    /* tslint:disable: no-bitwise */
+    return (this.configOtherEnable & 64) === 64;
+    /* tslint:enable: no-bitwise */
+  }
+
+  /**
+   * Check whether DMX is enabled or not.
+   */
+   public isDmxEnabled(): boolean {
+    /* tslint:disable: no-bitwise */
+    return (this.configOtherEnable & 256) === 256;
     /* tslint:enable: no-bitwise */
   }
 }
