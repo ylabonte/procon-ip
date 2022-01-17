@@ -166,7 +166,7 @@ export class GetStateDataSysInfo {
   /**
    * Checks if the chlorine dosage device is configured as an electrolysis cell or a pump..
    */
-   public isElectrolysis(): boolean {
+  public isElectrolysis(): boolean {
     /* tslint:disable: no-bitwise */
     return (this.dosageControl & 16) === 16;
     /* tslint:enable: no-bitwise */
@@ -239,7 +239,7 @@ export class GetStateDataSysInfo {
   /**
    * Check whether generation of an avatar image is enabled  or not.
    */
-   public isAvatarEnabled(): boolean {
+  public isAvatarEnabled(): boolean {
     /* tslint:disable: no-bitwise */
     return (this.configOtherEnable & 8) === 8;
     /* tslint:enable: no-bitwise */
@@ -248,7 +248,7 @@ export class GetStateDataSysInfo {
   /**
    * Check whether external relays are enabled or not.
    */
-   public isExtRelaysEnabled(): boolean {
+  public isExtRelaysEnabled(): boolean {
     /* tslint:disable: no-bitwise */
     return (this.configOtherEnable & 16) === 16;
     /* tslint:enable: no-bitwise */
@@ -258,7 +258,7 @@ export class GetStateDataSysInfo {
    * Check whether the digitial input 0 is configured as a flow sensor
    * or not.
    */
-   public isFlowSensorEnabled(): boolean {
+  public isFlowSensorEnabled(): boolean {
     /* tslint:disable: no-bitwise */
     return (this.configOtherEnable & 64) === 64;
     /* tslint:enable: no-bitwise */
@@ -267,7 +267,7 @@ export class GetStateDataSysInfo {
   /**
    * Check whether DMX is enabled or not.
    */
-   public isDmxEnabled(): boolean {
+  public isDmxEnabled(): boolean {
     /* tslint:disable: no-bitwise */
     return (this.configOtherEnable & 256) === 256;
     /* tslint:enable: no-bitwise */
