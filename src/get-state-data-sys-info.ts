@@ -70,7 +70,7 @@ export class GetStateDataSysInfo {
    *  - Bit 7: Repeated Mails
    *  - Bit 6: FlowSensor
    *  - Bit 5: High Bus Load
-   *  - Bit 4: Relais Extension
+   *  - Bit 4: Relay Extension
    *  - Bit 3: Avatar
    *  - Bit 2: DMX
    *  - Bit 1: SD-Card
@@ -99,17 +99,17 @@ export class GetStateDataSysInfo {
   /**
    * pH+ dosage relay id.
    */
-  public phPlusDosageRelais!: number;
+  public phPlusDosageRelay!: number;
 
   /**
    * pH- dosage relay id.
    */
-  public phMinusDosageRelais!: number;
+  public phMinusDosageRelay!: number;
 
   /**
    * Chlorine dosage relay id.
    */
-  public chlorineDosageRelais!: number;
+  public chlorineDosageRelay!: number;
 
   /**
    * Initialize a new [[`GetStateDataSysInfo`]] object.
@@ -136,9 +136,9 @@ export class GetStateDataSysInfo {
     this.ntpFaultState = Number(data[0][4]);
     this.configOtherEnable = Number(data[0][5]);
     this.dosageControl = Number(data[0][6]);
-    this.phPlusDosageRelais = Number(data[0][7]);
-    this.phMinusDosageRelais = Number(data[0][8]);
-    this.chlorineDosageRelais = Number(data[0][9]);
+    this.phPlusDosageRelay = Number(data[0][7]);
+    this.phMinusDosageRelay = Number(data[0][8]);
+    this.chlorineDosageRelay = Number(data[0][9]);
   }
 
   /**
@@ -213,24 +213,24 @@ export class GetStateDataSysInfo {
   }
 
   /**
-   * Returns the configured dosage relais for a given
+   * Returns the configured dosage relay for a given
    * [[`GetStateDataObject`]] object.
    *
    * @param object The [[`GetStateDataObject`]] to check, should be a
    * [[`GetStateData.categories.canister`]] or a
    * [[`GetStateData.categories.canisterConsumptions`]] object.
    */
-  public getDosageRelais(object: GetStateDataObject): number {;
+  public getDosageRelay(object: GetStateDataObject): number {;
     switch (object.id) {
       case 36:
       case 39:
-        return this.chlorineDosageRelais;
+        return this.chlorineDosageRelay;
       case 37:
       case 40:
-        return this.phMinusDosageRelais;
+        return this.phMinusDosageRelay;
       case 38:
       case 41:
-        return this.phPlusDosageRelais;
+        return this.phPlusDosageRelay;
       default:
         return 0;
     }
