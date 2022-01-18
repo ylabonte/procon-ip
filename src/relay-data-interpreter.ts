@@ -134,7 +134,7 @@ export class RelayDataInterpreter {
    * @param relay
    */
   public setOn(relay: GetStateDataObject): [number, number] {
-    this.log.debug(`Relay byte sate: ${JSON.stringify(this.bitStates)}`);
+    this.log.debug(`Relay byte state: ${JSON.stringify(this.bitStates)}`);
     const relayObject = new RelayDataObject(relay);
     /* tslint:disable: no-bitwise */
     this.bitStates[0] |= relayObject.bitMask;
@@ -151,7 +151,7 @@ export class RelayDataInterpreter {
    * @param relay
    */
   public setOff(relay: GetStateDataObject): [number, number] {
-    this.log.debug(`Relay byte sate: ${JSON.stringify(this.bitStates)}`);
+    this.log.debug(`Relay byte state: ${JSON.stringify(this.bitStates)}`);
     const relayObject = new RelayDataObject(relay);
     /* tslint:disable: no-bitwise */
     this.bitStates[0] |= relayObject.bitMask;
@@ -168,7 +168,7 @@ export class RelayDataInterpreter {
    * @param relay
    */
   public setAuto(relay: GetStateDataObject): [number, number] {
-    this.log.debug(`Relay byte sate: ${JSON.stringify(this.bitStates)}`);
+    this.log.debug(`Relay byte state: ${JSON.stringify(this.bitStates)}`);
     const relayObject = new RelayDataObject(relay);
     /* tslint:disable: no-bitwise */
     this.bitStates[0] &= ~relayObject.bitMask;

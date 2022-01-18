@@ -6,7 +6,6 @@ Package info
 [![npm version](https://badge.fury.io/js/procon-ip.svg)](https://badge.fury.io/js/procon-ip)
 ![GitHub](https://img.shields.io/github/license/ylabonte/procon-ip)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ylabonte/procon-ip)  
-[![Dependency Status](https://img.shields.io/david/ylabonte/procon-ip.svg)](https://david-dm.org/ylabonte/procon-ip)
 [![Known Vulnerabilities](https://snyk.io/test/github/ylabonte/procon-ip/badge.svg)](https://snyk.io/test/github/ylabonte/procon-ip)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ylabonte/procon-ip/alerts/)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ylabonte/procon-ip/context:javascript)  
@@ -21,7 +20,7 @@ Package info
 * [Examples](#examples)
   * [Requesting data](#requesting-data)
   * [Switching relays](#switching-relays)
-* [Full API docs](#full-api-docs)
+* [Full API docs (auto generated)](#full-api-docs)
 * [A brief description of the ProCon.IP pool controller](#a-brief-description-of-the-proconip-pool-controller)
 * [Disclaimer](#disclaimer)
 
