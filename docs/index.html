@@ -1,310 +1,144 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>procon-ip</title>
-	<meta name="description" content="Documentation for procon-ip">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-	<script async src="assets/js/search.js" id="search-script"></script>
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">procon-ip</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<h1>procon-ip</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#procon-ip" id="procon-ip" style="color: inherit; text-decoration: none;">
-					<h1>procon-ip</h1>
-				</a>
-				<p><a href="https://nodei.co/npm/procon-ip/"><img src="https://nodei.co/npm/procon-ip.png?downloads=true&downloadRank=true&stars=true" alt="NPM"></a></p>
-				<p>Package info<br><a href="https://badge.fury.io/js/procon-ip"><img src="https://badge.fury.io/js/procon-ip.svg" alt="npm version"></a>
-					<img src="https://img.shields.io/github/license/ylabonte/procon-ip" alt="GitHub">
-					<img src="https://img.shields.io/github/issues-raw/ylabonte/procon-ip" alt="GitHub issues"><br><a href="https://david-dm.org/ylabonte/procon-ip"><img src="https://img.shields.io/david/ylabonte/procon-ip.svg" alt="Dependency Status"></a>
-					<a href="https://snyk.io/test/github/ylabonte/procon-ip"><img src="https://snyk.io/test/github/ylabonte/procon-ip/badge.svg" alt="Known Vulnerabilities"></a>
-					<a href="https://lgtm.com/projects/g/ylabonte/procon-ip/alerts/"><img src="https://img.shields.io/lgtm/alerts/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18" alt="Total alerts"></a>
-					<a href="https://lgtm.com/projects/g/ylabonte/procon-ip/context:javascript"><img src="https://img.shields.io/lgtm/grade/javascript/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18" alt="Language grade: JavaScript"></a><br><img src="https://github.com/ylabonte/procon-ip/workflows/CI%20Workflow/badge.svg" alt="CI Workflow">
-					<img src="https://github.com/ylabonte/procon-ip/workflows/CodeQL/badge.svg" alt="CodeQL">
-					<img src="https://github.com/ylabonte/procon-ip/workflows/Github%20Package%20Release/badge.svg" alt="Github Package release">
-				<img src="https://github.com/ylabonte/procon-ip/workflows/NPM%20Package%20Release/badge.svg" alt="NPM Package release"></p>
-				<a href="#overview" id="overview" style="color: inherit; text-decoration: none;">
-					<h2>Overview</h2>
-				</a>
-				<ul>
-					<li><a href="#introduction">Introduction (<em>What is this library for?</em>)</a></li>
-					<li><a href="#examples">Examples</a><ul>
-							<li><a href="#requesting-data">Requesting data</a></li>
-							<li><a href="#switching-relays">Switching relays</a></li>
-						</ul>
-					</li>
-					<li><a href="#full-api-docs">Full API docs</a></li>
-					<li><a href="#a-brief-description-of-the-proconip-pool-controller">A brief description of the ProCon.IP pool controller</a></li>
-					<li><a href="#disclaimer">Disclaimer</a></li>
-				</ul>
-				<hr>
-				<a href="#introduction" id="introduction" style="color: inherit; text-decoration: none;">
-					<h2>Introduction</h2>
-				</a>
-				<p>The name of this library refers to the <a href="#what-is-procon-ip">ProCon.IP pool controller</a>.
-					Documentation might follow. Until this please take a look at the sources. I
-					tried to keep the interfaces readable. An IDE with proper auto-completion should
-				help understand and use the library without further documentation.</p>
-				<p>Feel free to ask questions by using githubs issues system, so others can take
-				part and are able to find the answer if they have a similar question. Thanks! :)</p>
-				<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
-					<h2>Examples</h2>
-				</a>
-				<a href="#requesting-data" id="requesting-data" style="color: inherit; text-decoration: none;">
-					<h3>Requesting data</h3>
-				</a>
-				<p>First you have to initialize the <code>GetStateService</code>, which is responsible for
-				receiving information from the ProCon.IP controller.</p>
-				<pre><code class="language-javascript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">GetStateService</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;procon-ip/lib/get-state.service&#039;</span><span style="color: #000000">).</span><span style="color: #001080">GetStateService</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">GetStateCategory</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;procon-ip/lib/get-state-data&#039;</span><span style="color: #000000">).</span><span style="color: #001080">GetStateCategory</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">Logger</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;procon-ip/lib/logger&#039;</span><span style="color: #000000">).</span><span style="color: #001080">Logger</span>
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>procon-ip</title><meta name="description" content="Documentation for procon-ip"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">procon-ip</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1> procon-ip</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#procon-ip" id="procon-ip" style="color: inherit; text-decoration: none;">
+  <h1>procon-ip</h1>
+</a>
+<p><a href="https://nodei.co/npm/procon-ip/"><img src="https://nodei.co/npm/procon-ip.png?downloads=true&downloadRank=true&stars=true" alt="NPM"></a></p>
+<p>Package info<br><a href="https://badge.fury.io/js/procon-ip"><img src="https://badge.fury.io/js/procon-ip.svg" alt="npm version"></a>
+<img src="https://img.shields.io/github/license/ylabonte/procon-ip" alt="GitHub">
+<img src="https://img.shields.io/github/issues-raw/ylabonte/procon-ip" alt="GitHub issues"><br><a href="https://snyk.io/test/github/ylabonte/procon-ip"><img src="https://snyk.io/test/github/ylabonte/procon-ip/badge.svg" alt="Known Vulnerabilities"></a>
+<a href="https://lgtm.com/projects/g/ylabonte/procon-ip/alerts/"><img src="https://img.shields.io/lgtm/alerts/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18" alt="Total alerts"></a>
+<a href="https://lgtm.com/projects/g/ylabonte/procon-ip/context:javascript"><img src="https://img.shields.io/lgtm/grade/javascript/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18" alt="Language grade: JavaScript"></a><br><img src="https://github.com/ylabonte/procon-ip/workflows/CI%20Workflow/badge.svg" alt="CI Workflow">
+<img src="https://github.com/ylabonte/procon-ip/workflows/CodeQL/badge.svg" alt="CodeQL">
+<img src="https://github.com/ylabonte/procon-ip/workflows/Github%20Package%20Release/badge.svg" alt="Github Package release">
+<img src="https://github.com/ylabonte/procon-ip/workflows/NPM%20Package%20Release/badge.svg" alt="NPM Package release"></p>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">logger</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Logger</span><span style="color: #000000">();</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">config</span><span style="color: #000000"> = {</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;controllerUrl&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;http://192.168.2.3&quot;</span><span style="color: #000000">, </span><span style="color: #008000">// &lt;-- replace with your pool controller&#039;s address</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;basicAuth&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;username&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;admin&quot;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;password&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;admin&quot;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;updateInterval&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">5000</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;timeout&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">5000</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;errorTolerance&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span>
-<span style="color: #000000">}</span>
+<a href="#overview" id="overview" style="color: inherit; text-decoration: none;">
+  <h2>Overview</h2>
+</a>
+<ul>
+<li><a href="#changelog">Changelog</a></li>
+<li><a href="#introduction">Introduction (<em>What is this library for?</em>)</a></li>
+<li><a href="#examples">Examples</a><ul>
+<li><a href="#requesting-data">Requesting data</a></li>
+<li><a href="#switching-relays">Switching relays</a></li>
+</ul>
+</li>
+<li><a href="#full-api-docs">Full API docs (auto generated)</a></li>
+<li><a href="#a-brief-description-of-the-proconip-pool-controller">A brief description of the ProCon.IP pool controller</a></li>
+<li><a href="#disclaimer">Disclaimer</a></li>
+</ul>
+<hr>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dataSource</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GetStateService</span><span style="color: #000000">(</span><span style="color: #001080">config</span><span style="color: #000000">, </span><span style="color: #001080">logger</span><span style="color: #000000">)</span>
+<a href="#changelog" id="changelog" style="color: inherit; text-decoration: none;">
+  <h2>Changelog</h2>
+</a>
+
+<a href="#release-130" id="release-130" style="color: inherit; text-decoration: none;">
+  <h3>Release 1.3.0</h3>
+</a>
+<ul>
+<li><strong>Breaking changes:</strong> Some properties of the <code>GetStateDataSysInfo</code> have been
+renamed fixing a typo: <ul>
+<li><code>phPlusDosageRelais</code> --&gt; <code>phPlusDosageRelay</code></li>
+<li><code>phMinusDosageRelais</code> --&gt; <code>phMinusDosageRelay</code></li>
+<li><code>chlorineDosageRelais</code> --&gt; <code>chlorineDosageRelay</code></li>
+</ul>
+</li>
+<li>New methods have been added to the <code>GetStateDataSysInfo()</code> class (credits go to
+@kriede for this):<ul>
+<li><code>isElectrolysis(): boolean</code></li>
+<li><code>getDosageRelais(object: GetStateDataObject): number</code></li>
+<li><code>isAvatarEnabled(): boolean</code></li>
+<li><code>isFlowSensorEnabled(): boolean</code></li>
+<li><code>isDmxEnabled(): boolean</code></li>
+</ul>
+</li>
+<li>Some typos in documentation and debug output have been fixed. </li>
+<li>Various dependencies have been updated.</li>
+</ul>
+<hr>
+
+<a href="#introduction" id="introduction" style="color: inherit; text-decoration: none;">
+  <h2>Introduction</h2>
+</a>
+<p>The name of this library refers to the <a href="#what-is-procon-ip">ProCon.IP pool controller</a>.
+Documentation might follow. Until this please take a look at the sources. I
+tried to keep the interfaces readable. An IDE with proper auto-completion should
+help understand and use the library without further documentation.</p>
+<p>Feel free to ask questions by using githubs issues system, so others can take
+part and are able to find the answer if they have a similar question. Thanks! :)</p>
+
+<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+  <h2>Examples</h2>
+</a>
+
+<a href="#requesting-data" id="requesting-data" style="color: inherit; text-decoration: none;">
+  <h3>Requesting data</h3>
+</a>
+<p>First you have to initialize the <code>GetStateService</code>, which is responsible for
+receiving information from the ProCon.IP controller.</p>
+<pre><code class="language-javascript"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">GetStateService</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;procon-ip/lib/get-state.service&#39;</span><span class="hl-1">).</span><span class="hl-5">GetStateService</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">GetStateCategory</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;procon-ip/lib/get-state-data&#39;</span><span class="hl-1">).</span><span class="hl-5">GetStateCategory</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">Logger</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;procon-ip/lib/logger&#39;</span><span class="hl-1">).</span><span class="hl-5">Logger</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">logger</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-3">Logger</span><span class="hl-1">();</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">config</span><span class="hl-1"> = {</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;controllerUrl&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-4">&quot;http://192.168.2.3&quot;</span><span class="hl-1">, </span><span class="hl-6">// &lt;-- replace with your pool controller&#39;s address</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;basicAuth&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-0">true</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;username&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-4">&quot;admin&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;password&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-4">&quot;admin&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;updateInterval&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-7">5000</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;timeout&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-7">5000</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;errorTolerance&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-7">2</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">dataSource</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-3">GetStateService</span><span class="hl-1">(</span><span class="hl-5">config</span><span class="hl-1">, </span><span class="hl-5">logger</span><span class="hl-1">)</span>
 </code></pre>
-				<p>In <strong>TypeScript</strong> you would write the following instead.</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">GetStateService</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;procon-ip/lib/get-state.service&#039;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">GetStateCategory</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;procon-ip/lib/get-state-data&#039;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Logger</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;procon-ip/lib/logger&#039;</span>
-
-<span style="color: #008000">// Just continue as in the snippet above...</span>
+<p>In <strong>TypeScript</strong> you would write the following instead.</p>
+<pre><code class="language-typescript"><span class="hl-8">import</span><span class="hl-1"> { </span><span class="hl-5">GetStateService</span><span class="hl-1"> } </span><span class="hl-8">from</span><span class="hl-1"> </span><span class="hl-4">&#39;procon-ip/lib/get-state.service&#39;</span><br/><span class="hl-8">import</span><span class="hl-1"> { </span><span class="hl-5">GetStateCategory</span><span class="hl-1"> } </span><span class="hl-8">from</span><span class="hl-1"> </span><span class="hl-4">&#39;procon-ip/lib/get-state-data&#39;</span><br/><span class="hl-8">import</span><span class="hl-1"> { </span><span class="hl-5">Logger</span><span class="hl-1"> } </span><span class="hl-8">from</span><span class="hl-1"> </span><span class="hl-4">&#39;procon-ip/lib/logger&#39;</span><br/><br/><span class="hl-6">// Just continue as in the snippet above...</span>
 </code></pre>
-				<p>You will have to replace the <code>controllerUrl</code> with the one pointing at your
-				ProCon.IP device, but except that it should just work.</p>
-				<p>With the <code>GetStateService</code> initialized you can simply request fresh data by
-				calling the <code>update()</code> or <code>start()</code> methods.</p>
-				<pre><code class="language-javascript"><span style="color: #008000">// You can easily request fresh data on demand using the update...</span>
-<span style="color: #001080">dataSource</span><span style="color: #000000">.</span><span style="color: #795E26">update</span><span style="color: #000000">().</span><span style="color: #795E26">then</span><span style="color: #000000">((</span><span style="color: #001080">data</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span><span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">`Uptime: </span><span style="color: #0000FF">${</span><span style="color: #001080">data</span><span style="color: #000000FF">.</span><span style="color: #001080">sysInfo</span><span style="color: #000000FF">.</span><span style="color: #001080">uptime</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
-<span style="color: #000000">})</span>
-
-<span style="color: #008000">// ...or periodically</span>
-<span style="color: #001080">dataSource</span><span style="color: #000000">.</span><span style="color: #795E26">start</span><span style="color: #000000">((</span><span style="color: #001080">data</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span><span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;Got new data from pool controller&quot;</span><span style="color: #000000">)</span>
-<span style="color: #000000">    </span><span style="color: #001080">data</span><span style="color: #000000">.</span><span style="color: #795E26">getDataObjectsByCategory</span><span style="color: #000000">(</span><span style="color: #001080">GetStateCategory</span><span style="color: #000000">.</span><span style="color: #0070C1">ELECTRODES</span><span style="color: #000000">).</span><span style="color: #795E26">forEach</span><span style="color: #000000">((</span><span style="color: #001080">dataObject</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">        </span><span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">`</span><span style="color: #0000FF">${</span><span style="color: #001080">dataObject</span><span style="color: #000000FF">.</span><span style="color: #001080">label</span><span style="color: #0000FF">}</span><span style="color: #A31515">: </span><span style="color: #0000FF">${</span><span style="color: #001080">dataObject</span><span style="color: #000000FF">.</span><span style="color: #001080">displayValue</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
-<span style="color: #000000">    })</span>
-<span style="color: #000000">})</span>
+<p>You will have to replace the <code>controllerUrl</code> with the one pointing at your
+ProCon.IP device, but except that it should just work.</p>
+<p>With the <code>GetStateService</code> initialized you can simply request fresh data by
+calling the <code>update()</code> or <code>start()</code> methods.</p>
+<pre><code class="language-javascript"><span class="hl-6">// You can easily request fresh data on demand using the update...</span><br/><span class="hl-5">dataSource</span><span class="hl-1">.</span><span class="hl-3">update</span><span class="hl-1">().</span><span class="hl-3">then</span><span class="hl-1">((</span><span class="hl-5">data</span><span class="hl-1">) </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-5">logger</span><span class="hl-1">.</span><span class="hl-3">info</span><span class="hl-1">(</span><span class="hl-4">`Uptime: </span><span class="hl-0">${</span><span class="hl-5">data</span><span class="hl-9">.</span><span class="hl-5">sysInfo</span><span class="hl-9">.</span><span class="hl-5">uptime</span><span class="hl-0">}</span><span class="hl-4">`</span><span class="hl-1">)</span><br/><span class="hl-1">})</span><br/><br/><span class="hl-6">// ...or periodically</span><br/><span class="hl-5">dataSource</span><span class="hl-1">.</span><span class="hl-3">start</span><span class="hl-1">((</span><span class="hl-5">data</span><span class="hl-1">) </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-5">logger</span><span class="hl-1">.</span><span class="hl-3">info</span><span class="hl-1">(</span><span class="hl-4">&quot;Got new data from pool controller&quot;</span><span class="hl-1">)</span><br/><span class="hl-1">    </span><span class="hl-5">data</span><span class="hl-1">.</span><span class="hl-3">getDataObjectsByCategory</span><span class="hl-1">(</span><span class="hl-5">GetStateCategory</span><span class="hl-1">.</span><span class="hl-2">ELECTRODES</span><span class="hl-1">).</span><span class="hl-3">forEach</span><span class="hl-1">((</span><span class="hl-5">dataObject</span><span class="hl-1">) </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-5">logger</span><span class="hl-1">.</span><span class="hl-3">info</span><span class="hl-1">(</span><span class="hl-4">`</span><span class="hl-0">${</span><span class="hl-5">dataObject</span><span class="hl-9">.</span><span class="hl-5">label</span><span class="hl-0">}</span><span class="hl-4">: </span><span class="hl-0">${</span><span class="hl-5">dataObject</span><span class="hl-9">.</span><span class="hl-5">displayValue</span><span class="hl-0">}</span><span class="hl-4">`</span><span class="hl-1">)</span><br/><span class="hl-1">    })</span><br/><span class="hl-1">})</span>
 </code></pre>
-				<p>Be aware of the the asynchronous character of this functions. Executing the
-				code above might produce an output like this:</p>
-				<pre><code class="language-shell"><span style="color: #000000">(2020-10-31T03:19:36.844Z) INFO: Got new data from pool controller</span>
-<span style="color: #000000">(2020-10-31T03:19:36.847Z) INFO: Redox: 927.75 mV</span>
-<span style="color: #000000">(2020-10-31T03:19:36.847Z) INFO: pH: 3.43 pH</span>
-<span style="color: #000000">(2020-10-31T03:19:36.847Z) INFO: Uptime: 1105292</span>
-<span style="color: #000000">(2020-10-31T03:19:36.848Z) INFO: Got new data from pool controller</span>
-<span style="color: #000000">(2020-10-31T03:19:36.848Z) INFO: Redox: 927.88 mV</span>
-<span style="color: #000000">(2020-10-31T03:19:36.848Z) INFO: pH: 3.43 pH</span>
+<p>Be aware of the the asynchronous character of this functions. Executing the
+code above might produce an output like this:</p>
+<pre><code class="language-shell"><span class="hl-1">(2020-10-31T03:19:36.844Z) INFO: Got new data from pool controller</span><br/><span class="hl-1">(2020-10-31T03:19:36.847Z) INFO: Redox: 927.75 mV</span><br/><span class="hl-1">(2020-10-31T03:19:36.847Z) INFO: pH: 3.43 pH</span><br/><span class="hl-1">(2020-10-31T03:19:36.847Z) INFO: Uptime: 1105292</span><br/><span class="hl-1">(2020-10-31T03:19:36.848Z) INFO: Got new data from pool controller</span><br/><span class="hl-1">(2020-10-31T03:19:36.848Z) INFO: Redox: 927.88 mV</span><br/><span class="hl-1">(2020-10-31T03:19:36.848Z) INFO: pH: 3.43 pH</span>
 </code></pre>
-				<p>Actually I got this output during a test run ensuring the exmaple code would
-				work.</p>
-				<a href="#switching-relays" id="switching-relays" style="color: inherit; text-decoration: none;">
-					<h3>Switching relays</h3>
-				</a>
-				<pre><code class="language-javascript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">UsrcfgCgiService</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;../lib/usrcfg-cgi.service&#039;</span><span style="color: #000000">).</span><span style="color: #001080">UsrcfgCgiService</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">RelayDataInterpreter</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;../lib/relay-data-interpreter&#039;</span><span style="color: #000000">).</span><span style="color: #001080">RelayDataInterpreter</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">GetStateCategory</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;../lib/get-state-data&#039;</span><span style="color: #000000">).</span><span style="color: #001080">GetStateCategory</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">GetStateService</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;../lib/get-state.service&#039;</span><span style="color: #000000">).</span><span style="color: #001080">GetStateService</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">Logger</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;../lib/logger&#039;</span><span style="color: #000000">).</span><span style="color: #001080">Logger</span>
+<p>Actually I got this output during a test run ensuring the exmaple code would
+work.</p>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">logger</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Logger</span><span style="color: #000000">();</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">config</span><span style="color: #000000"> = {</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;controllerUrl&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;http://192.168.2.3&quot;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;basicAuth&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;username&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;admin&quot;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;password&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;admin&quot;</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;timeout&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">5000</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;updateInterval&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">5000</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #A31515">&quot;errorTolerance&quot;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span>
-<span style="color: #000000">}</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">interpreter</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">RelayDataInterpreter</span><span style="color: #000000">(</span><span style="color: #001080">logger</span><span style="color: #000000">)</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dataSource</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">GetStateService</span><span style="color: #000000">(</span><span style="color: #001080">config</span><span style="color: #000000">, </span><span style="color: #001080">logger</span><span style="color: #000000">)</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">relaySwitcher</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">UsrcfgCgiService</span><span style="color: #000000">(</span><span style="color: #001080">config</span><span style="color: #000000">, </span><span style="color: #001080">logger</span><span style="color: #000000">, </span><span style="color: #001080">dataSource</span><span style="color: #000000">, </span><span style="color: #001080">interpreter</span><span style="color: #000000">)</span>
-
-<span style="color: #001080">dataSource</span><span style="color: #000000">.</span><span style="color: #795E26">update</span><span style="color: #000000">().</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span><span style="color: #008000">// Let&#039;s just switch the chlorine dosage relay off to keep it easy...</span>
-<span style="color: #000000">    </span><span style="color: #001080">relaySwitcher</span><span style="color: #000000">.</span><span style="color: #795E26">setOff</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">.</span><span style="color: #795E26">getChlorineDosageControl</span><span style="color: #000000">()).</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #001080">r</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">        </span><span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">`Chlorine dosage control has been turned off (response code: </span><span style="color: #0000FF">${</span><span style="color: #001080">r</span><span style="color: #0000FF">}</span><span style="color: #A31515">)`</span><span style="color: #000000">)</span>
-<span style="color: #000000">    })</span>
-
-<span style="color: #000000">    </span><span style="color: #008000">// ...to switch arbitrary relays you will have to determine the acutal</span>
-<span style="color: #000000">    </span><span style="color: #008000">// object id of the relay you want to switch (e.g. by its label):</span>
-<span style="color: #000000">    </span><span style="color: #001080">data</span><span style="color: #000000">.</span><span style="color: #795E26">getDataObjectsByCategory</span><span style="color: #000000">(</span><span style="color: #001080">GetStateCategory</span><span style="color: #000000">.</span><span style="color: #0070C1">RELAYS</span><span style="color: #000000">).</span><span style="color: #795E26">forEach</span><span style="color: #000000">(</span><span style="color: #001080">relay</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">        </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">relay</span><span style="color: #000000">.</span><span style="color: #001080">label</span><span style="color: #000000"> === </span><span style="color: #A31515">&quot;Gartenlicht&quot;</span><span style="color: #000000">) {</span>
-<span style="color: #000000">            </span><span style="color: #001080">relaySwitcher</span><span style="color: #000000">.</span><span style="color: #795E26">setAuto</span><span style="color: #000000">(</span><span style="color: #001080">relay</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #001080">r</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">                </span><span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">`</span><span style="color: #0000FF">${</span><span style="color: #001080">relay</span><span style="color: #000000FF">.</span><span style="color: #001080">label</span><span style="color: #0000FF">}</span><span style="color: #A31515"> has been turned on (response code: </span><span style="color: #0000FF">${</span><span style="color: #001080">r</span><span style="color: #0000FF">}</span><span style="color: #A31515">)`</span><span style="color: #000000">)</span>
-<span style="color: #000000">            })</span>
-<span style="color: #000000">        }</span>
-<span style="color: #000000">    })</span>
-<span style="color: #000000">})</span>
+<a href="#switching-relays" id="switching-relays" style="color: inherit; text-decoration: none;">
+  <h3>Switching relays</h3>
+</a>
+<pre><code class="language-javascript"><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">UsrcfgCgiService</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;../lib/usrcfg-cgi.service&#39;</span><span class="hl-1">).</span><span class="hl-5">UsrcfgCgiService</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">RelayDataInterpreter</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;../lib/relay-data-interpreter&#39;</span><span class="hl-1">).</span><span class="hl-5">RelayDataInterpreter</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">GetStateCategory</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;../lib/get-state-data&#39;</span><span class="hl-1">).</span><span class="hl-5">GetStateCategory</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">GetStateService</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;../lib/get-state.service&#39;</span><span class="hl-1">).</span><span class="hl-5">GetStateService</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">Logger</span><span class="hl-1"> = </span><span class="hl-3">require</span><span class="hl-1">(</span><span class="hl-4">&#39;../lib/logger&#39;</span><span class="hl-1">).</span><span class="hl-5">Logger</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">logger</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-3">Logger</span><span class="hl-1">();</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">config</span><span class="hl-1"> = {</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;controllerUrl&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-4">&quot;http://192.168.2.3&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;basicAuth&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-0">true</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;username&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-4">&quot;admin&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;password&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-4">&quot;admin&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;timeout&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-7">5000</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;updateInterval&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-7">5000</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">&quot;errorTolerance&quot;</span><span class="hl-5">:</span><span class="hl-1"> </span><span class="hl-7">2</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">interpreter</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-3">RelayDataInterpreter</span><span class="hl-1">(</span><span class="hl-5">logger</span><span class="hl-1">)</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">dataSource</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-3">GetStateService</span><span class="hl-1">(</span><span class="hl-5">config</span><span class="hl-1">, </span><span class="hl-5">logger</span><span class="hl-1">)</span><br/><span class="hl-0">const</span><span class="hl-1"> </span><span class="hl-2">relaySwitcher</span><span class="hl-1"> = </span><span class="hl-0">new</span><span class="hl-1"> </span><span class="hl-3">UsrcfgCgiService</span><span class="hl-1">(</span><span class="hl-5">config</span><span class="hl-1">, </span><span class="hl-5">logger</span><span class="hl-1">, </span><span class="hl-5">dataSource</span><span class="hl-1">, </span><span class="hl-5">interpreter</span><span class="hl-1">)</span><br/><br/><span class="hl-5">dataSource</span><span class="hl-1">.</span><span class="hl-3">update</span><span class="hl-1">().</span><span class="hl-3">then</span><span class="hl-1">(</span><span class="hl-5">data</span><span class="hl-1"> </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-6">// Let&#39;s just switch the chlorine dosage relay off to keep it easy...</span><br/><span class="hl-1">    </span><span class="hl-5">relaySwitcher</span><span class="hl-1">.</span><span class="hl-3">setOff</span><span class="hl-1">(</span><span class="hl-5">data</span><span class="hl-1">.</span><span class="hl-3">getChlorineDosageControl</span><span class="hl-1">()).</span><span class="hl-3">then</span><span class="hl-1">(</span><span class="hl-5">r</span><span class="hl-1"> </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-5">logger</span><span class="hl-1">.</span><span class="hl-3">info</span><span class="hl-1">(</span><span class="hl-4">`Chlorine dosage control has been turned off (response code: </span><span class="hl-0">${</span><span class="hl-5">r</span><span class="hl-0">}</span><span class="hl-4">)`</span><span class="hl-1">)</span><br/><span class="hl-1">    })</span><br/><br/><span class="hl-1">    </span><span class="hl-6">// ...to switch arbitrary relays you will have to determine the acutal</span><br/><span class="hl-1">    </span><span class="hl-6">// object id of the relay you want to switch (e.g. by its label):</span><br/><span class="hl-1">    </span><span class="hl-5">data</span><span class="hl-1">.</span><span class="hl-3">getDataObjectsByCategory</span><span class="hl-1">(</span><span class="hl-5">GetStateCategory</span><span class="hl-1">.</span><span class="hl-2">RELAYS</span><span class="hl-1">).</span><span class="hl-3">forEach</span><span class="hl-1">(</span><span class="hl-5">relay</span><span class="hl-1"> </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-8">if</span><span class="hl-1"> (</span><span class="hl-5">relay</span><span class="hl-1">.</span><span class="hl-5">label</span><span class="hl-1"> === </span><span class="hl-4">&quot;Gartenlicht&quot;</span><span class="hl-1">) {</span><br/><span class="hl-1">            </span><span class="hl-5">relaySwitcher</span><span class="hl-1">.</span><span class="hl-3">setAuto</span><span class="hl-1">(</span><span class="hl-5">relay</span><span class="hl-1">).</span><span class="hl-3">then</span><span class="hl-1">(</span><span class="hl-5">r</span><span class="hl-1"> </span><span class="hl-0">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">                </span><span class="hl-5">logger</span><span class="hl-1">.</span><span class="hl-3">info</span><span class="hl-1">(</span><span class="hl-4">`</span><span class="hl-0">${</span><span class="hl-5">relay</span><span class="hl-9">.</span><span class="hl-5">label</span><span class="hl-0">}</span><span class="hl-4"> has been turned on (response code: </span><span class="hl-0">${</span><span class="hl-5">r</span><span class="hl-0">}</span><span class="hl-4">)`</span><span class="hl-1">)</span><br/><span class="hl-1">            })</span><br/><span class="hl-1">        }</span><br/><span class="hl-1">    })</span><br/><span class="hl-1">})</span>
 </code></pre>
-				<p>The examples above can also be found in the <code>examples</code> directory of this repository.</p>
-				<a href="#full-api-docs" id="full-api-docs" style="color: inherit; text-decoration: none;">
-					<h2>Full API docs</h2>
-				</a>
-				<p>Find the <a href="https://ylabonte.github.io/procon-ip/">full API documentation</a>
-				published via Github Pages.</p>
-				<a href="#a-brief-description-of-the-proconip-pool-controller" id="a-brief-description-of-the-proconip-pool-controller" style="color: inherit; text-decoration: none;">
-					<h2>A brief description of the ProCon.IP pool controller</h2>
-				</a>
-				<p><img src="https://www.pooldigital.de/shop/media/image/66/47/a5/ProConIP1_720x600.png" alt="Picture from pooldigital.de"></p>
-				<p>The ProCon.IP pool controller is a low budget network attached control unit for
-					home swimming pools. With its software switched relays, it can control
-					multiple pumps (for the pool filter and different dosage aspects) either
-					simply planned per time schedule or depending on a reading/value from one of
-					its many input channels for measurements (eg. i/o flow sensors, Dallas 1-Wire
-					termometers, redox and pH electrodes). At least there is also the option to
-					switch these relays on demand, which makes them also applicable for switching
-					lights (or anything else you want) on/off.
-					Not all of its functionality is reachable via API. In fact there is one
-					documented API for reading (polling) values as CSV (<code>/GetState.csv</code>). In my
-					memories there was another one for switching the relays on/off and on with
-					timer. But I cannot find the second one anymore. So not even pretty, but
-					functional: The ProCon.IP has two native web interfaces, which can be
-					analyzed, to some kind of reverse engineer a given functionality (like
-				switching the relays).</p>
-				<p>For more information see the following links (sorry it&#39;s only in german;
-				haven&#39;t found an english documentation/information so far):</p>
-				<ul>
-					<li><a href="https://www.pooldigital.de/shop/poolsteuerungen/procon.ip/35/procon.ip-webbasierte-poolsteuerung-/-dosieranlage">pooldigital.de webshop</a></li>
-					<li><a href="http://forum.pooldigital.de/">pooldigital.de forum</a></li>
-				</ul>
-				<a href="#disclaimer" id="disclaimer" style="color: inherit; text-decoration: none;">
-					<h2>Disclaimer</h2>
-				</a>
-				<p><strong>Just to be clear: I have nothing to do with the development, sellings,
-						marketing or support of the pool controller unit itself. I just developed a
-						solution to integrate such with <a href="https://github.com/ylabonte/ioBroker.procon-ip">ioBroker</a>
-				and now decoupled the library part to make it cleaner.</strong></p>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class=" ">
-						<a href="modules.html">Modules</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/abstract_service.html">abstract-<wbr>service</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/get_state_data.html">get-<wbr>state-<wbr>data</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/get_state_data_object.html">get-<wbr>state-<wbr>data-<wbr>object</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/get_state_data_sys_info.html">get-<wbr>state-<wbr>data-<wbr>sys-<wbr>info</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/get_state_service.html">get-<wbr>state.service</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/logger.html">logger</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/mock_state.html">mock-<wbr>state</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/relay_data_interpreter.html">relay-<wbr>data-<wbr>interpreter</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/relay_data_object.html">relay-<wbr>data-<wbr>object</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/usrcfg_cgi_service.html">usrcfg-<wbr>cgi.service</a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-			</ul>
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+<p>The examples above can also be found in the <code>examples</code> directory of this repository.</p>
+
+<a href="#full-api-docs" id="full-api-docs" style="color: inherit; text-decoration: none;">
+  <h2>Full API docs</h2>
+</a>
+<p>Find the <a href="https://ylabonte.github.io/procon-ip/">full API documentation</a>
+published via Github Pages.</p>
+
+<a href="#a-brief-description-of-the-proconip-pool-controller" id="a-brief-description-of-the-proconip-pool-controller" style="color: inherit; text-decoration: none;">
+  <h2>A brief description of the ProCon.IP pool controller</h2>
+</a>
+<p><img src="https://www.pooldigital.de/shop/media/image/66/47/a5/ProConIP1_720x600.png" alt="Picture from pooldigital.de"></p>
+<p>The ProCon.IP pool controller is a low budget network attached control unit for
+home swimming pools. With its software switched relays, it can control
+multiple pumps (for the pool filter and different dosage aspects) either
+simply planned per time schedule or depending on a reading/value from one of
+its many input channels for measurements (eg. i/o flow sensors, Dallas 1-Wire
+termometers, redox and pH electrodes). At least there is also the option to
+switch these relays on demand, which makes them also applicable for switching
+lights (or anything else you want) on/off.
+Not all of its functionality is reachable via API. In fact there is one
+documented API for reading (polling) values as CSV (<code>/GetState.csv</code>). In my
+memories there was another one for switching the relays on/off and on with
+timer. But I cannot find the second one anymore. So not even pretty, but
+functional: The ProCon.IP has two native web interfaces, which can be
+analyzed, to some kind of reverse engineer a given functionality (like
+switching the relays).</p>
+<p>For more information see the following links (sorry it&#39;s only in german;
+haven&#39;t found an english documentation/information so far):</p>
+<ul>
+<li><a href="https://www.pooldigital.de/shop/poolsteuerungen/procon.ip/35/procon.ip-webbasierte-poolsteuerung-/-dosieranlage">pooldigital.de webshop</a></li>
+<li><a href="http://forum.pooldigital.de/">pooldigital.de forum</a></li>
+</ul>
+
+<a href="#disclaimer" id="disclaimer" style="color: inherit; text-decoration: none;">
+  <h2>Disclaimer</h2>
+</a>
+<p><strong>Just to be clear: I have nothing to do with the development, sellings,
+marketing or support of the pool controller unit itself. I just developed a
+solution to integrate such with <a href="https://github.com/ylabonte/ioBroker.procon-ip">ioBroker</a>
+and now decoupled the library part to make it cleaner.</strong></p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/abstract_service.html">abstract-<wbr/>service</a></li><li class=" tsd-kind-module"><a href="modules/get_state_data.html">get-<wbr/>state-<wbr/>data</a></li><li class=" tsd-kind-module"><a href="modules/get_state_data_object.html">get-<wbr/>state-<wbr/>data-<wbr/>object</a></li><li class=" tsd-kind-module"><a href="modules/get_state_data_sys_info.html">get-<wbr/>state-<wbr/>data-<wbr/>sys-<wbr/>info</a></li><li class=" tsd-kind-module"><a href="modules/get_state_service.html">get-<wbr/>state.service</a></li><li class=" tsd-kind-module"><a href="modules/logger.html">logger</a></li><li class=" tsd-kind-module"><a href="modules/mock_state.html">mock-<wbr/>state</a></li><li class=" tsd-kind-module"><a href="modules/relay_data_interpreter.html">relay-<wbr/>data-<wbr/>interpreter</a></li><li class=" tsd-kind-module"><a href="modules/relay_data_object.html">relay-<wbr/>data-<wbr/>object</a></li><li class=" tsd-kind-module"><a href="modules/usrcfg_cgi_service.html">usrcfg-<wbr/>cgi.service</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>

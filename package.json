@@ -21,7 +21,7 @@
     "format": "npx prettier --write \"src/**/*.ts\"",
     "lint": "npx tslint -p tsconfig.json",
     "build": "npx tsc",
-    "build:docs": "rm -rf docs && npx typedoc --excludeInternal --out docs/ src/ && touch docs/.nojekyll",
+    "build:docs": "rm -rf docs && npx typedoc --excludeInternal --out docs/ --entryPointStrategy expand src/ && touch docs/.nojekyll",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint"
   },
