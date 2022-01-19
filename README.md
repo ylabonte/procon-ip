@@ -16,6 +16,7 @@ Package info
 
 ## Overview
 
+* [Changelog](#changelog)
 * [Introduction (_What is this library for?_)](#introduction)
 * [Examples](#examples)
   * [Requesting data](#requesting-data)
@@ -23,6 +24,27 @@ Package info
 * [Full API docs (auto generated)](#full-api-docs)
 * [A brief description of the ProCon.IP pool controller](#a-brief-description-of-the-proconip-pool-controller)
 * [Disclaimer](#disclaimer)
+
+---
+
+## Changelog
+
+### Release 1.3.0
+
+* **Breaking changes:** Some properties of the `GetStateDataSysInfo` have been
+  renamed fixing a typo: 
+  * `phPlusDosageRelais` --> `phPlusDosageRelay`
+  * `phMinusDosageRelais` --> `phMinusDosageRelay`
+  * `chlorineDosageRelais` --> `chlorineDosageRelay`
+* New methods have been added to the `GetStateDataSysInfo()` class (credits go to
+  @kriede for this):
+  * `isElectrolysis(): boolean`
+  * `getDosageRelais(object: GetStateDataObject): number`
+  * `isAvatarEnabled(): boolean`
+  * `isFlowSensorEnabled(): boolean`
+  * `isDmxEnabled(): boolean`
+* Some typos in documentation and debug output have been fixed. 
+* Various dependencies have been updated.
 
 ---
 
