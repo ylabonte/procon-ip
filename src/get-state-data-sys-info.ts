@@ -164,7 +164,7 @@ export class GetStateDataSysInfo {
   }
 
   /**
-   * Checks if the chlorine dosage device is configured as an electrolysis cell or a pump..
+   * Checks if the chlorine dosage device is configured as an electrolysis cell or a pump.
    */
   public isElectrolysis(): boolean {
     /* tslint:disable: no-bitwise */
@@ -220,7 +220,7 @@ export class GetStateDataSysInfo {
    * [[`GetStateData.categories.canister`]] or a
    * [[`GetStateData.categories.canisterConsumptions`]] object.
    */
-  public getDosageRelay(object: GetStateDataObject): number {;
+  public getDosageRelay(object: GetStateDataObject): number {
     switch (object.id) {
       case 36:
       case 39:
