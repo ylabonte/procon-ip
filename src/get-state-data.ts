@@ -383,7 +383,7 @@ export class GetStateData {
    */
   private categorize(): void {
     Object.keys(this.categories).forEach((category) => {
-      let catId = 1;
+      let catId = 0;
       this.categories[category] = this.expandSlice(this.categories[category]);
       this.categories[category].forEach((id: number) => {
         if (this.objects[id] !== undefined) {

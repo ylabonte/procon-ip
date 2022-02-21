@@ -29,6 +29,11 @@ Package info
 
 ## Changelog
 
+### Release 1.3.1
+
+* Fix `GetStateDataObject.categoryId` to start counting from 0 as stated in the
+  documentation.
+
 ### Release 1.3.0
 
 * **Breaking changes:** Some properties of the `GetStateDataSysInfo` have been
