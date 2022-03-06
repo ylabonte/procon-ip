@@ -31,8 +31,7 @@ Package info
 
 ### Release 1.3.3
 
-* Fix `RelayDataObject.bitMask` (was broke after 
-  `GetStateDataObject.categoryId` refactoring).
+* Fix `RelayDataObject.bitMask` (was broken since `categoryId` refactoring).
 
 ### Release 1.3.2
 
