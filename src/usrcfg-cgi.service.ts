@@ -173,7 +173,7 @@ export class UsrcfgCgiService extends AbstractService {
   private send(bitTupel: [number, number]): AxiosPromise /*<{data: string; status: number; statusText: string}>*/ {
     // private send(bitTupel: [number, number]): /*Axios*/Promise<{data: string; status: number; statusText: string}> {
     const requestConfig = this.axiosRequestConfig;
-    requestConfig.data = `ENA=${encodeURIComponent(bitTupel.join(','))}&MANUAL=1`;
+    requestConfig.data = `ENA=${bitTupel.join(',')}&MANUAL=1`;
 
     return axios.request(requestConfig);
   }
