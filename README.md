@@ -29,6 +29,11 @@ Package info
 
 ## Changelog
 
+### Release 1.3.3
+
+* Fix `RelayDataObject.bitMask` (was broke after 
+  `GetStateDataObject.categoryId` refactoring).
+
 ### Release 1.3.2
 
 * Fix `UsrcfgCgiService.send()` method for switching relays.

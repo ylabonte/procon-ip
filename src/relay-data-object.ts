@@ -43,8 +43,8 @@ export class RelayDataObject extends GetStateDataObject {
     return (
       0x01 <<
       ((this.category as GetStateCategory) === GetStateCategory.EXTERNAL_RELAYS
-        ? this.categoryId + 7
-        : this.categoryId - 1)
+        ? this.categoryId + 8
+        : this.categoryId)
     );
     /* tslint:enable: no-bitwise */
   }
