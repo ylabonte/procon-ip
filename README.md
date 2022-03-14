@@ -29,6 +29,12 @@ Package info
 
 ## Changelog
 
+### Release 1.4.0
+
+* Add new property `RelayDataObject.isExternal`.
+* Migrate from `CommonJS` to `ES2015`.
+* Update dependencies.
+
 ### Release 1.3.3
 
 * Fix `RelayDataObject.bitMask` (was broken since `categoryId` refactoring).

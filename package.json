@@ -1,6 +1,6 @@
 {
   "name": "procon-ip",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "description": "Library for the ProCon.IP pool controller",
   "license": "MIT",
   "homepage": "https://github.com/ylabonte/procon-ip#readme",
@@ -19,7 +19,7 @@
   "scripts": {
     "test": "",
     "format": "npx prettier --write \"src/**/*.ts\"",
-    "lint": "npx tslint -p tsconfig.json",
+    "lint": "npx eslint -- src/",
     "build": "npx tsc",
     "build:docs": "rm -rf docs && npx typedoc --excludeInternal --out docs/ --entryPointStrategy expand src/ && touch docs/.nojekyll",
     "prepare": "npm run build",
@@ -36,13 +36,19 @@
     "library"
   ],
   "devDependencies": {
-    "prettier": "^2.4.0",
-    "tslint": "^6.1.3",
-    "tslint-config-prettier": "^1.18.0",
-    "typedoc": "^0.22.12",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^5.14.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-prettier-config": "^1.0.1",
+    "prettier": "^2.5.1",
+    "typedoc": "^0.22.13",
     "typescript": "^4.6.2"
   },
   "dependencies": {
-    "axios": "^0.26.0"
+    "axios": "^0.26.1"
   }
 }
