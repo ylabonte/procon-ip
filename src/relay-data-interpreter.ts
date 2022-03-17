@@ -17,8 +17,8 @@ import { ILogger } from './logger';
  * It is used by the [[`RelayDataInterpreter`]] and the [[`UsrcfgCgiService`]].
  */
 export enum RelayStateBitMask {
-  on = 1,
-  manual = 2,
+  on = 1, // eslint-disable-line no-unused-vars
+  manual = 2, // eslint-disable-line no-unused-vars
   // off = 2,
   // on = 3,
   // autoOff = 0,

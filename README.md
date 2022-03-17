@@ -31,8 +31,13 @@ Package info
 
 ### Release 1.4.0
 
+* Change build parameters making the default build an ES-Module
+  * There is nothing to change if you want to keep using the CommonJS build.
+* Introduce the commonly used index.js to ease `import`/`require` statements.
+  * Simply use `import { GetStateService } from 'procon-ip` instead of 
+    `import { GetStateService } from 'procon-ip/get-state.service'`.
 * Add new property `RelayDataObject.isExternal`.
-* Migrate from `CommonJS` to `ES2015`.
+* Migrate from `tslint` to `eslint`.
 * Update dependencies.
 
 ### Release 1.3.3

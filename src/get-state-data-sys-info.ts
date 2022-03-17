@@ -17,7 +17,7 @@ export class GetStateDataSysInfo {
    * Making [[`GetStateDataSysInfo`]] objects extensible, also allows accessing
    * object keys using string variables.
    */
-  [key: string]: any;
+  [key: string]: any; // eslint-disable-line no-undef
 
   /**
    *
@@ -146,7 +146,7 @@ export class GetStateDataSysInfo {
    * handling/iteration.
    */
   public toArrayOfObjects(): { key: string; value: string }[] {
-    const values = new Array<{ key: string; value: string }>();
+    const values: { key: string; value: string }[] = [];
     Object.keys(this).forEach((attr: string) => {
       values.push({ key: attr, value: this[attr] });
     });
@@ -158,36 +158,28 @@ export class GetStateDataSysInfo {
    * Check whether the automated chlorine dosage is enabled.
    */
   public isChlorineDosageEnabled(): boolean {
-    /* tslint:disable: no-bitwise */
     return (this.dosageControl & 1) === 1;
-    /* tslint:enable: no-bitwise */
   }
 
   /**
    * Checks if the chlorine dosage device is configured as an electrolysis cell or a pump.
    */
   public isElectrolysis(): boolean {
-    /* tslint:disable: no-bitwise */
     return (this.dosageControl & 16) === 16;
-    /* tslint:enable: no-bitwise */
   }
 
   /**
    * Check whether the automated pH- dosage is enabled.
    */
   public isPhMinusDosageEnabled(): boolean {
-    /* tslint:disable: no-bitwise */
     return (this.dosageControl & 256) === 256;
-    /* tslint:enable: no-bitwise */
   }
 
   /**
    * Check whether the automated pH+ dosage is enabled.
    */
   public isPhPlusDosageEnabled(): boolean {
-    /* tslint:disable: no-bitwise */
     return (this.dosageControl & 4096) === 4096;
-    /* tslint:enable: no-bitwise */
   }
 
   /**
@@ -240,18 +232,14 @@ export class GetStateDataSysInfo {
    * Check whether generation of an avatar image is enabled  or not.
    */
   public isAvatarEnabled(): boolean {
-    /* tslint:disable: no-bitwise */
     return (this.configOtherEnable & 8) === 8;
-    /* tslint:enable: no-bitwise */
   }
 
   /**
    * Check whether external relays are enabled or not.
    */
   public isExtRelaysEnabled(): boolean {
-    /* tslint:disable: no-bitwise */
     return (this.configOtherEnable & 16) === 16;
-    /* tslint:enable: no-bitwise */
   }
 
   /**
@@ -259,17 +247,13 @@ export class GetStateDataSysInfo {
    * or not.
    */
   public isFlowSensorEnabled(): boolean {
-    /* tslint:disable: no-bitwise */
     return (this.configOtherEnable & 64) === 64;
-    /* tslint:enable: no-bitwise */
   }
 
   /**
    * Check whether DMX is enabled or not.
    */
   public isDmxEnabled(): boolean {
-    /* tslint:disable: no-bitwise */
     return (this.configOtherEnable & 256) === 256;
-    /* tslint:enable: no-bitwise */
   }
 }

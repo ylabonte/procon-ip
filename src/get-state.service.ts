@@ -103,9 +103,7 @@ export class GetStateService extends AbstractService {
     this._consecutiveFailsLimit = config.errorTolerance;
     this._consecutiveFails = 0;
     this._requestHeaders.Accept = 'text/csv,text/plain';
-    this._updateCallback = () => {
-      return;
-    };
+    this._updateCallback = () => {};
     this.data = new GetStateData();
   }
 

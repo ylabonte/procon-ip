@@ -19,9 +19,9 @@ import { ILogger } from './logger';
  * [[`setAuto`]]) that can be used.
  */
 export enum SetStateValue {
-  OFF = 0,
-  ON = 1,
-  AUTO = 2,
+  OFF = 0, // eslint-disable-line no-unused-vars
+  ON = 1, // eslint-disable-line no-unused-vars
+  AUTO = 2, // eslint-disable-line no-unused-vars
 }
 
 /**
@@ -147,7 +147,7 @@ export class UsrcfgCgiService extends AbstractService {
     this.log.info(`usrcfg.cgi data: ${JSON.stringify(data)}`);
     return new Promise<number>((resolve, reject) => {
       if (data === undefined) {
-        return reject('Cannot determine request data for relay switching');
+        return reject(new Error('Cannot determine request data for relay switching'));
       }
 
       this.send(data)
@@ -160,17 +160,19 @@ export class UsrcfgCgiService extends AbstractService {
             resolve(desiredValue);
           } else {
             reject(
-              `(${response.status}: ${response.statusText}) Error sending relay control command: ${response.data}`,
+              new Error(
+                `(${response.status}: ${response.statusText}) Error sending relay control command: ${response.data}`,
+              ),
             );
           }
         })
         .catch((e) => {
-          reject(`Error sending relay control command: ${e.response ? e.response : e}`);
+          reject(new Error(`Error sending relay control command: ${e.response ? e.response : e}`));
         });
     });
   }
 
-  private send(bitTupel: [number, number]): AxiosPromise /*<{data: string; status: number; statusText: string}>*/ {
+  private send(bitTupel: [number, number]): AxiosPromise /* <{data: string; status: number; statusText: string}> */ {
     // private send(bitTupel: [number, number]): /*Axios*/Promise<{data: string; status: number; statusText: string}> {
     const requestConfig = this.axiosRequestConfig;
     requestConfig.data = `ENA=${bitTupel.join(',')}&MANUAL=1`;

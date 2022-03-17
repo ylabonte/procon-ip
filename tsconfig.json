@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
-        "target": "ES6",
-        "module": "ES2015",
-        "moduleResolution": "node",
+        "target": "ES2015",
+        "module": "ES2020",
         "strict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "Node",
         "declaration": true,
-        "outDir": "./lib"
+        "outDir": "./module"
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules/**/*"]

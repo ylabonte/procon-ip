@@ -11,18 +11,24 @@
   "bugs": {
     "url": "https://github.com/ylabonte/procon-ip/issues"
   },
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "module": "./module/index.js",
   "readmeFilename": "README.md",
   "files": [
-    "lib/**/*"
+    "module/",
+    "lib/"
   ],
   "scripts": {
     "test": "",
     "format": "npx prettier --write \"src/**/*.ts\"",
-    "lint": "npx eslint -- src/",
-    "build": "npx tsc",
+    "lint": "npx eslint -- src/**",
+    "lint:fix": "npx eslint --fix -- src/**",
+    "build": "npm run build:esmodule && npm run build:commonjs",
+    "build:commonjs": "npx tsc -p tsconfig-commonjs.json",
+    "build:esmodule": "npx tsc -p tsconfig.json",
     "build:docs": "rm -rf docs && npx typedoc --excludeInternal --out docs/ --entryPointStrategy expand src/ && touch docs/.nojekyll",
-    "prepare": "npm run build",
+    "build:all": "npm run build && npm run build:docs",
+    "prepack": "npm run build",
     "prepublishOnly": "npm test && npm run lint"
   },
   "repository": {
@@ -39,12 +45,13 @@
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",
     "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.2.0",
-    "eslint-prettier-config": "^1.0.1",
-    "prettier": "^2.5.1",
+    "prettier": "^2.6.0",
     "typedoc": "^0.22.13",
     "typescript": "^4.6.2"
   },

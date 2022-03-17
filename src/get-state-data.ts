@@ -23,47 +23,47 @@ export enum GetStateCategory {
    * Internal time of the ProCon.IP when processing the corresponding request.
    * Hence there is only one item in this category.
    */
-  TIME = 'time',
+  TIME = 'time', // eslint-disable-line no-unused-vars
 
   /**
    * Category for analog channels.
    */
-  ANALOG = 'analog',
+  ANALOG = 'analog', // eslint-disable-line no-unused-vars
 
   /**
    * Category for electrode readings.
    */
-  ELECTRODES = 'electrodes',
+  ELECTRODES = 'electrodes', // eslint-disable-line no-unused-vars
 
   /**
    * Category for temperature sensor values.
    */
-  TEMPERATURES = 'temperatures',
+  TEMPERATURES = 'temperatures', // eslint-disable-line no-unused-vars
 
   /**
    * Category for internal relays.
    */
-  RELAYS = 'relays',
+  RELAYS = 'relays', // eslint-disable-line no-unused-vars
 
   /**
    * Category for digital inputs.
    */
-  DIGITAL_INPUT = 'digitalInput',
+  DIGITAL_INPUT = 'digitalInput', // eslint-disable-line no-unused-vars
 
   /**
    * Category for external relays.
    */
-  EXTERNAL_RELAYS = 'externalRelays',
+  EXTERNAL_RELAYS = 'externalRelays', // eslint-disable-line no-unused-vars
 
   /**
    * Category for canister filling levels.
    */
-  CANISTER = 'canister',
+  CANISTER = 'canister', // eslint-disable-line no-unused-vars
 
   /**
    * Category for canister consumptions.
    */
-  CANISTER_CONSUMPTION = 'canisterConsumptions',
+  CANISTER_CONSUMPTION = 'canisterConsumptions', // eslint-disable-line no-unused-vars
 }
 
 /**
@@ -75,7 +75,7 @@ export class GetStateData {
   /**
    * Extend the data object instances as you like.
    */
-  [key: string]: any;
+  [key: string]: any; // eslint-disable-line no-undef
 
   /**
    * Raw CSV input string (retrieved by the [[`GetStateService`]]).
@@ -399,7 +399,7 @@ export class GetStateData {
    * @internal
    */
   private expandSlice(input: number[][]): number[] {
-    const output = new Array<number>();
+    const output: number[] = [];
     input.forEach((def) => {
       if (Number.isInteger(Number(def))) {
         output.push(Number(def));

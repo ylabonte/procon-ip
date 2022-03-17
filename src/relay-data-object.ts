@@ -42,9 +42,7 @@ export class RelayDataObject extends GetStateDataObject {
     /* tslint:disable: no-bitwise */
     return (
       0x01 <<
-      ((this.category as GetStateCategory) === GetStateCategory.EXTERNAL_RELAYS
-        ? this.categoryId + 8
-        : this.categoryId)
+      ((this.category as GetStateCategory) === GetStateCategory.EXTERNAL_RELAYS ? this.categoryId + 8 : this.categoryId)
     );
     /* tslint:enable: no-bitwise */
   }

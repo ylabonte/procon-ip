@@ -14,7 +14,7 @@ export class GetStateDataObject {
    * Making [[`GetStateDataObject`]] objects extensible, also allows accessing
    * object keys using string variables.
    */
-  [key: string]: any;
+  [key: string]: any; // eslint-disable-line no-undef
 
   /**
    * Object id aka column index.
