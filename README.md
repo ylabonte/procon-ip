@@ -29,7 +29,7 @@ Package info
 
 ## Changelog
 
-### Release 1.4.0
+### Release v1.4.0
 
 * Change build parameters making the default build an ES-Module
   * There is nothing to change if you want to keep using the CommonJS build.
@@ -46,20 +46,20 @@ Package info
 * Migrate from `tslint` to `eslint`.
 * Update dependencies.
 
-### Release 1.3.3
+### Release v1.3.3
 
 * Fix `RelayDataObject.bitMask` (was broken since `categoryId` refactoring).
 
-### Release 1.3.2
+### Release v1.3.2
 
 * Fix `UsrcfgCgiService.send()` method for switching relays.
 
-### Release 1.3.1
+### Release v1.3.1
 
 * Fix `GetStateDataObject.categoryId` to start counting from 0 as stated in the
   documentation.
 
-### Release 1.3.0
+### Release v1.3.0
 
 * **Breaking changes:** Some properties of the `GetStateDataSysInfo` have been
   renamed fixing a typo: 
