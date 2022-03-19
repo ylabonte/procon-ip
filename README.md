@@ -33,9 +33,15 @@ Package info
 
 * Change build parameters making the default build an ES-Module
   * There is nothing to change if you want to keep using the CommonJS build.
+    But you can also make use of the index.js also added with this release
+    (see next bullet point).
 * Introduce the commonly used index.js to ease `import`/`require` statements.
-  * Simply use `import { GetStateService } from 'procon-ip` instead of 
-    `import { GetStateService } from 'procon-ip/get-state.service'`.
+  This means you can import all classes and interfaces from the index module.
+  * For the CommonJS variant you can simply your imports by using 
+    `import { GetStateService } from 'procon-ip/lib` instead of 
+    `import { GetStateService } from 'procon-ip/lib/get-state.service'`.
+  * For the new ES Module variant just use 
+    `import { GetStateService } from 'procon-ip'`.
 * Add new property `RelayDataObject.isExternal`.
 * Migrate from `tslint` to `eslint`.
 * Update dependencies.
@@ -90,9 +96,10 @@ First you have to initialize the `GetStateService`, which is responsible for
 receiving information from the ProCon.IP controller.
 
 ```javascript
-const GetStateService = require('procon-ip/lib/get-state.service').GetStateService
-const GetStateCategory = require('procon-ip/lib/get-state-data').GetStateCategory
-const Logger = require('procon-ip/lib/logger').Logger
+const ProconIp = require('procon-ip');
+const GetStateService = ProconIp.GetStateService
+const GetStateCategory = ProconIp.GetStateCategory
+const Logger = ProconIp.Logger
 
 const logger = new Logger();
 const config = {
@@ -111,9 +118,7 @@ const dataSource = new GetStateService(config, logger)
 In **TypeScript** you would write the following instead.
 
 ```typescript
-import { GetStateService } from 'procon-ip/lib/get-state.service'
-import { GetStateCategory } from 'procon-ip/lib/get-state-data'
-import { Logger } from 'procon-ip/lib/logger'
+import { GetStateService, GetStateCategory, Logger } from 'procon-ip'
 
 // Just continue as in the snippet above...
 ```
@@ -158,11 +163,12 @@ work.
 ### Switching relays
 
 ```javascript
-const UsrcfgCgiService = require('../lib/usrcfg-cgi.service').UsrcfgCgiService
-const RelayDataInterpreter = require('../lib/relay-data-interpreter').RelayDataInterpreter
-const GetStateCategory = require('../lib/get-state-data').GetStateCategory
-const GetStateService = require('../lib/get-state.service').GetStateService
-const Logger = require('../lib/logger').Logger
+const ProconIp = require('procon-ip');
+const UsrcfgCgiService = ProconIp.UsrcfgCgiService
+const RelayDataInterpreter = ProconIp.RelayDataInterpreter
+const GetStateCategory = ProconIp.GetStateCategory
+const GetStateService = ProconIp.GetStateService
+const Logger = ProconIp.Logger
 
 const logger = new Logger();
 const config = {

@@ -1,13 +1,13 @@
 /**
- * This example assumes you have sourced the .env file in this directory or set the
+ * This example assumes you have a .env file in this directory or set the
  * appropriate environment vars manually.
  */
-
-const GetStateCategory = require('../lib/get-state-data').GetStateCategory;
-const UsrcfgCgiService = require('../lib/usrcfg-cgi.service').UsrcfgCgiService
-const RelayDataInterpreter = require('../lib/relay-data-interpreter').RelayDataInterpreter
-const GetStateService = require('../lib/get-state.service').GetStateService
-const Logger = require('../lib/logger').Logger
+require('dotenv').config();
+const GetStateCategory = require('procon-ip/lib').GetStateCategory;
+const UsrcfgCgiService = require('procon-ip/lib').UsrcfgCgiService;
+const RelayDataInterpreter = require('procon-ip/lib').RelayDataInterpreter;
+const GetStateService = require('procon-ip/lib').GetStateService;
+const Logger = require('procon-ip/lib').Logger;
 
 const logger = new Logger();
 const config = {

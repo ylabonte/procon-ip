@@ -1,13 +1,14 @@
 /**
- * This example assumes you have sourced the .env file in this directory or set the
+ * This example assumes you have a .env file in this directory or set the
  * appropriate environment vars manually.
  */
 
-const GetStateService = require('../lib/get-state.service').GetStateService
-const GetStateCategory = require('../lib/get-state-data').GetStateCategory
-const Logger = require('../lib/logger').Logger
+require('dotenv').config();
+const ProconIp = require('procon-ip/lib');
+const GetStateService = ProconIp.GetStateService
+const GetStateCategory = ProconIp.GetStateCategory
 
-const logger = new Logger();
+const logger = new ProconIp.Logger();
 const config = {
     "controllerUrl": process.env.PROCON_IP_BASE_URL,
     "basicAuth": true,

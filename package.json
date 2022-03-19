@@ -11,8 +11,12 @@
   "bugs": {
     "url": "https://github.com/ylabonte/procon-ip/issues"
   },
-  "main": "./lib/index.js",
+  "main": "./module/index.js",
   "module": "./module/index.js",
+  "exports": {
+    "import": "./module/index.js",
+    "require": "./lib/index.js"
+  },
   "readmeFilename": "README.md",
   "files": [
     "module/",

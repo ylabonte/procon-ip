@@ -41,13 +41,17 @@
 <li>There is nothing to change if you want to keep using the CommonJS build.</li>
 </ul>
 </li>
-<li>Introduce the commonly used index.js to ease <code>import</code>/<code>require</code> statements.<ul>
-<li>Simply use <code>import { GetStateService } from &#39;procon-ip</code> instead of 
-<code>import { GetStateService } from &#39;procon-ip/get-state.service&#39;</code>.</li>
+<li>Introduce the commonly used index.js to ease <code>import</code>/<code>require</code> statements.
+This means you can import all classes and interfaces from the index module.<ul>
+<li>For the CommonJS variant you can simply your imports by using 
+<code>import { GetStateService } from &#39;procon-ip/lib</code> instead of 
+<code>import { GetStateService } from &#39;procon-ip/lib/get-state.service&#39;</code>.</li>
+<li>For the new ES Module variant just use 
+<code>import { GetStateService } from &#39;procon-ip&#39;</code>.</li>
 </ul>
 </li>
 <li>Add new property <code>RelayDataObject.isExternal</code>.</li>
-<li>Migrate from <code>tslint</code> to <code>eslint</code> ().</li>
+<li>Migrate from <code>tslint</code> to <code>eslint</code>.</li>
 <li>Update dependencies.</li>
 </ul>
 
