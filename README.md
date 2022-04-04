@@ -29,6 +29,36 @@ Package info
 
 ## Changelog
 
+### Release v1.4.1
+* Fine tune error behavior of the `GetStateService.start()`.
+  * Add documentation for `errorCallback` parameter.
+  * Add new optional parameter `stopOnError: boolean`.
+  * Pass original `Error` (mostly `AxiosError`) instead of an own error
+    as parameter to the `errorCallback` (parameter of the
+    `GetStateService.start()` method).
+  * New method signature + documentation:  
+  ```TypeScript
+   /**
+    * Start the service.
+    * 
+    * This will periodically update the internal data and invoke the optional
+    * callables each time new data is received.
+    * 
+    * @param successCallback Will be triggered everytime the service receives
+    * new data. The current [[`GetStateData`]] object is passed as parameter
+    * to the callback.
+    * @param errorCallback Error callback receives the most recent error as
+    * parameter, in case the consecutive error tolerance is hit.
+    * @param stopOnError Whether to stop in case the consecutive error tolerance
+    * is hit. Default behavior (for backward compatibility) is to keep running
+    * in any case.
+    */
+    start(
+        successCallback?: (data: GetStateData) => void,
+        errorCallback?: (e: Error) => void,
+        stopOnError?: boolean);
+    ```
+
 ### Release v1.4.0
 
 * Change build parameters making the default build an ES-Module

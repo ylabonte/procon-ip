@@ -92,6 +92,11 @@ export class GetStateService extends AbstractService {
   private _recentError: any;
 
   /**
+   * @internal
+   */
+  private _stopOnError: boolean;
+
+  /**
    * Initialize a new [[`GetStateService`]].
    *
    * @param config Service configuration.
@@ -99,6 +104,7 @@ export class GetStateService extends AbstractService {
    */
   public constructor(config: IGetStateServiceConfig, logger: ILogger) {
     super(config, logger);
+    this._stopOnError = false;
     this._updateInterval = config.updateInterval;
     this._consecutiveFailsLimit = config.errorTolerance;
     this._consecutiveFails = 0;
@@ -134,17 +140,30 @@ export class GetStateService extends AbstractService {
    * Start the service.
    *
    * This will periodically update the internal data and invoke the optional
-   * `callable` each time new data is received.
+   * callables each time new data is received.
    *
-   * @param callable Will be set as [[`_updateCallback`]] and triggered
-   *  periodically ([[`_updateInterval`]]) and
+   * @param successCallback Will be triggered everytime the service receives
+   *  new data. The current [[`GetStateData`]] object is passed as parameter
+   *  to the callback.
+   * @param errorCallback Error callback receives the most recent error as
+   *  parameter, in case the consecutive error tolerance is hit.
+   * @param stopOnError Whether to stop in case the consecutive error tolerance
+   *  is hit. Default behavior (for backward compatibility) is to keep running
+   *  in any case.
    */
-  public start(callable?: (data: GetStateData) => void, errorCallback?: (e: Error) => void): void {
-    if (callable !== undefined) {
-      this._updateCallback = callable;
+  public start(
+    successCallback?: (data: GetStateData) => void,
+    errorCallback?: (e: Error) => void,
+    stopOnError?: boolean,
+  ): void {
+    if (successCallback !== undefined) {
+      this._updateCallback = successCallback;
     }
     if (errorCallback !== undefined) {
       this._errorCallback = errorCallback;
+    }
+    if (stopOnError) {
+      this._stopOnError = stopOnError;
     }
     this.autoUpdate();
   }
@@ -166,6 +185,7 @@ export class GetStateService extends AbstractService {
    */
   public autoUpdate(): void {
     this.update().catch((e) => {
+      if (this._stopOnError) this.stop();
       if (this._errorCallback !== undefined) this._errorCallback(e);
     });
     if (this.next === undefined) {
@@ -198,20 +218,31 @@ export class GetStateService extends AbstractService {
       }
     } catch (e: any) {
       this._consecutiveFails += 1;
-      if (this._consecutiveFails % this._consecutiveFailsLimit === 0 && this._recentError === e.response) {
-        this.log.warn(`${this._consecutiveFails} consecutive requests failed: ${e.response ? e.response : e}`);
-        this._recentError = null;
-        this._hasData = false;
-        this._consecutiveFails = 0;
-        throw new Error(`Unable to request data from ${this.url}`);
+      let isConsecutiveError: boolean;
+      let errorMessage: string;
+      if (e.isAxiosError && e.response && e.response.status) {
+        errorMessage = `${e.response.status} / ${e.response.statusMessage}`;
+        isConsecutiveError =
+          this._recentError &&
+          this._recentError.isAxiosError &&
+          this._recentError.response &&
+          this._recentError.response.status &&
+          this._recentError.response.status === e.response.status;
       } else {
-        if (this._recentError !== e.response) {
-          this.log.info(`${this._consecutiveFails} request(s) failed: ${e.response ? e.response : e}`);
-          this._recentError = e.response;
-          this._consecutiveFails = 1;
-        } else {
-          this.log.debug(`${this._consecutiveFails} request(s) failed: ${e.response ? e.response : e}`);
-        }
+        errorMessage = e.message;
+        isConsecutiveError = this._recentError && this._recentError.message && this._recentError === e.message;
+      }
+
+      if (isConsecutiveError && this._consecutiveFails % this._consecutiveFailsLimit === 0) {
+        this.log.warn(`${this._consecutiveFails} consecutive requests failed with error "${errorMessage}"`);
+        this._hasData = false;
+        throw e;
+      } else if (isConsecutiveError) {
+        this.log.debug(`${this._consecutiveFails} request(s) failed: ${errorMessage}`);
+      } else {
+        this.log.warn(`request failed with error "${errorMessage}"`);
+        this._recentError = e;
+        this._consecutiveFails = 1;
       }
     }
 
