@@ -230,7 +230,7 @@ export class GetStateService extends AbstractService {
           this._recentError.response.status === e.response.status;
       } else {
         errorMessage = e.message;
-        isConsecutiveError = this._recentError && this._recentError.message && this._recentError === e.message;
+        isConsecutiveError = this._recentError && this._recentError.message && this._recentError.message === e.message;
       }
 
       if (isConsecutiveError && this._consecutiveFails % this._consecutiveFailsLimit === 0) {

@@ -29,6 +29,10 @@ Package info
 
 ## Changelog
 
+### Release v1.4.2
+* Fix condition for identifying similar consecutive errors in `GetStateService`
+  in case no status code is available.
+
 ### Release v1.4.1
 * Fine tune error behavior of the `GetStateService.start()`.
   * Add documentation for `errorCallback` parameter.
