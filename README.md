@@ -9,10 +9,10 @@ Package info
 [![Known Vulnerabilities](https://snyk.io/test/github/ylabonte/procon-ip/badge.svg)](https://snyk.io/test/github/ylabonte/procon-ip)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ylabonte/procon-ip/alerts/)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ylabonte/procon-ip/context:javascript)  
-![CI Workflow](https://github.com/ylabonte/procon-ip/workflows/CI%20Workflow/badge.svg)
-![CodeQL](https://github.com/ylabonte/procon-ip/workflows/CodeQL/badge.svg)
-![Github Package release](https://github.com/ylabonte/procon-ip/workflows/Github%20Package%20Release/badge.svg)
-![NPM Package release](https://github.com/ylabonte/procon-ip/workflows/NPM%20Package%20Release/badge.svg)
+[![CI Workflow](https://github.com/ylabonte/procon-ip/actions/workflows/ci.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/ci.yml)
+[![CodeQL Analysis](https://github.com/ylabonte/procon-ip/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/codeql-analysis.yml)
+[![Github Package Release](https://github.com/ylabonte/procon-ip/actions/workflows/release-github.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/release-github.yml)
+[![NPM Package Release](https://github.com/ylabonte/procon-ip/actions/workflows/release-npmjs.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/release-npmjs.yml)
 
 ## Overview
 
