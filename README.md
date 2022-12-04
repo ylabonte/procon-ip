@@ -30,7 +30,7 @@ Package info
 ## Changelog
 
 ### Release v1.5.0
-* Use the latest Node LTS version (currently 18.x) for builds/releases.
+* Use Node 18 for builds/releases.
 * Drop Node 14 from compatibility/ci build test list.
 * Update dependencies.
 * Merge pull-request to make `GetStateData.categories` static  
