@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
       with:
-        node-version: 'latest'
+        node-version: '18'
         registry-url: 'https://npm.pkg.github.com'
     # Rewrite package.json to have the package name scoped for publishing to the github repo.
     - run: |
