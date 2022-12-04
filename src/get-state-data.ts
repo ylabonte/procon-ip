@@ -122,6 +122,8 @@ export class GetStateData {
    */
   public active: number[];
 
+  public readonly categories = GetStateData.categories;
+
   /**
    * Data categories as array of objects.
    *
@@ -132,10 +134,10 @@ export class GetStateData {
    * Counting columns starts at 0. The value is of type `any` to simplify
    * dynamic iteration without linting or parsing errors.
    */
-  public readonly categories: any = {
+  public static readonly categories: any = {
     /**
      * Internal time of the ProCon.IP when processing the corresponding request.
-     * Hence there is only one item in this category. _Read from **column 0**
+     * Hence, there is only one item in this category. _Read from **column 0**
      * of the CSV._
      */
     time: [0],
@@ -145,56 +147,56 @@ export class GetStateData {
      *
      * _Read from **column 1 to 5** of the CSV._
      */
-    analog: [[1, 5]],
+    analog: GetStateData.expandSlice([[1, 5]]),
 
     /**
      * Category for electrode readings.
      *
      * _Read from **columns 6 and 7** of the CSV._
      */
-    electrodes: [6, 7],
+    electrodes: GetStateData.expandSlice([[6, 7]]),
 
     /**
      * Category for temperature sensor values.
      *
      * _Read from **column 8 to 15** of the CSV._
      */
-    temperatures: [[8, 15]],
+    temperatures: GetStateData.expandSlice([[8, 15]]),
 
     /**
      * Category for internal relay values.
      *
      * _Read from **column 16 to 23** of the CSV._
      */
-    relays: [[16, 23]],
+    relays: GetStateData.expandSlice([[16, 23]]),
 
     /**
      * Category for digital input values.
      *
      * _Read from **column 24 to 27** of the CSV._
      */
-    digitalInput: [[24, 27]],
+    digitalInput: GetStateData.expandSlice([[24, 27]]),
 
     /**
      * Category for external relay values.
      *
      * _Read from **column 28 to 35** of the CSV._
      */
-    externalRelays: [[28, 35]],
+    externalRelays: GetStateData.expandSlice([[28, 35]]),
 
     /**
      * Category for canister values.
      *
      * _Read from **column 36 to 38** of the CSV._
      */
-    canister: [[36, 38]],
+    canister: GetStateData.expandSlice([[36, 38]]),
 
     /**
      * Category for canister consumptions.
      *
      * _Read from **column 39 to 41** of the CSV._
      */
-    canisterConsumptions: [[39, 41]],
+    canisterConsumptions: GetStateData.expandSlice([[39, 41]]),
   };
 
   /**
@@ -231,8 +233,8 @@ export class GetStateData {
    * @returns Category name or string `none` if no category could be identified.
    */
   public getCategory(index: number): string {
-    for (const category in this.categories) {
-      if (this.categories[category].indexOf(index) >= 0) {
+    for (const category in GetStateData.categories) {
+      if (GetStateData.categories[category].indexOf(index) >= 0) {
         return category;
       }
     }
@@ -268,28 +270,28 @@ export class GetStateData {
    * @param activeOnly Optionally filter for active objects only.
    */
   public getDataObjectsByCategory(category: string, activeOnly = false): GetStateDataObject[] {
-    return this.getDataObjects(this.categories[category as GetStateCategory], activeOnly);
+    return this.getDataObjects(GetStateData.categories[category as GetStateCategory], activeOnly);
   }
 
   /**
    * Get the object id aka column index of the chlorine dosage control relay.
    */
   public getChlorineDosageControlId(): number {
-    return Math.min(...this.categories.relays) + Number(this.sysInfo.chlorineDosageRelay);
+    return Math.min(...GetStateData.categories.relays) + Number(this.sysInfo.chlorineDosageRelais);
   }
 
   /**
    * Get the object id aka column index of the pH minus dosage control relay.
    */
   public getPhMinusDosageControlId(): number {
-    return Math.min(...this.categories.relays) + Number(this.sysInfo.phMinusDosageRelay);
+    return Math.min(...GetStateData.categories.relays) + Number(this.sysInfo.phMinusDosageRelais);
   }
 
   /**
    * Get the object id aka column index of the pH plus dosage control relay.
    */
   public getPhPlusDosageControlId(): number {
-    return Math.min(...this.categories.relays) + Number(this.sysInfo.phPlusDosageRelay);
+    return Math.min(...GetStateData.categories.relays) + Number(this.sysInfo.phPlusDosageRelais);
   }
 
   /**
@@ -382,10 +384,9 @@ export class GetStateData {
    * @internal
    */
   private categorize(): void {
-    Object.keys(this.categories).forEach((category) => {
+    Object.keys(GetStateData.categories).forEach((category) => {
       let catId = 0;
-      this.categories[category] = this.expandSlice(this.categories[category]);
-      this.categories[category].forEach((id: number) => {
+      GetStateData.categories[category].forEach((id: number) => {
         if (this.objects[id] !== undefined) {
           this.objects[id].categoryId = catId++;
           this.objects[id].category = category;
@@ -398,7 +399,7 @@ export class GetStateData {
    * @param input
    * @internal
    */
-  private expandSlice(input: number[][]): number[] {
+  private static expandSlice(input: number[][]): number[] {
     const output: number[] = [];
     input.forEach((def) => {
       if (Number.isInteger(Number(def))) {
