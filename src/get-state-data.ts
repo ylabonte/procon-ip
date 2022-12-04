@@ -1,6 +1,6 @@
 /**
  * The [[`GetStateData`]] class is parser and access helper for the CSV response
- * data of the `/GetState.csv` endpoint (see {@linkcode GetStateService}). The
+ * data of the `/GetState.csv` endpoint (see {@link GetStateService}). The
  * [[`GetStateCategory`]] enum can be used to retrieve data objects categorized
  * according to the endpoint description (see [ProCon.IP manual](http://www.pooldigital.de/trm/TRM_ProConIP.pdf)).
  * @packageDocumentation
@@ -21,7 +21,7 @@ import { RelayDataObject } from './relay-data-object';
 export enum GetStateCategory {
   /**
    * Internal time of the ProCon.IP when processing the corresponding request.
-   * Hence there is only one item in this category.
+   * Hence, there is only one item in this category.
    */
   TIME = 'time', // eslint-disable-line no-unused-vars
 

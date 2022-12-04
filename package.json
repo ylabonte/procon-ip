@@ -30,7 +30,7 @@
     "build": "npm run build:esmodule && npm run build:commonjs",
     "build:commonjs": "npx tsc -p tsconfig-commonjs.json",
     "build:esmodule": "npx tsc -p tsconfig.json",
-    "build:docs": "rm -rf docs && npx typedoc --excludeInternal --out docs/ --entryPointStrategy expand src/ && touch docs/.nojekyll",
+    "build:docs": "rm -rf docs && npx typedoc --excludeInternal --out docs/ --entryPointStrategy expand src/index.ts && touch docs/.nojekyll",
     "build:all": "npm run build && npm run build:docs",
     "prepack": "npm run build",
     "prepublishOnly": "npm test && npm run lint"
@@ -46,20 +46,20 @@
     "library"
   ],
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.15.0",
-    "@typescript-eslint/parser": "^5.15.0",
-    "eslint": "^7.32.0",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.4",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "prettier": "^2.6.0",
-    "typedoc": "^0.22.13",
-    "typescript": "^4.6.2"
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "prettier": "^2.8.0",
+    "typedoc": "^0.23.21",
+    "typescript": "^4.9.3"
   },
   "dependencies": {
-    "axios": "^0.26.1"
+    "axios": "^1.2.0"
   }
 }
