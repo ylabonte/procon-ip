@@ -1,22 +1,32 @@
-name: Github Package Release
+name: "Github Package Release"
+
 on:
   workflow_run:
-      workflows: ["NPM Package Release"]
-      types:
-          - completed
+      workflows: [ "NPM Package Release" ]
+      types: [ "completed" ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: "Checkout"
     - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+
+    - name: "Setup node environment"
+      uses: actions/setup-node@v3
       with:
         node-version: '18'
         registry-url: 'https://npm.pkg.github.com'
+
     # Rewrite package.json to have the package name scoped for publishing to the github repo.
-    - run: |
+    - name: "Rewrite package.json for github publishing"
+      run: |
         sed -i.orig "s/\(\"name\": \"\)\(procon-ip\"\)/\1@ylabonte\/\2/" package.json
-    - run: npm ci
-    - run: npm publish
+
+    - name: "Setup dependencies"
+      run: npm ci
+
+    - name: "Build and publish project on github.com"
+      run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

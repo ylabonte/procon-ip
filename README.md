@@ -4,15 +4,13 @@
 
 Package info  
 [![npm version](https://badge.fury.io/js/procon-ip.svg)](https://badge.fury.io/js/procon-ip)
-![GitHub](https://img.shields.io/github/license/ylabonte/procon-ip)
-![GitHub issues](https://img.shields.io/github/issues-raw/ylabonte/procon-ip)  
-[![Known Vulnerabilities](https://snyk.io/test/github/ylabonte/procon-ip/badge.svg)](https://snyk.io/test/github/ylabonte/procon-ip)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ylabonte/procon-ip/alerts/)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/ylabonte/procon-ip.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ylabonte/procon-ip/context:javascript)  
+[![GitHub](https://img.shields.io/github/license/ylabonte/procon-ip)](https://github.com/ylabonte/procon-ip/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues-raw/ylabonte/procon-ip)](https://github.com/ylabonte/procon-ip/issues)
+[![Known Vulnerabilities](https://snyk.io/test/github/ylabonte/procon-ip/badge.svg)](https://snyk.io/test/github/ylabonte/procon-ip)  
+[![Github Package Release](https://github.com/ylabonte/procon-ip/actions/workflows/release-github.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/release-github.yml)
+[![NPM Package Release](https://github.com/ylabonte/procon-ip/actions/workflows/release-npmjs.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/release-npmjs.yml)  
 [![CI Workflow](https://github.com/ylabonte/procon-ip/actions/workflows/ci.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/ci.yml)
 [![CodeQL Analysis](https://github.com/ylabonte/procon-ip/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/codeql-analysis.yml)
-[![Github Package Release](https://github.com/ylabonte/procon-ip/actions/workflows/release-github.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/release-github.yml)
-[![NPM Package Release](https://github.com/ylabonte/procon-ip/actions/workflows/release-npmjs.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/release-npmjs.yml)
 
 ## Overview
 
