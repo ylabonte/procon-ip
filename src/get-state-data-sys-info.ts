@@ -1,5 +1,5 @@
 /**
- * The [[`GetStateDataSysInfo`]] class is part of the [[`GetStateData`]]
+ * The {@link GetStateDataSysInfo} class is part of the {@link GetStateData}
  * class, which is kind of an object representation of the `/GetState.csv`
  * API endpoint response of the ProCon.IP pool controller.
  * @packageDocumentation
@@ -14,7 +14,7 @@ import { GetStateDataObject } from './get-state-data-object';
  */
 export class GetStateDataSysInfo {
   /**
-   * Making [[`GetStateDataSysInfo`]] objects extensible, also allows accessing
+   * Making {@link GetStateDataSysInfo} objects extensible, also allows accessing
    * object keys using string variables.
    */
   [key: string]: any; // eslint-disable-line no-undef
@@ -112,10 +112,10 @@ export class GetStateDataSysInfo {
   public chlorineDosageRelay!: number;
 
   /**
-   * Initialize a new [[`GetStateDataSysInfo`]] object.
+   * Initialize a new {@link GetStateDataSysInfo} object.
    *
    * @param data Parsed response CSV of the `/GetState.csv` endpoint as
-   *             2-dimensional array (see: [[`GetStateData.parsed`]])
+   *             2-dimensional array (see: {@link GetStateData.parsed})
    */
   public constructor(data?: string[][]) {
     if (data) {
@@ -127,7 +127,7 @@ export class GetStateDataSysInfo {
    * Set values from based on a 2-dimensional array structure.
    *
    * @param data Parsed response CSV of the `/GetState.csv` endpoint as
-   *             2-dimensional array (see: [[`GetStateData.parsed`]])
+   *             2-dimensional array (see: {@link GetStateData.parsed})
    */
   public setValuesFromArray(data: string[][]): void {
     this.version = data[0][1];
@@ -183,10 +183,10 @@ export class GetStateDataSysInfo {
   }
 
   /**
-   * Check whether the given [[`GetStateDataObject`]] object is a dosage control
+   * Check whether the given {@link GetStateDataObject} object is a dosage control
    * relay.
    *
-   * @param object The [[`GetStateDataObject`]] to check.
+   * @param object The {@link GetStateDataObject} to check.
    */
   public isDosageEnabled(object: GetStateDataObject): boolean {
     switch (object.id) {
@@ -206,11 +206,11 @@ export class GetStateDataSysInfo {
 
   /**
    * Returns the configured dosage relay for a given
-   * [[`GetStateDataObject`]] object.
+   * {@link GetStateDataObject} object.
    *
-   * @param object The [[`GetStateDataObject`]] to check, should be a
-   * [[`GetStateData.categories.canister`]] or a
-   * [[`GetStateData.categories.canisterConsumptions`]] object.
+   * @param object The {@link GetStateDataObject} to check, should be a
+   * {@link GetStateData.categories:STATIC.canister} or a
+   * {@link GetStateData.categories:STATIC.canisterConsumptions} object.
    */
   public getDosageRelay(object: GetStateDataObject): number {
     switch (object.id) {

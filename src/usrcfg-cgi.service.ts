@@ -1,7 +1,7 @@
 /**
- * The [[`UsrcfgCgiService`]] uses the `/usrcfg.cgi` endpoint of the ProCon.IP
+ * The {@link UsrcfgCgiService} uses the `/usrcfg.cgi` endpoint of the ProCon.IP
  * pool controller to switch its relay states. The actual states can be read
- * from the [[`GetStateService`]].
+ * from the {@link GetStateService}.
  * @packageDocumentation
  */
 
@@ -14,9 +14,9 @@ import { RelayDataInterpreter, RelayStateBitMask } from './relay-data-interprete
 import { ILogger } from './logger';
 
 /**
- * This enum can be used with the [[`UsrcfgCgiService.setState`]] method. But
- * there are also shorthand wrappers for all states ([[`setOn`]], [[`setOff`]],
- * [[`setAuto`]]) that can be used.
+ * This enum can be used with the {@link UsrcfgCgiService.setState} method. But
+ * there are also shorthand wrappers for all states ({@link UsrcfgCgiService.setOn},
+ * {@link UsrcfgCgiService.setOff}, {@link UsrcfgCgiService.setAuto}) that can be used.
  */
 export enum SetStateValue {
   OFF = 0, // eslint-disable-line no-unused-vars
@@ -25,7 +25,7 @@ export enum SetStateValue {
 }
 
 /**
- * The [[`UsrcfgCgiService`]] uses the `/usrcfg.cgi` endpoint of the ProCon.IP
+ * The {@link UsrcfgCgiService} uses the `/usrcfg.cgi` endpoint of the ProCon.IP
  * pool controller to switch its relay states.
  *
  * It uses two bit patterns in decimal representation, to set on/off and auto
@@ -37,7 +37,7 @@ export class UsrcfgCgiService extends AbstractService {
   /**
    * Specific service endpoint.
    *
-   * A path relative to the [[`IServiceConfig.controllerUrl`]].
+   * A path relative to the {@link IServiceConfig.controllerUrl}.
    */
   public _endpoint = '/usrcfg.cgi';
 
@@ -54,13 +54,13 @@ export class UsrcfgCgiService extends AbstractService {
   private relayDataInterpreter: RelayDataInterpreter;
 
   /**
-   * Initialize a new [[`UsrcfgCgiService`]]
+   * Initialize a new {@link UsrcfgCgiService}
    *
    * @param config The service config.
    * @param logger The service logger.
-   * @param getStateService A corresponding [[`GetStateService`]] (must address
+   * @param getStateService A corresponding {@link GetStateService} (must address
    *                        the same pool controller)
-   * @param relayDataInterpreter An instance of [[`RelayDataInterpreter`]].
+   * @param relayDataInterpreter An instance of {@link RelayDataInterpreter}.
    */
   public constructor(
     config: IServiceConfig,

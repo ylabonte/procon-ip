@@ -1,8 +1,8 @@
 /**
  * This file exports the common basis of the webservice interfaces.
  *
- * This abstract class builds a common basis for the [[`GetStateService`]] and
- * the [[`UsrcfgCgiService`]] classes. These two classes are the actual
+ * This abstract class builds a common basis for the {@link GetStateService} and
+ * the {@link UsrcfgCgiService} classes. These two classes are the actual
  * webservice interfaces to the ProCon.IP pool controller.
  * It also has a shared service configuration. In this context _service_ means
  * a web service or endpoint of the ProCon.IP pool controller. The following
@@ -63,7 +63,7 @@ export abstract class AbstractService {
    * Specific webservice endpoint.
    *
    * An _absolute URL_, which means a path with leading slash ('/') relative to
-   * the [[`IServiceConfig.controllerUrl`]] (ProCon.IP base address).
+   * the {@link IServiceConfig.controllerUrl} (ProCon.IP base address).
    */
   abstract _endpoint: string;
 
@@ -118,7 +118,7 @@ export abstract class AbstractService {
   /**
    * Get the base url.
    *
-   * @returns The [[`IServiceConfig.controllerUrl`]] string.
+   * @returns The {@link IServiceConfig.controllerUrl} string.
    */
   public get baseUrl(): string {
     return this._config.controllerUrl;

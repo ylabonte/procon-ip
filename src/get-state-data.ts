@@ -1,7 +1,7 @@
 /**
- * The [[`GetStateData`]] class is parser and access helper for the CSV response
+ * The {@link GetStateData} class is parser and access helper for the CSV response
  * data of the `/GetState.csv` endpoint (see {@link GetStateService}). The
- * [[`GetStateCategory`]] enum can be used to retrieve data objects categorized
+ * {@link GetStateCategory} enum can be used to retrieve data objects categorized
  * according to the endpoint description (see [ProCon.IP manual](http://www.pooldigital.de/trm/TRM_ProConIP.pdf)).
  * @packageDocumentation
  */
@@ -12,7 +12,7 @@ import { RelayDataObject } from './relay-data-object';
 
 /**
  * Enum of valid categories that can be used with
- * [[`GetStateData.getDataObjectsByCategory`]].
+ * {@link GetStateData.getDataObjectsByCategory}.
  *
  * Categories are based on the official API documentation.
  *
@@ -68,7 +68,7 @@ export enum GetStateCategory {
 
 /**
  * This class is parser and access helper at once with integrated object
- * representation for the response CSV of the [[`GetStateService`]].
+ * representation for the response CSV of the {@link GetStateService}.
  * (_This might be changed/split in seperate classes in a future refactoring_)
  */
 export class GetStateData {
@@ -78,7 +78,7 @@ export class GetStateData {
   [key: string]: any; // eslint-disable-line no-undef
 
   /**
-   * Raw CSV input string (retrieved by the [[`GetStateService`]]).
+   * Raw CSV input string (retrieved by the {@link GetStateService}).
    */
   public raw: string;
 
@@ -128,11 +128,12 @@ export class GetStateData {
    * Data categories as array of objects.
    *
    * Category names as keys and arrays as values. These arrays list columns
-   * (referencing the [[`parsed`]] CSV) which fall into this category.
+   * (referencing the {@link parsed} CSV) which fall into this category.
    * The array values might contain simple listings of the column positions or
    * another array containing the starting and ending index of a slice/range.
    * Counting columns starts at 0. The value is of type `any` to simplify
    * dynamic iteration without linting or parsing errors.
+   * {@label STATIC}
    */
   public static readonly categories: any = {
     /**
@@ -188,6 +189,7 @@ export class GetStateData {
      * Category for canister values.
      *
      * _Read from **column 36 to 38** of the CSV._
+     * {@label CAN_STATIC}
      */
     canister: GetStateData.expandSlice([[36, 38]]),
 
@@ -195,14 +197,15 @@ export class GetStateData {
      * Category for canister consumptions.
      *
      * _Read from **column 39 to 41** of the CSV._
+     * {@label CANCON_STATIC}
      */
     canisterConsumptions: GetStateData.expandSlice([[39, 41]]),
   };
 
   /**
-   * Initialize new [[`GetStateData`]] instance.
+   * Initialize new {@link GetStateData} instance.
    *
-   * @param rawData Plain response string of the [[`GetStateService`]] or the
+   * @param rawData Plain response string of the {@link GetStateService} or the
    *                `/GetState.csv` API endpoint.
    */
   public constructor(rawData?: string) {
@@ -243,7 +246,7 @@ export class GetStateData {
   }
 
   /**
-   * Get [[`GetStateDataObject`]] objects by index.
+   * Get {@link GetStateDataObject} objects by index.
    *
    * @param indices An array of object indices specifying the return objects.
    * @param activeOnly Optionally filter for active objects only.
@@ -255,7 +258,7 @@ export class GetStateData {
   }
 
   /**
-   * Get a single [[`GetStateDataObject`]] by id aka column index.
+   * Get a single {@link GetStateDataObject} by id aka column index.
    *
    * @param id Object column index.
    */
@@ -266,7 +269,7 @@ export class GetStateData {
   /**
    * Get all data objects of a given category.
    *
-   * @param category A valid category string (see [[`GetStateCategory`]])
+   * @param category A valid category string (see {@link GetStateCategory})
    * @param activeOnly Optionally filter for active objects only.
    */
   public getDataObjectsByCategory(category: string, activeOnly = false): GetStateDataObject[] {
@@ -295,28 +298,28 @@ export class GetStateData {
   }
 
   /**
-   * Get the chlorine dosage control [[`RelayDataObject`]].
+   * Get the chlorine dosage control {@link RelayDataObject}.
    */
   public getChlorineDosageControl(): RelayDataObject {
     return new RelayDataObject(this.getDataObject(this.getChlorineDosageControlId()));
   }
 
   /**
-   * Get the pH- dosage control [[`RelayDataObject`]].
+   * Get the pH- dosage control {@link RelayDataObject}.
    */
   public getPhMinusDosageControl(): RelayDataObject {
     return new RelayDataObject(this.getDataObject(this.getPhMinusDosageControlId()));
   }
 
   /**
-   * Get the pH+ dosage control [[`RelayDataObject`]].
+   * Get the pH+ dosage control {@link RelayDataObject}.
    */
   public getPhPlusDosageControl(): RelayDataObject {
     return new RelayDataObject(this.getDataObject(this.getPhPlusDosageControlId()));
   }
 
   /**
-   * Check whether the given id refers to a dosage control [[`RelayDataObject`]].
+   * Check whether the given id refers to a dosage control {@link RelayDataObject}.
    */
   public isDosageControl(id: number): boolean {
     return (
@@ -328,7 +331,7 @@ export class GetStateData {
 
   /**
    * Parse the CSV string into a 2-dimensional array structure and into
-   * [[`GetStateDataObject`]] and [[`RelayDataObject`]] objects.
+   * {@link GetStateDataObject} and {@link RelayDataObject} objects.
    *
    * @param csv Raw CSV input string (response of the `/GetState.csv` endpoint)
    */

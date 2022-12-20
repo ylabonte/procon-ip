@@ -1,5 +1,5 @@
 /**
- * The [[`GetStateDataObject`]] class is part of the [[`GetStateData`]]
+ * The {@link GetStateDataObject} class is part of the {@link GetStateData}
  * class, which is kind of an object representation of the `/GetState.csv`
  * API endpoint response of the ProCon.IP pool controller.
  * @packageDocumentation
@@ -11,7 +11,7 @@
  */
 export class GetStateDataObject {
   /**
-   * Making [[`GetStateDataObject`]] objects extensible, also allows accessing
+   * Making {@link GetStateDataObject} objects extensible, also allows accessing
    * object keys using string variables.
    */
   [key: string]: any; // eslint-disable-line no-undef
@@ -77,7 +77,7 @@ export class GetStateDataObject {
   public active!: boolean;
 
   /**
-   * Passthru all parameters to [[`GetStateDataObject.set`]].
+   * Passthru all parameters to {@link GetStateDataObject.set}.
    *
    * @param index Column id/index
    * @param name Column or data portion name

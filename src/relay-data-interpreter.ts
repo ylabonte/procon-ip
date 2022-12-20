@@ -1,5 +1,5 @@
 /**
- * The [[`RelayDataInterpreter`]] is a helper for all the binary operations
+ * The {@link RelayDataInterpreter} is a helper for all the binary operations
  * that are necessary to read and write relay states.
  * @packageDocumentation
  */
@@ -14,7 +14,7 @@ import { ILogger } from './logger';
  * - lsb: 0 = off, 1 = on
  * - msb: 0 = auto, 1 = manual
  *
- * It is used by the [[`RelayDataInterpreter`]] and the [[`UsrcfgCgiService`]].
+ * It is used by the {@link RelayDataInterpreter} and the {@link UsrcfgCgiService}.
  */
 export enum RelayStateBitMask {
   on = 1, // eslint-disable-line no-unused-vars
@@ -26,7 +26,7 @@ export enum RelayStateBitMask {
 }
 
 /**
- * The [[`RelayDataInterpreter`]] is a helper for all the binary operations
+ * The {@link RelayDataInterpreter} is a helper for all the binary operations
  * that are necessary to read and write relay states.
  */
 export class RelayDataInterpreter {
@@ -39,7 +39,7 @@ export class RelayDataInterpreter {
   private log: ILogger;
 
   /**
-   * Initialize a new [[`RelayDataInterpreter`]].
+   * Initialize a new {@link RelayDataInterpreter}.
    *
    * @param logger
    */
@@ -48,17 +48,17 @@ export class RelayDataInterpreter {
   }
 
   /**
-   * Evaluate the current relay states and set the [[`byteState`]] accordingly.
+   * Evaluate the current relay states and set the {@link bitStates} accordingly.
    *
-   * The determined values are used to set the switching parameters. Therefore
-   * the input values should be as up-to-date as possible. Otherwise a change
+   * The determined values are used to set the switching parameters. Therefore,
+   * the input values should be as up-to-date as possible. Otherwise, a change
    * on one relay will reset all other relays based on the `stateData`.
    *
    * **Important**
    * This method should be called before using any of the set operations
-   * ([[`setOn`]], [[`setOff`]], [[`setAuto`]]).
+   * ({@link setOn}, {@link setOff}, {@link setAuto}).
    *
-   * @param stateData The most recent [[`GetStateData`]] instance.
+   * @param stateData The most recent {@link GetStateData} instance.
    */
   public evaluate(stateData: GetStateData): RelayDataInterpreter {
     let relays = stateData.getDataObjectsByCategory(GetStateCategory.RELAYS);
@@ -84,7 +84,7 @@ export class RelayDataInterpreter {
   }
 
   /**
-   * True if the given relay ([[`GetStateDataObject`]]) is currently switched
+   * True if the given relay ({@link GetStateDataObject}) is currently switched
    * on.
    *
    * @param relay
@@ -96,7 +96,7 @@ export class RelayDataInterpreter {
   }
 
   /**
-   * True if the given relay ([[`GetStateDataObject`]]) is currently switched
+   * True if the given relay ({@link GetStateDataObject}) is currently switched
    * off.
    *
    * @param relay
@@ -106,7 +106,7 @@ export class RelayDataInterpreter {
   }
 
   /**
-   * True if the given relay ([[`GetStateDataObject`]]) is currently not in
+   * True if the given relay ({@link GetStateDataObject}) is currently not in
    * auto mode.
    *
    * @param relay
@@ -118,7 +118,7 @@ export class RelayDataInterpreter {
   }
 
   /**
-   * True if the given relay ([[`GetStateDataObject`]]) is currently in auto
+   * True if the given relay ({@link GetStateDataObject}) is currently in auto
    * mode.
    *
    * @param relay
@@ -129,7 +129,7 @@ export class RelayDataInterpreter {
 
   /**
    * Return the appropriate bit patterns for the `/usrcfg.cgi` endpoint to
-   * switch the given relay ([[`GetStateDataObject`]]) on.
+   * switch the given relay ({@link GetStateDataObject}) on.
    *
    * @param relay
    */
@@ -146,7 +146,7 @@ export class RelayDataInterpreter {
 
   /**
    * Return the appropriate bit patterns for the `/usrcfg.cgi` endpoint to
-   * switch the given relay ([[`GetStateDataObject`]]) off.
+   * switch the given relay ({@link GetStateDataObject}) off.
    *
    * @param relay
    */
@@ -163,7 +163,7 @@ export class RelayDataInterpreter {
 
   /**
    * Return the appropriate bit patterns for the `/usrcfg.cgi` endpoint to
-   * switch the given relay ([[`GetStateDataObject`]]) into auto mode.
+   * switch the given relay ({@link GetStateDataObject}) into auto mode.
    *
    * @param relay
    */
