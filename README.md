@@ -27,6 +27,9 @@ Package info
 
 ## Changelog
 
+### Release v1.5.1
+* Dependency Updates
+
 ### Release v1.5.0
 * Use Node 18 for builds/releases.
 * Drop Node 14 from compatibility/ci build test list.
