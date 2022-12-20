@@ -67,7 +67,7 @@ export enum GetStateCategory {
 }
 
 export interface IGetStateCategories {
-  time: number[]
+  time: number[];
   analog: number[];
   electrodes: number[];
   temperatures: number[];
