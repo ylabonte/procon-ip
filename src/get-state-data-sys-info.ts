@@ -209,8 +209,8 @@ export class GetStateDataSysInfo {
    * {@link GetStateDataObject} object.
    *
    * @param object The {@link GetStateDataObject} to check, should be a
-   * {@link GetStateData.categories:STATIC.canister} or a
-   * {@link GetStateData.categories:STATIC.canisterConsumptions} object.
+   * {@link GetStateData.categories | GetStateData.categories.canister} or a
+   * {@link GetStateData.categories | GetStateData.categories.canisterConsumptions} object.
    */
   public getDosageRelay(object: GetStateDataObject): number {
     switch (object.id) {

@@ -66,6 +66,18 @@ export enum GetStateCategory {
   CANISTER_CONSUMPTION = 'canisterConsumptions', // eslint-disable-line no-unused-vars
 }
 
+export interface IGetStateCategories {
+  time: number[]
+  analog: number[];
+  electrodes: number[];
+  temperatures: number[];
+  relays: number[];
+  digitalInput: number[];
+  externalRelays: number[];
+  canister: number[];
+  canisterConsumptions: number[];
+}
+
 /**
  * This class is parser and access helper at once with integrated object
  * representation for the response CSV of the {@link GetStateService}.
@@ -122,7 +134,7 @@ export class GetStateData {
    */
   public active: number[];
 
-  public readonly categories = GetStateData.categories;
+  public readonly categories: IGetStateCategories = GetStateData.categories;
 
   /**
    * Data categories as array of objects.
@@ -133,9 +145,8 @@ export class GetStateData {
    * another array containing the starting and ending index of a slice/range.
    * Counting columns starts at 0. The value is of type `any` to simplify
    * dynamic iteration without linting or parsing errors.
-   * {@label STATIC}
    */
-  public static readonly categories: any = {
+  public static readonly categories: IGetStateCategories = {
     /**
      * Internal time of the ProCon.IP when processing the corresponding request.
      * Hence, there is only one item in this category. _Read from **column 0**
@@ -189,7 +200,6 @@ export class GetStateData {
      * Category for canister values.
      *
      * _Read from **column 36 to 38** of the CSV._
-     * {@label CAN_STATIC}
      */
     canister: GetStateData.expandSlice([[36, 38]]),
 
@@ -197,7 +207,6 @@ export class GetStateData {
      * Category for canister consumptions.
      *
      * _Read from **column 39 to 41** of the CSV._
-     * {@label CANCON_STATIC}
      */
     canisterConsumptions: GetStateData.expandSlice([[39, 41]]),
   };
@@ -237,7 +246,7 @@ export class GetStateData {
    */
   public getCategory(index: number): string {
     for (const category in GetStateData.categories) {
-      if (GetStateData.categories[category].indexOf(index) >= 0) {
+      if (GetStateData.categories[category as keyof IGetStateCategories].indexOf(index) >= 0) {
         return category;
       }
     }
@@ -389,7 +398,7 @@ export class GetStateData {
   private categorize(): void {
     Object.keys(GetStateData.categories).forEach((category) => {
       let catId = 0;
-      GetStateData.categories[category].forEach((id: number) => {
+      GetStateData.categories[category as keyof IGetStateCategories].forEach((id: number) => {
         if (this.objects[id] !== undefined) {
           this.objects[id].categoryId = catId++;
           this.objects[id].category = category;
