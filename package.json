@@ -1,6 +1,6 @@
 {
   "name": "procon-ip",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Library for the ProCon.IP pool controller",
   "license": "MIT",
   "homepage": "https://github.com/ylabonte/procon-ip#readme",
