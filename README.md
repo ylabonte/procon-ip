@@ -27,6 +27,12 @@ Package info
 
 ## Changelog
 
+### Release v1.5.3
+* Dependency Updates
+
+### Release v1.5.2
+* Dependency Updates
+
 ### Release v1.5.1
 * Dependency Updates
 
