@@ -122,12 +122,12 @@ Package info
 
 ## Introduction
 
-The name of this library refers to the [ProCon.IP pool controller](#what-is-procon-ip).
-Documentation might follow. Until this please take a look at the sources. I
-tried to keep the interfaces readable. An IDE with proper auto-completion should
-help understand and use the library without further documentation.
+The name of this library refers to the ProCon.IP pool controller.
+See [Examples](#examples) or [API docs (auto generated)](#full-api-docs) for an overview
+of the library's feature set or take a look at the [brief description of the ProCon.IP pool controller](#a-brief-description-of-the-proconip-pool-controller)
+if you have no idea what the ProCon.IP is.
 
-Feel free to ask questions by using githubs issues system, so others can take
+Feel free to ask questions by using github's issues system, so others can take
 part and are able to find the answer if they have a similar question. Thanks! :)
 
 ## Examples
@@ -261,7 +261,7 @@ home swimming pools. With its software switched relays, it can control
 multiple pumps (for the pool filter and different dosage aspects) either
 simply planned per time schedule or depending on a reading/value from one of
 its many input channels for measurements (eg. i/o flow sensors, Dallas 1-Wire
-termometers, redox and pH electrodes). At least there is also the option to
+thermometers, redox and pH electrodes). At least there is also the option to
 switch these relays on demand, which makes them also applicable for switching
 lights (or anything else you want) on/off.
 Not all of its functionality is reachable via API. In fact there is one

@@ -2,10 +2,8 @@
 
 ## Supported Versions
 
-| Version | Supported          | Statement                                |
-| ------- | ------------------ | ---------------------------------------- |
-| 0.x.x   | :x:                | No updates. Use current version instead. |
-| 1.0.x   | :white_check_mark: | Most recent version only.                |
+Always use the most recent version. There will be no support for older
+versions.
 
 ## Reporting a Vulnerability
 
