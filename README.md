@@ -28,6 +28,9 @@ Package info
 
 ## Changelog
 
+### Release v1.5.4
+* Dependency Updates
+
 ### Release v1.5.3
 * Dependency Updates
 
