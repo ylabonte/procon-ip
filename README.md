@@ -28,6 +28,9 @@ Package info
 
 ## Changelog
 
+### Release v1.6.0
+* Add `CommandService` for manual dosage control. 
+
 ### Release v1.5.4
 * Dependency Updates
 
