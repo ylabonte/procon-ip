@@ -199,7 +199,7 @@ export class GetStateService extends AbstractService {
   }
 
   /**
-   * Update data by staging a HTTP request to the pool controller.
+   * Update data by staging an HTTP request to the pool controller.
    *
    * This method will be triggered periodically once the service
    * has been started (see {@link GetStateService.start}). It also
@@ -260,8 +260,8 @@ export class GetStateService extends AbstractService {
    * Tells you whether the service has most recent status information or not.
    *
    * More accurately it tells you whether the most recent request succeeded or
-   * not. So it will return `true` if the reuqest succeeded and your data is
-   * up to date. It will return `false` until the service retrieved its first
+   * not. So it will return `true` if the request succeeded and your data is
+   * up-to-date. It will return `false` until the service retrieved its first
    * data and again if a subsequent request fails.
    */
   public hasData(): boolean {

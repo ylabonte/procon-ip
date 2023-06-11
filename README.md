@@ -184,16 +184,16 @@ calling the `update()` or `start()` methods.
 ```javascript
 // You can easily request fresh data on demand using the update...
 dataSource.update().then((data) => {
-    logger.info(`Uptime: ${data.sysInfo.uptime}`)
-})
+    logger.info(`Uptime: ${data.sysInfo.uptime}`);
+});
 
 // ...or periodically
 dataSource.start((data) => {
     logger.info("Got new data from pool controller")
     data.getDataObjectsByCategory(GetStateCategory.ELECTRODES).forEach((dataObject) => {
-        logger.info(`${dataObject.label}: ${dataObject.displayValue}`)
-    })
-})
+        logger.info(`${dataObject.label}: ${dataObject.displayValue}`);
+    });
+});
 ```
 
 Be aware of the the asynchronous character of this functions. Executing the
@@ -216,11 +216,11 @@ work.
 
 ```javascript
 const ProconIp = require('procon-ip');
-const UsrcfgCgiService = ProconIp.UsrcfgCgiService
-const RelayDataInterpreter = ProconIp.RelayDataInterpreter
-const GetStateCategory = ProconIp.GetStateCategory
-const GetStateService = ProconIp.GetStateService
-const Logger = ProconIp.Logger
+const UsrcfgCgiService = ProconIp.UsrcfgCgiService;
+const RelayDataInterpreter = ProconIp.RelayDataInterpreter;
+const GetStateCategory = ProconIp.GetStateCategory;
+const GetStateService = ProconIp.GetStateService;
+const Logger = ProconIp.Logger;
 
 const logger = new Logger();
 const config = {
@@ -230,29 +230,55 @@ const config = {
     "password": "admin",
     "timeout": 5000,
     "updateInterval": 5000,
-    "errorTolerance": 2
-}
+    "errorTolerance": 2,
+};
 
-const interpreter = new RelayDataInterpreter(logger)
-const dataSource = new GetStateService(config, logger)
-const relaySwitcher = new UsrcfgCgiService(config, logger, dataSource, interpreter)
+const interpreter = new RelayDataInterpreter(logger);
+const dataSource = new GetStateService(config, logger);
+const relaySwitcher = new UsrcfgCgiService(config, logger, dataSource, interpreter);
 
 dataSource.update().then(data => {
     // Let's just switch the chlorine dosage relay off to keep it easy...
     relaySwitcher.setOff(data.getChlorineDosageControl()).then(r => {
-        logger.info(`Chlorine dosage control has been turned off (response code: ${r})`)
-    })
+        logger.info(`Chlorine dosage control has been turned off (response code: ${r})`);
+    });
 
     // ...to switch arbitrary relays you will have to determine the acutal
     // object id of the relay you want to switch (e.g. by its label):
     data.getDataObjectsByCategory(GetStateCategory.RELAYS).forEach(relay => {
         if (relay.label === "Gartenlicht") {
             relaySwitcher.setAuto(relay).then(r => {
-                logger.info(`${relay.label} has been turned on (response code: ${r})`)
-            })
+                logger.info(`${relay.label} has been turned on (response code: ${r})`);
+            });
         }
-    })
-})
+    });
+});
+```
+
+### Perform a manual dosage
+
+```javascript
+const ProconIp = require('procon-ip');
+const CommandService = ProconIp.CommandService;
+const Logger = ProconIp.Logger;
+
+const logger = new Logger();
+const config = {
+  controllerUrl: 'http://192.168.2.3',
+  basicAuth: true,
+  username: 'admin',
+  password: 'admin',
+};
+
+const commandService = new CommandService(config, logger);
+
+commandService.setChlorineDosage(60).then((seconds) => {
+  // Manual dosage started for 1 minute
+  const interval = setInterval(() => {
+    console.log(`Dosage in progress. ${--seconds} remaining.`);
+    if (seconds <= 0) clearInterval(interval);
+  }, 1000);
+});
 ```
 
 The examples above can also be found in the `examples` directory of this repository.
