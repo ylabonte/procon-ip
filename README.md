@@ -28,6 +28,12 @@ Package info
 
 ## Changelog
 
+### Release v1.6.1
+* Fix helper methods:
+  * `GetStateData.getChlorineDosageControlId()`
+  * `GetStateData.getPhMinusDosageControlId()`
+  * `GetStateData.getPhPlusDosageControlId()`
+
 ### Release v1.6.0
 * Add `CommandService` for manual dosage control. 
 
