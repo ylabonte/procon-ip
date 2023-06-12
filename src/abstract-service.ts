@@ -109,7 +109,7 @@ export abstract class AbstractService {
    * @param config Service config.
    * @param logger Service logger.
    */
-  protected constructor(config: IServiceConfig, logger: ILogger) {
+  public constructor(config: IServiceConfig, logger: ILogger) {
     this._requestHeaders = {};
     this._config = config;
     this.log = logger;

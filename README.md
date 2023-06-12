@@ -28,6 +28,9 @@ Package info
 
 ## Changelog
 
+### Release v1.6.2
+* Fix `CommandService` by making the `AbstractService` constructor public.
+
 ### Release v1.6.1
 * Fix helper methods:
   * `GetStateData.getChlorineDosageControlId()`
