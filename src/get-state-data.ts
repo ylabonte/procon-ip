@@ -289,7 +289,6 @@ export class GetStateData {
    * Get the object id aka column index of the chlorine dosage control relay.
    */
   public getChlorineDosageControlId(): number {
-    //return Math.min(...GetStateData.categories.relays) + Number(this.sysInfo.chlorineDosageRelais);
     return this.sysInfo.chlorineDosageRelay;
   }
 
@@ -297,7 +296,6 @@ export class GetStateData {
    * Get the object id aka column index of the pH minus dosage control relay.
    */
   public getPhMinusDosageControlId(): number {
-    //return Math.min(...GetStateData.categories.relays) + Number(this.sysInfo.phMinusDosageRelais);
     return this.sysInfo.phMinusDosageRelay;
   }
 
@@ -305,7 +303,6 @@ export class GetStateData {
    * Get the object id aka column index of the pH plus dosage control relay.
    */
   public getPhPlusDosageControlId(): number {
-    //return Math.min(...GetStateData.categories.relays) + Number(this.sysInfo.phPlusDosageRelais);
     return this.sysInfo.phPlusDosageRelay;
   }
 
