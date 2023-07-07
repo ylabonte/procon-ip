@@ -25,7 +25,7 @@ Package info
 * [Disclaimer](#disclaimer)
 
 ---
-![ProCon.IP TypeScript library](logo.png)
+![ProCon.IP TypeScript library](./logo.png)
 
 ## Changelog
 
