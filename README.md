@@ -25,8 +25,12 @@ Package info
 * [Disclaimer](#disclaimer)
 
 ---
+![ProCon.IP TypeScript library](logo.png)
 
 ## Changelog
+
+### Release v1.6.3
+* Dependency updates
 
 ### Release v1.6.2
 * Fix `CommandService` by making the `AbstractService` constructor public.
@@ -41,16 +45,16 @@ Package info
 * Add `CommandService` for manual dosage control. 
 
 ### Release v1.5.4
-* Dependency Updates
+* Dependency updates
 
 ### Release v1.5.3
-* Dependency Updates
+* Dependency updates
 
 ### Release v1.5.2
-* Dependency Updates
+* Dependency updates
 
 ### Release v1.5.1
-* Dependency Updates
+* Dependency updates
 
 ### Release v1.5.0
 * Use Node 18 for builds/releases.
