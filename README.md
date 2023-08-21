@@ -29,6 +29,10 @@ Package info
 
 ## Changelog
 
+### Release v1.7.0
+* Add `SetStateService` for generic relay timers
+* Dependency updates
+
 ### Release v1.6.3
 * Dependency updates
 
