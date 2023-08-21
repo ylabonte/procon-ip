@@ -29,12 +29,15 @@ Package info
 
 ## Changelog
 
+### Release v1.7.1
+* Fix previous release by adding `SetStateService` to the package index.
+
 ### Release v1.7.0
-* Add `SetStateService` for generic relay timers
-* Dependency updates
+* Add `SetStateService` for generic relay timers.
+* Dependency updates.
 
 ### Release v1.6.3
-* Dependency updates
+* Dependency updates.
 
 ### Release v1.6.2
 * Fix `CommandService` by making the `AbstractService` constructor public.
@@ -49,16 +52,16 @@ Package info
 * Add `CommandService` for manual dosage control. 
 
 ### Release v1.5.4
-* Dependency updates
+* Dependency updates.
 
 ### Release v1.5.3
-* Dependency updates
+* Dependency updates.
 
 ### Release v1.5.2
-* Dependency updates
+* Dependency updates.
 
 ### Release v1.5.1
-* Dependency updates
+* Dependency updates.
 
 ### Release v1.5.0
 * Use Node 18 for builds/releases.
