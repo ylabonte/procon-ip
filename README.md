@@ -29,6 +29,9 @@ Package info
 
 ## Changelog
 
+### Release v1.7.2
+* Dependency updates.
+
 ### Release v1.7.1
 * Fix previous release by adding `SetStateService` to the package index.
 
