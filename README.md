@@ -29,6 +29,9 @@ Package info
 
 ## Changelog
 
+### Release v1.7.4
+* Dependency updates.
+
 ### Release v1.7.3
 * Dependency updates.
 
