@@ -216,6 +216,9 @@ haven't found an english documentation/information so far):
 
 ## Changelog
 
+### Release v1.7.6
+* Dependency updates.
+
 ### Release v1.7.5
 * Dependency updates.
 
