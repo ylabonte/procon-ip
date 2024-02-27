@@ -13,6 +13,8 @@ Package info
 [![CI Workflow](https://github.com/ylabonte/procon-ip/actions/workflows/ci.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/ci.yml)
 [![CodeQL Analysis](https://github.com/ylabonte/procon-ip/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/codeql-analysis.yml)  
 
+![ProCon.IP TypeScript library](./logo.png)
+
 ## Overview
 
 * [Introduction (_What is this library for?_)](#introduction)
@@ -211,148 +213,11 @@ haven't found an english documentation/information so far):
 * [pooldigital.de forum](http://forum.pooldigital.de/)
 
 ---
-![ProCon.IP TypeScript library](./logo.png)
 
 ## Changelog
 
 ### Release v1.7.5
 * Dependency updates.
-
-### Release v1.7.4
-* Dependency updates.
-
-### Release v1.7.3
-* Dependency updates.
-
-### Release v1.7.2
-* Dependency updates.
-
-### Release v1.7.1
-* Fix previous release by adding `SetStateService` to the package index.
-
-### Release v1.7.0
-* Add `SetStateService` for generic relay timers.
-* Dependency updates.
-
-### Release v1.6.3
-* Dependency updates.
-
-### Release v1.6.2
-* Fix `CommandService` by making the `AbstractService` constructor public.
-
-### Release v1.6.1
-* Fix helper methods:
-  * `GetStateData.getChlorineDosageControlId()`
-  * `GetStateData.getPhMinusDosageControlId()`
-  * `GetStateData.getPhPlusDosageControlId()`
-
-### Release v1.6.0
-* Add `CommandService` for manual dosage control.
-
-### Release v1.5.4
-* Dependency updates.
-
-### Release v1.5.3
-* Dependency updates.
-
-### Release v1.5.2
-* Dependency updates.
-
-### Release v1.5.1
-* Dependency updates.
-
-### Release v1.5.0
-* Use Node 18 for builds/releases.
-* Drop Node 14 from compatibility/ci build test list.
-* Update dependencies.
-* Merge pull-request to make `GetStateData.categories` static  
-  (while keeping backward compatibility).
-
-### Release v1.4.2
-* Fix condition for identifying similar consecutive errors in `GetStateService`
-  in case no status code is available.
-
-### Release v1.4.1
-* Fine tune error behavior of the `GetStateService.start()`.
-  * Add documentation for `errorCallback` parameter.
-  * Add new optional parameter `stopOnError: boolean`.
-  * Pass original `Error` (mostly `AxiosError`) instead of an own error
-    as parameter to the `errorCallback` (parameter of the
-    `GetStateService.start()` method).
-  * New method signature + documentation:
-  ```TypeScript
-   /**
-    * Start the service.
-    * 
-    * This will periodically update the internal data and invoke the optional
-    * callables each time new data is received.
-    * 
-    * @param successCallback Will be triggered everytime the service receives
-    * new data. The current [[`GetStateData`]] object is passed as parameter
-    * to the callback.
-    * @param errorCallback Error callback receives the most recent error as
-    * parameter, in case the consecutive error tolerance is hit.
-    * @param stopOnError Whether to stop in case the consecutive error tolerance
-    * is hit. Default behavior (for backward compatibility) is to keep running
-    * in any case.
-    */
-    start(
-        successCallback?: (data: GetStateData) => void,
-        errorCallback?: (e: Error) => void,
-        stopOnError?: boolean);
-    ```
-
-### Release v1.4.0
-
-* Change build parameters making the default build an ES-Module
-  * There is nothing to change if you want to keep using the CommonJS build.
-    But you can also make use of the index.js also added with this release
-    (see next bullet point).
-* Introduce the commonly used index.js to ease `import`/`require` statements.
-  This means you can import all classes and interfaces from the index module.
-  * For the CommonJS variant you can simply your imports by using
-    `import { GetStateService } from 'procon-ip/lib` instead of
-    `import { GetStateService } from 'procon-ip/lib/get-state.service'`.
-  * For the new ES Module variant just use
-    `import { GetStateService } from 'procon-ip'`.
-* Add new property `RelayDataObject.isExternal`.
-* Migrate from `tslint` to `eslint`.
-* Update dependencies.
-
-### Release v1.3.3
-
-* Fix `RelayDataObject.bitMask` (was broken since `categoryId` refactoring).
-
-### Release v1.3.2
-
-* Fix `UsrcfgCgiService.send()` method for switching relays.
-
-### Release v1.3.1
-
-* Fix `GetStateDataObject.categoryId` to start counting from 0 as stated in the
-  documentation.
-
-### Release v1.3.0
-
-* **Breaking changes:** Some properties of the `GetStateDataSysInfo` have been
-  renamed fixing a typo:
-  * `phPlusDosageRelais` --> `phPlusDosageRelay`
-  * `phMinusDosageRelais` --> `phMinusDosageRelay`
-  * `chlorineDosageRelais` --> `chlorineDosageRelay`
-* New methods have been added to the `GetStateDataSysInfo()` class (credits go to
-  @kriede for this):
-  * `isElectrolysis(): boolean`
-  * `getDosageRelais(object: GetStateDataObject): number`
-  * `isAvatarEnabled(): boolean`
-  * `isFlowSensorEnabled(): boolean`
-  * `isDmxEnabled(): boolean`
-* Some typos in documentation and debug output have been fixed.
-* Various dependencies have been updated.
-
----
-![ProCon.IP TypeScript library](./logo.png)
-
-## Changelog
 
 ### Release v1.7.4
 * Dependency updates.
