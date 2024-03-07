@@ -23,17 +23,16 @@
     "lib/"
   ],
   "scripts": {
-    "test": "",
     "format": "npx prettier --write \"src/**/*.ts\"",
     "lint": "npx eslint -- src/**",
     "lint:fix": "npx eslint --fix -- src/**",
-    "build": "npm run build:esmodule && npm run build:commonjs",
+    "build": "yarn run build:esmodule && yarn run build:commonjs",
     "build:commonjs": "npx tsc -p tsconfig-commonjs.json",
     "build:esmodule": "npx tsc -p tsconfig.json",
     "build:docs": "rm -rf docs && npx typedoc --excludeInternal --out docs/ --entryPointStrategy expand src/index.ts && touch docs/.nojekyll",
-    "build:all": "npm run build && npm run build:docs",
-    "prepack": "npm run build",
-    "prepublishOnly": "npm test && npm run lint"
+    "build:all": "yarn run build && yarn run build:docs",
+    "prepack": "yarn run build",
+    "prepublishOnly": "yarn run lint"
   },
   "repository": {
     "type": "git",
@@ -45,21 +44,22 @@
     "controller",
     "library"
   ],
+  "packageManager": "yarn@1.22.21",
+  "dependencies": {
+    "axios": "^1.6.7"
+  },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-promise": "^6.1.1",
     "prettier": "^3.2.5",
-    "typedoc": "^0.25.9",
+    "typedoc": "^0.25.11",
     "typescript": "^5.3.3"
-  },
-  "dependencies": {
-    "axios": "^1.6.7"
   }
 }
