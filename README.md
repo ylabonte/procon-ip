@@ -6,12 +6,12 @@ Package info
 [![npm version](https://badge.fury.io/js/procon-ip.svg)](https://badge.fury.io/js/procon-ip)
 [![GitHub](https://img.shields.io/github/license/ylabonte/procon-ip)](https://github.com/ylabonte/procon-ip/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues-raw/ylabonte/procon-ip)](https://github.com/ylabonte/procon-ip/issues)
-[![Known Vulnerabilities](https://snyk.io/test/github/ylabonte/procon-ip/badge.svg)](https://snyk.io/test/github/ylabonte/procon-ip)
-[![Buy me a coffee](https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg?style=flat)](https://www.buymeacoffee.com/ylabonte)  
-[![Github Package Release](https://github.com/ylabonte/procon-ip/actions/workflows/release-github.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/release-github.yml)
-[![NPM Package Release](https://github.com/ylabonte/procon-ip/actions/workflows/release-npmjs.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/release-npmjs.yml)  
+[![Known Vulnerabilities](https://snyk.io/test/github/ylabonte/procon-ip/badge.svg)](https://snyk.io/test/github/ylabonte/procon-ip)  
+[![NPM Package Release](https://github.com/ylabonte/procon-ip/actions/workflows/release-npmjs.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/release-npmjs.yml)
+[![Github Package Release](https://github.com/ylabonte/procon-ip/actions/workflows/release-github.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/release-github.yml)  
 [![CI Workflow](https://github.com/ylabonte/procon-ip/actions/workflows/ci.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/ci.yml)
-[![CodeQL Analysis](https://github.com/ylabonte/procon-ip/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/codeql-analysis.yml)  
+[![CodeQL](https://github.com/ylabonte/procon-ip/actions/workflows/codeql.yml/badge.svg)](https://github.com/ylabonte/procon-ip/actions/workflows/codeql-analysis.yml)  
+[![Buy me a coffee](https://img.shields.io/badge/donation-buy%20me%20a%20coffee-yellow.svg?style=flat)](https://www.buymeacoffee.com/ylabonte)  
 
 ![ProCon.IP TypeScript library](./logo.png)
 
