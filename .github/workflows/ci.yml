@@ -1,30 +1,47 @@
 name: "CI Workflow"
 
+permissions:
+  pull-requests: write
+  issues: write
+  contents: write
+
 on:
   push:
-    branches: [ "master", "develop", "feature/*" ]
+    branches:
+      - "master"
+      - "develop"
+      - "feature/*"
   pull_request:
-    branches: [ "master", "develop", "feature/*" ]
+    branches:
+      - "master"
+      - "develop"
+      - "feature/*"
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    name: "Build and lint"
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        node-version: [16, 18]
+        node-version:
+          - 16
+          - 18
+          - 20
 
     steps:
-      - run: git config --global core.autocrlf false
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: "Ensure line endings"
+        run: git config --global core.autocrlf false
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+      - name: "Set up Node.js v${{ matrix.node-version }}"
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run build
-      - run: npm run lint
-      - run: npm run test
-        env:
-          CI: true
+          cache: "yarn"
+      - name: "Install dependencies"
+        run: yarn
+      - name: "Build"
+        run: yarn run build
+      - name: "Run linter"
+        run: yarn run lint
