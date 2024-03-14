@@ -2,7 +2,7 @@ name: "CI Workflow"
 
 permissions:
   pull-requests: write
-  issues: write
+#  issues: write
   contents: write
 
 on:
@@ -11,11 +11,7 @@ on:
       - "master"
       - "develop"
       - "feature/*"
-  pull_request:
-    branches:
-      - "master"
-      - "develop"
-      - "feature/*"
+  workflow_call:
 
 jobs:
   build:
