@@ -7,11 +7,17 @@ permissions:
   pull-requests: write
 
 jobs:
+  ci:
+    name: "Run CI Workflow"
+    uses: ./.github/workflows/ci.yml
+  codeql:
+    name: "Run CodeQL Workflow"
+    uses: ./.github/workflows/codeql.yml
   automerge:
-    name: "Auto-merge Dependabot PR"
+    name: "Auto-merge PR (Dependabot only!)"
     needs:
-      - analyze
-      - build
+      - ci
+      - codeql
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
