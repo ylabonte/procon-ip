@@ -216,6 +216,10 @@ haven't found an english documentation/information so far):
 
 ## Changelog
 
+### Work in progress
+* Dependency updates.
+* Breaking backward compatibility for Node versions <18.18.x
+
 ### Release v1.7.6
 * Dependency updates.
 
