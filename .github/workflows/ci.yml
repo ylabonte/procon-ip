@@ -10,6 +10,11 @@ on:
       - "master"
       - "develop"
       - "feature/*"
+  pull_request:
+    branches:
+      - "master"
+      - "develop"
+      - "feature/*"
   workflow_call:
 
 jobs:
