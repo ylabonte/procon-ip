@@ -11,9 +11,9 @@ permissions:
 
 jobs:
   automerge:
-    name: "Auto-merge PR (Dependabot only!)"
+    name: "Auto-approve PR"
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    if: github.actor == 'dependabot[bot]' || github.actor == 'ylabonte'
     steps:
       - name: "Approve PR to enable auto-merge"
         run: gh pr review --approve "$PR_URL"
