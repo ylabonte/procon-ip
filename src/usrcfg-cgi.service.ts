@@ -114,7 +114,7 @@ export class UsrcfgCgiService extends AbstractService {
         const returnValue = await this._setState(relay, state);
         // return new Promise<number>(() => returnValue);
         return returnValue;
-      } catch (e) {
+      } catch (e: any) {
         this.log.debug(`Error sending relay control command: ${e}`);
       }
     }
@@ -156,7 +156,7 @@ export class UsrcfgCgiService extends AbstractService {
           this.log.info(`usrcfg.cgi status: (${response.status}) ${response.statusText}`);
           // if (["continue", "done"].indexOf(response.data.toLowerCase()) >= 0) {
           if (response.status === 200) {
-            this.getStateService.update();
+            this.getStateService.update().catch(() => {});
             resolve(desiredValue);
           } else {
             reject(

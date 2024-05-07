@@ -219,6 +219,7 @@ haven't found an english documentation/information so far):
 ### Work in progress
 * Dependency updates.
 * Breaking backward compatibility for Node versions <18.18.x
+* Update eslint to v8.x
 
 ### Release v1.7.6
 * Dependency updates.

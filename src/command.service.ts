@@ -73,7 +73,7 @@ export class CommandService extends AbstractService {
     for (let errors = 0; errors < 3; errors++) {
       try {
         return await this._setDosage(dosageTarget, dosageDuration);
-      } catch (e) {
+      } catch (e: any) {
         this.log.debug(`Error sending relay control command: ${e}`);
       }
     }

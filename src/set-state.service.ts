@@ -35,7 +35,7 @@ export class SetStateService extends AbstractService {
     for (let errors = 0; errors < 3; errors++) {
       try {
         return await this._setTimer(relayNo, duration);
-      } catch (e) {
+      } catch (e: any) {
         this.log.debug(`Error setting relay timer: ${e}`);
       }
     }
