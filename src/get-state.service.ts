@@ -69,12 +69,12 @@ export class GetStateService extends AbstractService {
    * An optional callback, that can be passed when calling the
    * {@link start} method.
    */
-  private _updateCallback?: (data: GetStateData) => any;
+  private _updateCallback?: (data: GetStateData) => void;
 
   /**
    * @internal
    */
-  private _errorCallback?: (e: Error) => any;
+  private _errorCallback?: (e: Error) => void;
 
   /**
    * @internal
@@ -89,7 +89,9 @@ export class GetStateService extends AbstractService {
   /**
    * @internal
    */
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   private _recentError: any;
+  /* eslint-enable  @typescript-eslint/no-explicit-any */
 
   /**
    * @internal
@@ -184,7 +186,7 @@ export class GetStateService extends AbstractService {
    * interval ({@link IGetStateServiceConfig.updateInterval}).
    */
   public autoUpdate(): void {
-    this.update().catch((e) => {
+    this.update().catch((e: Error) => {
       if (this._stopOnError) this.stop();
       if (this._errorCallback !== undefined) this._errorCallback(e);
     });
@@ -207,6 +209,9 @@ export class GetStateService extends AbstractService {
    * [[`_updateCallback`]] (see {@link start}).
    */
   public async update(): Promise<GetStateData> {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    /* eslint-disable  @typescript-eslint/no-unsafe-assignment */
+    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
     try {
       const response = await this.getData();
       this._consecutiveFails = 0;
@@ -247,6 +252,9 @@ export class GetStateService extends AbstractService {
     }
 
     return this.data;
+    /* eslint-enable  @typescript-eslint/no-explicit-any */
+    /* eslint-enable  @typescript-eslint/no-unsafe-assignment */
+    /* eslint-enable  @typescript-eslint/no-unsafe-member-access */
   }
 
   /**

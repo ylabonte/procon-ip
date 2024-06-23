@@ -17,7 +17,7 @@ export class GetStateDataSysInfo {
    * Making {@link GetStateDataSysInfo} objects extensible, also allows accessing
    * object keys using string variables.
    */
-  [key: string]: any; // eslint-disable-line no-undef
+  [key: string]: unknown;
 
   /**
    *
@@ -148,7 +148,7 @@ export class GetStateDataSysInfo {
   public toArrayOfObjects(): { key: string; value: string }[] {
     const values: { key: string; value: string }[] = [];
     Object.keys(this).forEach((attr: string) => {
-      values.push({ key: attr, value: this[attr] });
+      values.push({ key: attr, value: String(this[attr]) });
     });
 
     return values;

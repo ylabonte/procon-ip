@@ -19,9 +19,9 @@ import { ILogger } from './logger';
  * {@link UsrcfgCgiService.setOff}, {@link UsrcfgCgiService.setAuto}) that can be used.
  */
 export enum SetStateValue {
-  OFF = 0, // eslint-disable-line no-unused-vars
-  ON = 1, // eslint-disable-line no-unused-vars
-  AUTO = 2, // eslint-disable-line no-unused-vars
+  OFF = 0,
+  ON = 1,
+  AUTO = 2,
 }
 
 /**
@@ -109,6 +109,7 @@ export class UsrcfgCgiService extends AbstractService {
    * @param state The desired state.
    */
   private async setState(relay: GetStateDataObject, state: SetStateValue | number): Promise<number> {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     for (let errors = 0; errors < 3; errors++) {
       try {
         const returnValue = await this._setState(relay, state);
@@ -121,12 +122,13 @@ export class UsrcfgCgiService extends AbstractService {
 
     // return new Promise<number>(() => -1);
     return -1;
+    /* eslint-enable  @typescript-eslint/no-explicit-any */
   }
 
   private async _setState(relay: GetStateDataObject, state: SetStateValue | number): Promise<number> {
     let data: [number, number] | undefined;
     let desiredValue: number;
-    /* tslint:disable: no-bitwise */
+    /* eslint-disable  @typescript-eslint/no-unsafe-enum-comparison */
     switch (state) {
       case SetStateValue.AUTO:
         data = this.relayDataInterpreter.evaluate(this.getStateService.data).setAuto(relay);
@@ -142,7 +144,7 @@ export class UsrcfgCgiService extends AbstractService {
         desiredValue = RelayStateBitMask.manual | ~RelayStateBitMask.on;
         break;
     }
-    /* tslint:enable: no-bitwise */
+    /* eslint-enable  @typescript-eslint/no-unsafe-enum-comparison */
 
     this.log.info(`usrcfg.cgi data: ${JSON.stringify(data)}`);
     return new Promise<number>((resolve, reject) => {
@@ -167,7 +169,9 @@ export class UsrcfgCgiService extends AbstractService {
           }
         })
         .catch((e) => {
+          /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
           reject(new Error(`Error sending relay control command: ${e.response ? e.response : e}`));
+          /* eslint-enable  @typescript-eslint/no-unsafe-member-access */
         });
     });
   }

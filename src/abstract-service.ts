@@ -49,7 +49,7 @@ export interface IServiceConfig {
    */
   // Use a catch-all approach to enable array-like iteration with
   // key as a variable...
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -142,10 +142,10 @@ export abstract class AbstractService {
     try {
       return new URL(
         (this.baseUrl.endsWith('/') ? this.baseUrl : `${this.baseUrl}/`) +
-          (this._endpoint.startsWith('/') ? this._endpoint.substr(1) : this._endpoint),
+          (this._endpoint.startsWith('/') ? this._endpoint.substring(1) : this._endpoint),
       ).href;
-    } catch (e: any) {
-      this.log.error(e);
+    } catch (e: unknown) {
+      this.log.error(String(e));
       return this._endpoint;
     }
   }

@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import axios, { AxiosPromise, Method } from 'axios';
+import axios, { AxiosError, AxiosPromise, Method } from 'axios';
 import { AbstractService } from './abstract-service';
 
 /**
@@ -13,9 +13,9 @@ import { AbstractService } from './abstract-service';
  * {@link CommandService.setPhPlusDosage}, {@link CommandService.setPhMinusDosage}) that can be used.
  */
 export enum DosageTarget {
-  CHLORINE = 0, // eslint-disable-line no-unused-vars
-  PH_MINUS = 1, // eslint-disable-line no-unused-vars
-  PH_PLUS = 2, // eslint-disable-line no-unused-vars
+  CHLORINE = 0,
+  PH_MINUS = 1,
+  PH_PLUS = 2,
 }
 
 /**
@@ -73,8 +73,8 @@ export class CommandService extends AbstractService {
     for (let errors = 0; errors < 3; errors++) {
       try {
         return await this._setDosage(dosageTarget, dosageDuration);
-      } catch (e: any) {
-        this.log.debug(`Error sending relay control command: ${e}`);
+      } catch (e: unknown) {
+        this.log.debug(`Error sending relay control command: ${String(e)}`);
       }
     }
 
@@ -97,8 +97,8 @@ export class CommandService extends AbstractService {
             );
           }
         })
-        .catch((e) => {
-          reject(new Error(`Error sending dosage control command: ${e.response ? e.response : e}`));
+        .catch((e: AxiosError) => {
+          reject(new Error(`Error sending dosage control command: ${e.response?.statusText ?? String(e)}`));
         });
     });
   }

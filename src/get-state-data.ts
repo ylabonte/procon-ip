@@ -23,47 +23,47 @@ export enum GetStateCategory {
    * Internal time of the ProCon.IP when processing the corresponding request.
    * Hence, there is only one item in this category.
    */
-  TIME = 'time', // eslint-disable-line no-unused-vars
+  TIME = 'time',
 
   /**
    * Category for analog channels.
    */
-  ANALOG = 'analog', // eslint-disable-line no-unused-vars
+  ANALOG = 'analog',
 
   /**
    * Category for electrode readings.
    */
-  ELECTRODES = 'electrodes', // eslint-disable-line no-unused-vars
+  ELECTRODES = 'electrodes',
 
   /**
    * Category for temperature sensor values.
    */
-  TEMPERATURES = 'temperatures', // eslint-disable-line no-unused-vars
+  TEMPERATURES = 'temperatures',
 
   /**
    * Category for internal relays.
    */
-  RELAYS = 'relays', // eslint-disable-line no-unused-vars
+  RELAYS = 'relays',
 
   /**
    * Category for digital inputs.
    */
-  DIGITAL_INPUT = 'digitalInput', // eslint-disable-line no-unused-vars
+  DIGITAL_INPUT = 'digitalInput',
 
   /**
    * Category for external relays.
    */
-  EXTERNAL_RELAYS = 'externalRelays', // eslint-disable-line no-unused-vars
+  EXTERNAL_RELAYS = 'externalRelays',
 
   /**
    * Category for canister filling levels.
    */
-  CANISTER = 'canister', // eslint-disable-line no-unused-vars
+  CANISTER = 'canister',
 
   /**
    * Category for canister consumptions.
    */
-  CANISTER_CONSUMPTION = 'canisterConsumptions', // eslint-disable-line no-unused-vars
+  CANISTER_CONSUMPTION = 'canisterConsumptions',
 }
 
 export interface IGetStateCategories {
@@ -87,7 +87,7 @@ export class GetStateData {
   /**
    * Extend the data object instances as you like.
    */
-  [key: string]: any; // eslint-disable-line no-undef
+  [key: string]: unknown;
 
   /**
    * Raw CSV input string (retrieved by the {@link GetStateService}).
@@ -230,7 +230,7 @@ export class GetStateData {
       // Parse csv into 2-dimensional array of strings.
       this.parsed = this.raw
         .split(/[\r\n]+/) // split rows
-        .map((row) => row.split(/[,]/)) // split columns
+        .map((row) => row.split(/,/)) // split columns
         .filter((row) => row.length > 1 || (row.length === 1 && row[0].trim().length > 1)); // remove blank lines
       // Save common system information.
       this.sysInfo = new GetStateDataSysInfo(this.parsed);
@@ -262,8 +262,8 @@ export class GetStateData {
    */
   public getDataObjects(indices: number[], activeOnly = false): GetStateDataObject[] {
     return activeOnly
-      ? this.objects.filter((obj, idx) => indices.indexOf(idx) >= 0 && this.active.indexOf(idx) >= 0)
-      : this.objects.filter((obj, idx) => indices.indexOf(idx) >= 0);
+      ? this.objects.filter((_, idx) => indices.indexOf(idx) >= 0 && this.active.indexOf(idx) >= 0)
+      : this.objects.filter((_, idx) => indices.indexOf(idx) >= 0);
   }
 
   /**
@@ -350,7 +350,7 @@ export class GetStateData {
     // Parse csv into 2-dimensional array of strings.
     this.parsed = csv
       .split(/[\r\n]+/) // split rows
-      .map((row) => row.split(/[,]/)) // split columns
+      .map((row) => row.split(/,/)) // split columns
       .filter((row) => row.length > 1 || (row.length === 1 && row[0].trim().length > 1)); // remove blank lines
     // Save common system information.
     this.sysInfo = new GetStateDataSysInfo(this.parsed);

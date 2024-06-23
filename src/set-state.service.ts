@@ -32,6 +32,7 @@ export class SetStateService extends AbstractService {
    * @param duration Desired timer duration in seconds.
    */
   public async setTimer(relayNo: number, duration: number): Promise<number> {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     for (let errors = 0; errors < 3; errors++) {
       try {
         return await this._setTimer(relayNo, duration);
@@ -41,9 +42,11 @@ export class SetStateService extends AbstractService {
     }
 
     return -1;
+    /* eslint-enable  @typescript-eslint/no-explicit-any */
   }
 
   private async _setTimer(relayNo: number, duration: number): Promise<number> {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     return new Promise<number>((resolve, reject) => {
       const requestConfig = this.axiosRequestConfig;
       requestConfig.url += `?R${relayNo}=1&RT${relayNo}=${duration * 1000}`;
@@ -58,9 +61,10 @@ export class SetStateService extends AbstractService {
             reject(new Error(`(${response.status}: ${response.statusText}): ${response.data}`));
           }
         })
-        .catch((e) => {
-          reject(new Error(e.response ? e.response : e));
+        .catch((e: any) => {
+          reject(e);
         });
     });
+    /* eslint-enable  @typescript-eslint/no-explicit-any */
   }
 }

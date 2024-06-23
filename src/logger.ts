@@ -9,10 +9,10 @@
  */
 
 export enum LogLevel {
-  DEBUG = 1, // eslint-disable-line no-unused-vars
-  INFO = 2, // eslint-disable-line no-unused-vars
-  WARN = 3, // eslint-disable-line no-unused-vars
-  ERROR = 4, // eslint-disable-line no-unused-vars
+  DEBUG = 1,
+  INFO = 2,
+  WARN = 3,
+  ERROR = 4,
 }
 
 /**

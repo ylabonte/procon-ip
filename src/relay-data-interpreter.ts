@@ -17,12 +17,8 @@ import { ILogger } from './logger';
  * It is used by the {@link RelayDataInterpreter} and the {@link UsrcfgCgiService}.
  */
 export enum RelayStateBitMask {
-  on = 1, // eslint-disable-line no-unused-vars
-  manual = 2, // eslint-disable-line no-unused-vars
-  // off = 2,
-  // on = 3,
-  // autoOff = 0,
-  // autoOn = 1
+  on = 1,
+  manual = 2,
 }
 
 /**
@@ -90,9 +86,9 @@ export class RelayDataInterpreter {
    * @param relay
    */
   public isOn(relay: GetStateDataObject): boolean {
-    /* tslint:disable: no-bitwise */
+    /* eslint-disable  @typescript-eslint/no-unsafe-enum-comparison */
     return (relay.raw & RelayStateBitMask.on) === RelayStateBitMask.on;
-    /* tslint:enable: no-bitwise */
+    /* eslint-enable  @typescript-eslint/no-unsafe-enum-comparison */
   }
 
   /**
@@ -112,9 +108,9 @@ export class RelayDataInterpreter {
    * @param relay
    */
   public isManual(relay: GetStateDataObject): boolean {
-    /* tslint:disable: no-bitwise */
+    /* eslint-disable  @typescript-eslint/no-unsafe-enum-comparison */
     return (relay.raw & RelayStateBitMask.manual) === RelayStateBitMask.manual;
-    /* tslint:enable: no-bitwise */
+    /* eslint-enable  @typescript-eslint/no-unsafe-enum-comparison */
   }
 
   /**

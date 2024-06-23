@@ -14,7 +14,7 @@ export class GetStateDataObject {
    * Making {@link GetStateDataObject} objects extensible, also allows accessing
    * object keys using string variables.
    */
-  [key: string]: any; // eslint-disable-line no-undef
+  [key: string]: unknown;
 
   /**
    * Object id aka column index.
@@ -151,7 +151,7 @@ export class GetStateDataObject {
    *
    * @param callback A user-defined callback.
    */
-  public forFields(callback: (field: string) => any): void {
+  public forFields(callback: (field: string) => void): void {
     Object.keys(this).forEach(callback);
   }
 }
