@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import axios, { Method } from 'axios';
+import axios, { AxiosError, Method } from 'axios';
 import { AbstractService } from './abstract-service';
 
 /**
@@ -46,7 +46,6 @@ export class SetStateService extends AbstractService {
   }
 
   private async _setTimer(relayNo: number, duration: number): Promise<number> {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
     return new Promise<number>((resolve, reject) => {
       const requestConfig = this.axiosRequestConfig;
       requestConfig.url += `?R${relayNo}=1&RT${relayNo}=${duration * 1000}`;
@@ -61,10 +60,9 @@ export class SetStateService extends AbstractService {
             reject(new Error(`(${response.status}: ${response.statusText}): ${response.data}`));
           }
         })
-        .catch((e: any) => {
+        .catch((e: AxiosError | Error) => {
           reject(e);
         });
     });
-    /* eslint-enable  @typescript-eslint/no-explicit-any */
   }
 }
