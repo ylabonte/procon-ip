@@ -214,7 +214,7 @@ haven't found an english documentation/information so far):
 
 ## Changelog
 
-### Work in progress
+### Release v1.8.0
 * Dependency updates.
 * Breaking backward compatibility for Node versions <18.18.x
 * Update eslint to v9.x (enforcing new config format)

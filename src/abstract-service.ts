@@ -135,7 +135,6 @@ export abstract class AbstractService {
   /**
    * Get the webservice url (joined base url and endpoint).
    *
-   * @throws TypeError [ERR_INVALID_URL]: Invalid URL
    * @returns URL string (joined base url and endpoint).
    */
   public get url(): string {
