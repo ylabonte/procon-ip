@@ -1,204 +1,103 @@
 /**
- * This file exports the common basis of the webservice interfaces.
- *
- * This abstract class builds a common basis for the {@link GetStateService} and
- * the {@link UsrcfgCgiService} classes. These two classes are the actual
- * webservice interfaces to the ProCon.IP pool controller.
- * It also has a shared service configuration. In this context _service_ means
- * a web service or endpoint of the ProCon.IP pool controller. The following
- * parameters are those that all services (in this library) have in common.
+ * Common HTTP base for ProCon.IP service classes.
  * @packageDocumentation
  */
 
-import { AxiosRequestConfig, Method } from 'axios';
-import { ILogger } from './logger';
+import { BadCredentialsError, BadStatusCodeError, RequestTimeoutError } from './errors';
+import type { ILogger } from './logger';
 
 export interface IServiceConfig {
-  requestHeaders?: { [key: string]: string };
-  /**
-   * Controller URL must be a valid URL string with leading protocol scheme
-   * (e.g. 'http://') and should point to the ProCon.IP HTTP root. This address
-   * will be combined with the endpoint (e.g. `"/GetState.csv"`) to build the
-   * request address. A trailing slash will be added automatically if needed.
-   */
+  /** Controller base URL (e.g. `"http://192.168.2.3"`). Trailing slash optional. */
   controllerUrl: string;
-
-  /**
-   * HTTP basic auth username. Optional.
-   */
-  username?: string;
-
-  /**
-   * HTTP basic auth pass. Optional.
-   */
-  password?: string;
-
-  /**
-   * Enable HTTP basic auth.
-   */
+  /** Enable HTTP basic auth (uses {@link username} and {@link password}). */
   basicAuth: boolean;
-
-  /**
-   * Define request timeout.
-   */
+  /** Optional basic-auth username. */
+  username?: string;
+  /** Optional basic-auth password. */
+  password?: string;
+  /** Per-request timeout in milliseconds. */
   timeout: number;
-
-  /**
-   * Configurations might contain any other values/keys, that do not conflict
-   * with valid configuration parameters.
-   */
-  // Use a catch-all approach to enable array-like iteration with
-  // key as a variable...
+  /** Optional extra headers merged into every request. */
+  requestHeaders?: Record<string, string>;
+  /** Forward-compatible escape hatch for ad-hoc config keys. */
   [key: string]: unknown;
 }
 
-/**
- * Abstract service implementing the common base setup for the _axios_ requests
- * of the specific service implementations.
- */
+/** HTTP methods accepted by `AbstractService._method`. */
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
+
 export abstract class AbstractService {
   protected _config: IServiceConfig;
-
-  /**
-   * Specific webservice endpoint.
-   *
-   * An _absolute URL_, which means a path with leading slash ('/') relative to
-   * the {@link IServiceConfig.controllerUrl} (ProCon.IP base address).
-   */
-  abstract _endpoint: string;
-
-  /**
-   * HTTP request method.
-   *
-   * Must be one of the valid HTTP request methods like _GET_, _POST_, etc.
-   * See `axios/Method` type:
-   * ```
-   * export type Method =
-   *   | 'get' | 'GET'
-   *   | 'delete' | 'DELETE'
-   *   | 'head' | 'HEAD'
-   *   | 'options' | 'OPTIONS'
-   *   | 'post' | 'POST'
-   *   | 'put' | 'PUT'
-   *   | 'patch' | 'PATCH'
-   *   | 'purge' | 'PURGE'
-   *   | 'link' | 'LINK'
-   *   | 'unlink' | 'UNLINK'
-   * ```
-   */
-  abstract _method: Method;
-
-  /**
-   * Custom HTTP headers.
-   *
-   * Custom headers can be defined in form of a key value pair.
-   * ```
-   * this._requestHeaders["Cache-Control"] = "no-cache";
-   * ```
-   */
-  protected _requestHeaders: { [key: string]: string };
-
-  /**
-   * Logger which will be used for all logging events.
-   */
+  protected _requestHeaders: Record<string, string>;
   protected log: ILogger;
 
-  /**
-   * Constructor.
-   *
-   * @param config Service config.
-   * @param logger Service logger.
-   */
+  /** Endpoint path relative to {@link IServiceConfig.controllerUrl}. */
+  abstract _endpoint: string;
+  /** HTTP method for this endpoint. */
+  abstract _method: HttpMethod;
+
   public constructor(config: IServiceConfig, logger: ILogger) {
-    this._requestHeaders = {};
     this._config = config;
+    this._requestHeaders = { ...(config.requestHeaders ?? {}) };
     this.log = logger;
   }
 
-  /**
-   * Get the base url.
-   *
-   * @returns The {@link IServiceConfig.controllerUrl} string.
-   */
   public get baseUrl(): string {
     return this._config.controllerUrl;
   }
 
-  // public get requestHeaders(): object {
-  //     // if (this._basicAuth) {
-  //     //     this.setHttpHeader("Authorization", `Basic ${this.base64Credentials}`)
-  //     // }
-  //
-  //     return this._requestHeaders;
-  // }
-
-  /**
-   * Get the webservice url (joined base url and endpoint).
-   *
-   * @returns URL string (joined base url and endpoint).
-   */
   public get url(): string {
-    try {
-      return new URL(
-        (this.baseUrl.endsWith('/') ? this.baseUrl : `${this.baseUrl}/`) +
-          (this._endpoint.startsWith('/') ? this._endpoint.substring(1) : this._endpoint),
-      ).href;
-    } catch (e: unknown) {
-      this.log.error(String(e));
-      return this._endpoint;
-    }
+    const base = this.baseUrl.endsWith('/') ? this.baseUrl : `${this.baseUrl}/`;
+    const path = this._endpoint.startsWith('/') ? this._endpoint.slice(1) : this._endpoint;
+    return new URL(path, base).href;
   }
 
-  // public setHttpHeader(name: string, value: string) {
-  //     this._requestHeaders.set(name, value);
-  // }
-  //
-  // private get base64Credentials(): string {
-  //     return atob(`${this._username}:${this._password}`);
-  // }
-
   /**
-   * Get an `axios/AxiosRequestConfig` object.
+   * Perform the HTTP request configured for this service.
+   *
+   * @param init Optional `fetch` init overrides; merged on top of method/headers/auth.
+   * @returns The raw `Response` for the caller to parse.
+   * @throws {@link BadCredentialsError} on HTTP 401 or 403.
+   * @throws {@link BadStatusCodeError} on any other 4xx/5xx response.
+   * @throws {@link RequestTimeoutError} if the request exceeds the configured timeout.
    */
-  protected get axiosRequestConfig(): AxiosRequestConfig {
-    const config: AxiosRequestConfig = {
-      // baseURL: this._baseUrl,
-      timeout: this._config.timeout,
-      url: this.url,
-      method: this._method,
-      headers: this._requestHeaders,
-      // httpAgent: new Agent({
-      //   /**
-      //    * Socket timeout in milliseconds. This will set the timeout after the socket is connected.
-      //    */
-      //   timeout: this._config.timeout,
-      //   /**
-      //    * Maximum number of sockets to allow per host. Default for Node 0.10 is 5, default for Node 0.12 is Infinity
-      //    */
-      //   maxSockets: 5,
-      //   /**
-      //    * Maximum number of sockets to leave open in a free state. Only relevant if keepAlive is set to true. Default = 256.
-      //    */
-      //   maxFreeSockets: 3,
-      //   /**
-      //    * Keep sockets around in a pool to be used by other requests in the future. Default = false
-      //    */
-      //   keepAlive: false,
-      //   /**
-      //    * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
-      //    * Only relevant if keepAlive is set to true.
-      //    */
-      //   keepAliveMsecs: this._config.timeout,
-      // }),
-    };
-
+  protected async request(init: RequestInit = {}): Promise<Response> {
+    const headers = new Headers(this._requestHeaders);
+    if (init.headers) new Headers(init.headers).forEach((v, k) => headers.set(k, v));
     if (this._config.basicAuth) {
-      config.auth = {
-        username: this._config.username || '',
-        password: this._config.password || '',
-      };
+      const creds = `${this._config.username ?? ''}:${this._config.password ?? ''}`;
+      headers.set('Authorization', `Basic ${Buffer.from(creds).toString('base64')}`);
     }
 
-    return config;
+    const controller = new AbortController();
+    const timeoutMs = this._config.timeout;
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const res = await fetch(this.url, {
+        ...init,
+        method: this._method,
+        headers,
+        signal: controller.signal,
+      });
+      if (res.status === 401 || res.status === 403) {
+        throw new BadCredentialsError(`Authentication failed (${res.status} ${res.statusText})`);
+      }
+      if (!res.ok) {
+        throw new BadStatusCodeError(
+          `Request failed: HTTP ${res.status} ${res.statusText}`,
+          res.status,
+          res.statusText,
+        );
+      }
+      return res;
+    } catch (e: unknown) {
+      if (e instanceof DOMException && e.name === 'AbortError') {
+        throw new RequestTimeoutError(`Request timed out after ${timeoutMs}ms`, timeoutMs);
+      }
+      throw e;
+    } finally {
+      clearTimeout(timer);
+    }
   }
 }
