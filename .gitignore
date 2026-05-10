@@ -1,7 +1,12 @@
-# Project specific excludes
+# Project-specific build outputs
 node_modules
-/lib
-/module
+dist
+site
+coverage
 
-# IDE specific excludes
+# Local Node version pin (developer convenience, not a published artefact)
+.nvmrc
+
+# IDE-specific excludes
 .idea
+.vscode
