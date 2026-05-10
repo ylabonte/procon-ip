@@ -9,9 +9,13 @@ export default tseslint.config(
     ignores: ['dist/**', 'site/**', 'coverage/**', 'docs/**', 'examples/**', 'node_modules/**'],
   },
   eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.recommendedTypeChecked.map((c) => ({
+    ...c,
+    files: ['src/**/*.ts', 'test/**/*.ts'],
+  })),
   prettierConfig,
   {
+    files: ['src/**/*.ts', 'test/**/*.ts'],
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',
@@ -34,6 +38,5 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unsafe-enum-comparison': 'warn',
     },
-    files: ['src/**/*.ts', 'test/**/*.ts'],
   },
 );
