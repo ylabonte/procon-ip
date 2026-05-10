@@ -11,28 +11,44 @@
   "bugs": {
     "url": "https://github.com/ylabonte/procon-ip/issues"
   },
-  "main": "./module/index.js",
-  "module": "./module/index.js",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "import": "./module/index.js",
-    "require": "./lib/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
   },
-  "readmeFilename": "README.md",
   "files": [
-    "module/",
-    "lib/"
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
   ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "format": "npx prettier --write \"src/**/*.ts\"",
-    "lint": "npx eslint -- src/**",
-    "lint:fix": "npx eslint --fix -- src/**",
-    "build": "yarn run build:esmodule && yarn run build:commonjs",
-    "build:commonjs": "npx tsc -p tsconfig-commonjs.json",
-    "build:esmodule": "npx tsc -p tsconfig.json",
-    "build:docs": "rm -rf docs && npx typedoc --excludeInternal --out docs/ --entryPointStrategy expand src/index.ts && touch docs/.nojekyll",
-    "build:all": "yarn run build && yarn run build:docs",
-    "prepack": "yarn run build",
-    "prepublishOnly": "yarn run lint"
+    "build": "tsup",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "coverage:report": "vitest run --coverage --reporter=verbose",
+    "docs": "typedoc",
+    "docs:check": "typedoc --validation.invalidLink --validation.notExported --treatWarningsAsErrors",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm build && changeset publish",
+    "prepack": "pnpm build"
   },
   "repository": {
     "type": "git",
@@ -43,25 +59,5 @@
     "pool",
     "controller",
     "library"
-  ],
-  "packageManager": "yarn@1.22.22",
-  "dependencies": {
-    "axios": "^1.7.8"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.15.0",
-    "@typescript-eslint/eslint-plugin": "^8.16.0",
-    "@typescript-eslint/parser": "^8.16.0",
-    "eslint": "^9.15.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-n": "^17.14.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-promise": "^7.2.1",
-    "prettier": "^3.4.1",
-    "typedoc": "^0.27.1",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.16.0"
-  }
+  ]
 }
