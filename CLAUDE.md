@@ -94,6 +94,15 @@ Dependabot (`.github/dependabot.yml`) groups updates into `production` and `dev-
 
 `.nvmrc` currently pins `v12.18.4` and is **stale** — actual supported Node is **18.18+** (per the v1.8.0 changelog; CI tests 18/20). Don't trust `.nvmrc` over `package.json` / CI.
 
+## Workflow conventions for AI agents
+
+When implementing work in this repo, Claude must:
+
+- **Break every plan into tracked tasks.** When executing a multi-step plan (anything beyond a single trivial edit), use `TaskCreate` to record each step at the start and `TaskUpdate` to mark steps `in_progress` and `completed` as you go. The user relies on live task progress to follow the work. Do not batch updates at the end.
+- **Pause at human-action checkpoints.** Any plan step that requires the user to act outside the editor — npm/GitHub/account configuration, secret creation or rotation, manual verification, deletions of shared resources, or any irreversible external change — must be flagged before you proceed and call out exactly what the user needs to do. Wait for confirmation; do not assume the action was taken.
+- **Surface decisions, not just questions.** When a step has a meaningful choice the user should weigh in on, present 2–3 concrete options with trade-offs (use `AskUserQuestion`), don't ask open-ended "what do you want?" questions.
+- **Plans live in `docs/superpowers/`.** Implementation plans go to `docs/superpowers/plans/YYYY-MM-DD-<topic>-plan.md`; design specs to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`. Both are tracked.
+
 ## Repo-specific gotchas
 
 - `examples/` has its own `node_modules` and `package-lock.json` — it's a separate sandbox project, not part of the library build. Don't run library scripts from inside it.
