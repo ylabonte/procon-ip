@@ -1,68 +1,52 @@
 /**
- * The {@link SetStateService} uses the `/SetState.pl` endpoint of the ProCon.IP
- * pool controller to turn on relays for a specified time span.
+ * Relay on-timer via the controller's `/SetState.pl` endpoint.
  * @packageDocumentation
  */
 
-import axios, { AxiosError, Method } from 'axios';
-import { AbstractService } from './abstract-service';
+import { AbstractService, type HttpMethod } from './abstract-service';
+import { ProconIpError } from './errors';
 
-/**
- * The {@link CommandService} uses the `/SetState.pl` endpoint of the ProCon.IP
- * pool controller to turn on relays for a specified time span.
- */
 export class SetStateService extends AbstractService {
-  /**
-   * Specific service endpoint.
-   *
-   * A path relative to the {@link IServiceConfig.controllerUrl}.
-   */
   public _endpoint = '/SetState.pl';
+  public _method: HttpMethod = 'GET';
 
   /**
-   * HTTP request method for this specific service endpoint.
-   * See: `axios/Method`
-   */
-  public _method: Method = 'get';
-
-  /**
-   * Set relay on-timer.
+   * Turn relay `relayNo` on for `duration` seconds via the controller's on-timer.
    *
-   * @param relayNo Target relay number (count starting from 1).
-   * @param duration Desired timer duration in seconds.
+   * @param relayNo Target relay number (1-based, matches the controller UI).
+   * @param duration Timer duration in **seconds** (controller wants ms — we multiply).
+   * @returns The duration on success, or `-1` after three failures.
    */
   public async setTimer(relayNo: number, duration: number): Promise<number> {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    for (let errors = 0; errors < 3; errors++) {
+    for (let attempt = 0; attempt < 3; attempt++) {
       try {
         return await this._setTimer(relayNo, duration);
-      } catch (e: any) {
-        this.log.debug(`Error setting relay timer: ${e}`);
+      } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : String(e);
+        this.log.debug(`SetState attempt ${attempt + 1} failed: ${msg}`);
       }
     }
-
     return -1;
-    /* eslint-enable  @typescript-eslint/no-explicit-any */
   }
 
   private async _setTimer(relayNo: number, duration: number): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
-      const requestConfig = this.axiosRequestConfig;
-      requestConfig.url += `?R${relayNo}=1&RT${relayNo}=${duration * 1000}`;
-      axios
-        .request(requestConfig)
-        .then((response) => {
-          this.log.info(`SetState.pl response: ${JSON.stringify(response.data)}`);
-          this.log.info(`SetState.pl status: (${response.status}) ${response.statusText}`);
-          if (response.status === 200) {
-            resolve(duration);
-          } else {
-            reject(new Error(`(${response.status}: ${response.statusText}): ${response.data}`));
-          }
-        })
-        .catch((e: AxiosError | Error) => {
-          reject(e);
-        });
-    });
+    const url = `${this.url}?R${relayNo}=1&RT${relayNo}=${duration * 1000}`;
+    const headers = new Headers(this._requestHeaders);
+    if (this._config.basicAuth) {
+      const creds = `${this._config.username ?? ''}:${this._config.password ?? ''}`;
+      headers.set('Authorization', `Basic ${Buffer.from(creds).toString('base64')}`);
+    }
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), this._config.timeout);
+    try {
+      const res = await fetch(url, { method: 'GET', headers, signal: controller.signal });
+      if (!res.ok) {
+        throw new ProconIpError(`SetState.pl responded ${res.status} ${res.statusText}`);
+      }
+      this.log.info(`SetState.pl OK (${res.status})`);
+      return duration;
+    } finally {
+      clearTimeout(timer);
+    }
   }
 }
