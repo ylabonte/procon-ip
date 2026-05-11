@@ -32,7 +32,9 @@ export class GetStateService extends AbstractService {
   public constructor(config: IGetStateServiceConfig, logger: ILogger) {
     super(config, logger);
     this._updateInterval = config.updateInterval;
-    this._consecutiveFailsLimit = config.errorTolerance;
+    // errorTolerance is used as a modulo divisor in update(); clamp to >=1 so
+    // 0 or negative values don't produce NaN/Infinity behaviour silently.
+    this._consecutiveFailsLimit = Math.max(1, Math.trunc(config.errorTolerance));
     this._requestHeaders.Accept = 'text/csv,text/plain';
     this.data = new GetStateData();
   }

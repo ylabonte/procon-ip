@@ -39,6 +39,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   package-root imports only.
 - **`mock-state`** public export. Move to `test/fixtures/` if you were
   depending on it; it was always a dev convenience.
+- **`SetStateValue` enum** export. It was effectively unreachable from
+  user code (the only public method that consumed it was a private
+  internal in v1). The `setOn` / `setOff` / `setAuto` wrappers remain
+  the only documented relay-switching API.
 - **Legacy `release-npmjs.yml` / `release-github.yml`** workflows.
 
 ### Migration

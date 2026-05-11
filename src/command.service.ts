@@ -45,12 +45,14 @@ export class CommandService extends AbstractService {
   }
 
   /**
-   * Trigger a manual dosage. Retries up to three times before giving up.
+   * Trigger a manual dosage. Retries up to three times internally before
+   * giving up; no error is surfaced to the caller — per-attempt failures
+   * (timeouts, HTTP errors, etc.) are caught and logged, and the method
+   * returns `-1` after the third failure.
    *
    * @param dosageTarget Target relay (chlorine / pH-minus / pH-plus).
    * @param dosageDuration Duration in **seconds**.
    * @returns The duration on success, or `-1` after three failures.
-   * @throws {@link ProconIpError} subclasses on per-attempt failures (caught internally for retry).
    */
   public async setDosage(dosageTarget: DosageTarget, dosageDuration: number): Promise<number> {
     for (let attempt = 0; attempt < 3; attempt++) {

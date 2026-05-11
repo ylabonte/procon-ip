@@ -38,6 +38,18 @@ describe('GetStateService', () => {
     await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
   });
 
+  it('clamps a 0/negative errorTolerance to 1 so the modulo check stays valid', async () => {
+    // Without the clamp, errorTolerance: 0 makes `_consecutiveFails % 0` NaN,
+    // which is never === 0, so the service would silently swallow failures
+    // forever. With Math.max(1, ...) the modulo math stays sane and consecutive
+    // same-message failures re-throw at the second occurrence.
+    const svc = new GetStateService({ ...config, errorTolerance: 0 }, new Logger());
+    mockFetchNetworkError('boom');
+    await svc.update(); // first failure: not yet consecutive, swallowed
+    mockFetchNetworkError('boom');
+    await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
+  });
+
   it('start() invokes successCallback on each update', async () => {
     vi.useFakeTimers();
     mockFetchOnce({ body: fixture });

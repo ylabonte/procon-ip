@@ -7,8 +7,8 @@ import { mockFetchOnce, mockFetchNetworkError, mockFetchAbortable } from './help
 class TestService extends AbstractService {
   _endpoint = '/test';
   _method = 'GET' as const;
-  async run(): Promise<Response> {
-    return this.request();
+  async run(init?: RequestInit): Promise<Response> {
+    return this.request(init);
   }
 }
 
@@ -74,5 +74,22 @@ describe('AbstractService', () => {
     const init = spy.mock.calls[0]?.[1] as RequestInit;
     const headers = new Headers(init.headers);
     expect(headers.get('authorization')).toBe('Basic ' + Buffer.from('u:p').toString('base64'));
+  });
+
+  it('honours an external AbortSignal and re-throws the original AbortError', async () => {
+    // A long-running mock that the test will abort externally.
+    vi.spyOn(globalThis, 'fetch').mockImplementationOnce(
+      (_input, init) =>
+        new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () => reject(new DOMException('aborted', 'AbortError')));
+        }),
+    );
+    const external = new AbortController();
+    const svc = new TestService({ ...baseConfig, timeout: 10_000 }, new Logger());
+    const pending = svc.run({ signal: external.signal });
+    external.abort();
+    await expect(pending).rejects.toMatchObject({ name: 'AbortError' });
+    // Importantly: external abort must NOT be rewrapped as RequestTimeoutError.
+    await expect(pending).rejects.not.toBeInstanceOf(RequestTimeoutError);
   });
 });

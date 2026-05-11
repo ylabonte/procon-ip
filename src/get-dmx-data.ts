@@ -21,7 +21,13 @@ export class GetDmxData implements Iterable<DmxChannelData> {
     if (values.length !== 16) {
       throw new InvalidPayloadError(`GetDmx.csv must contain exactly 16 channels; got ${values.length}`);
     }
-    this._channels = values.map((v, i) => new DmxChannelData(i, Number.parseInt(v, 10)));
+    this._channels = values.map((v, i) => {
+      const n = Number.parseInt(v, 10);
+      if (Number.isNaN(n)) {
+        throw new InvalidPayloadError(`channel ${i + 1} is not a valid integer: ${JSON.stringify(v)}`);
+      }
+      return new DmxChannelData(i, n);
+    });
   }
 
   [Symbol.iterator](): Iterator<DmxChannelData> {

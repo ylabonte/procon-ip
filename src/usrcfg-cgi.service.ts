@@ -9,12 +9,6 @@ import type { GetStateDataObject } from './get-state-data-object';
 import type { RelayDataInterpreter } from './relay-data-interpreter';
 import type { ILogger } from './logger';
 
-export enum SetStateValue {
-  OFF = 0,
-  ON = 1,
-  AUTO = 2,
-}
-
 export class UsrcfgCgiService extends AbstractService {
   public _endpoint = '/usrcfg.cgi';
   public _method: HttpMethod = 'POST';

@@ -26,6 +26,13 @@ describe('GetDmxData', () => {
     expect(() => new GetDmxData('1,2,3')).toThrow(InvalidPayloadError);
   });
 
+  it('throws InvalidPayloadError when a channel value is not a valid integer', () => {
+    // 16 values, one of them non-numeric -> reject rather than silently
+    // storing NaN and later POSTing it back to the controller.
+    const bad = '0,16,32,48,oops,80,96,112,128,144,160,176,192,208,224,255';
+    expect(() => new GetDmxData(bad)).toThrow(InvalidPayloadError);
+  });
+
   it('clamps set() values to [0, 255]', () => {
     const data = new GetDmxData(fixture);
     data.set(0, -10);

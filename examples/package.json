@@ -11,6 +11,6 @@
   },
   "dependencies": {
     "dotenv": "^16",
-    "procon-ip": "^2.0.0"
+    "procon-ip": "file:.."
   }
 }

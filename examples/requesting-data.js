@@ -15,12 +15,21 @@ import {
   BadCredentialsError,
 } from 'procon-ip';
 
+function requireEnv(name) {
+  const v = process.env[name];
+  if (!v) {
+    console.error(`Missing required env var: ${name}. Set it in .env or your shell.`);
+    process.exit(1);
+  }
+  return v;
+}
+
 const logger = new Logger();
 const config = {
-  controllerUrl: process.env.PROCON_IP_BASE_URL,
+  controllerUrl: requireEnv('PROCON_IP_BASE_URL'),
   basicAuth: true,
-  username: process.env.PROCON_IP_USERNAME,
-  password: process.env.PROCON_IP_PASSWORD,
+  username: requireEnv('PROCON_IP_USERNAME'),
+  password: requireEnv('PROCON_IP_PASSWORD'),
   updateInterval: 5000,
   timeout: 5000,
   errorTolerance: 2,

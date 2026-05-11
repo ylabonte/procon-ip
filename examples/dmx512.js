@@ -12,10 +12,27 @@
 import 'dotenv/config';
 import { GetDmxService, DmxService, Logger } from 'procon-ip';
 
+function requireEnv(name) {
+  const v = process.env[name];
+  if (!v) {
+    console.error(`Missing required env var: ${name}. Set it in .env or your shell.`);
+    process.exit(1);
+  }
+  return v;
+}
+
+const baseUrl = requireEnv('PROCON_IP_BASE_URL');
+const basicAuth = !!process.env.PROCON_IP_USERNAME;
+// When basicAuth is requested, both creds must be set.
+if (basicAuth && !process.env.PROCON_IP_PASSWORD) {
+  console.error('PROCON_IP_USERNAME is set but PROCON_IP_PASSWORD is not. Set both, or neither.');
+  process.exit(1);
+}
+
 const logger = new Logger();
 const config = {
-  controllerUrl: process.env.PROCON_IP_BASE_URL,
-  basicAuth: !!process.env.PROCON_IP_USERNAME,
+  controllerUrl: baseUrl,
+  basicAuth,
   username: process.env.PROCON_IP_USERNAME,
   password: process.env.PROCON_IP_PASSWORD,
   timeout: 5000,

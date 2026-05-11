@@ -56,6 +56,9 @@ export abstract class AbstractService {
    * Perform the HTTP request configured for this service.
    *
    * @param init Optional `fetch` init overrides; merged on top of method/headers/auth.
+   *   If `init.signal` is provided, the request aborts when either the caller's
+   *   signal fires or the configured timeout elapses; an external abort re-throws
+   *   the original `AbortError` so callers can distinguish it from a timeout.
    * @returns The raw `Response` for the caller to parse.
    * @throws {@link BadCredentialsError} on HTTP 401 or 403.
    * @throws {@link BadStatusCodeError} on any other 4xx/5xx response.
@@ -73,12 +76,18 @@ export abstract class AbstractService {
     const timeoutMs = this._config.timeout;
     const timer = setTimeout(() => controller.abort(), timeoutMs);
 
+    // If the caller passed their own AbortSignal, honour both: the request
+    // aborts when either signal fires. Distinguishes a caller-driven abort
+    // from our timeout below.
+    const externalSignal = init.signal ?? null;
+    const signal = externalSignal ? AbortSignal.any([externalSignal, controller.signal]) : controller.signal;
+
     try {
       const res = await fetch(this.url, {
         ...init,
         method: this._method,
         headers,
-        signal: controller.signal,
+        signal,
       });
       if (res.status === 401 || res.status === 403) {
         throw new BadCredentialsError(`Authentication failed (${res.status} ${res.statusText})`);
@@ -93,6 +102,9 @@ export abstract class AbstractService {
       return res;
     } catch (e: unknown) {
       if (e instanceof DOMException && e.name === 'AbortError') {
+        // Caller-driven abort: re-throw the original AbortError so consumers
+        // can distinguish it from our timeout.
+        if (externalSignal?.aborted) throw e;
         throw new RequestTimeoutError(`Request timed out after ${timeoutMs}ms`, timeoutMs);
       }
       throw e;
