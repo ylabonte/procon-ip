@@ -17,7 +17,7 @@ describe('CommandService', () => {
     const svc = new CommandService(config, new Logger());
     const result = await svc.setChlorineDosage(60);
     expect(result).toBe(60);
-    expect(String(spy.mock.calls[0]![0])).toContain('MAN_DOSAGE=0,60');
+    expect(String(spy.mock.calls[0][0] as string | URL)).toContain('MAN_DOSAGE=0,60');
   });
 
   it('targets the correct dosage code per helper', async () => {

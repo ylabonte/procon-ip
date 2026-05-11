@@ -34,11 +34,11 @@ describe('UsrcfgCgiService', () => {
   it('POSTs ENA=<on>,<auto>&MANUAL=1 form-encoded body to /usrcfg.cgi', async () => {
     const { svc, getStateService } = await buildService();
     const spy = mockFetchOnce({ status: 200 });
-    const relay = getStateService.data.getDataObjectsByCategory(GetStateCategory.RELAYS)[0]!;
+    const relay = getStateService.data.getDataObjectsByCategory(GetStateCategory.RELAYS)[0];
     await svc.setOff(relay);
     expect(spy).toHaveBeenCalled();
-    const [url, init] = spy.mock.calls[0]!;
-    expect(String(url)).toContain('/usrcfg.cgi');
+    const [url, init] = spy.mock.calls[0];
+    expect(String(url as string | URL)).toContain('/usrcfg.cgi');
     expect((init as RequestInit).method).toBe('POST');
     const body = (init as RequestInit).body as string;
     expect(body).toMatch(/^ENA=\d+%2C\d+&MANUAL=1$/);
@@ -47,7 +47,7 @@ describe('UsrcfgCgiService', () => {
   it('setOn / setOff / setAuto all reach the endpoint', async () => {
     const { svc, getStateService } = await buildService();
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('', { status: 200 }));
-    const relay = getStateService.data.getDataObjectsByCategory(GetStateCategory.RELAYS)[0]!;
+    const relay = getStateService.data.getDataObjectsByCategory(GetStateCategory.RELAYS)[0];
     await expect(svc.setOn(relay)).resolves.toBeUndefined();
     await expect(svc.setOff(relay)).resolves.toBeUndefined();
     await expect(svc.setAuto(relay)).resolves.toBeUndefined();

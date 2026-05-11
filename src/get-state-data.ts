@@ -134,7 +134,9 @@ export class GetStateData {
    */
   public active: number[];
 
-  public readonly categories: IGetStateCategories = GetStateData.categories;
+  public get categories(): IGetStateCategories {
+    return GetStateData.categories;
+  }
 
   /**
    * Data categories as array of objects.

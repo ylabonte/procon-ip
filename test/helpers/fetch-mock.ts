@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi, type MockInstance } from 'vitest';
 
 export interface MockResponse {
   status?: number;
@@ -7,7 +7,9 @@ export interface MockResponse {
   delayMs?: number;
 }
 
-export function mockFetchOnce(res: MockResponse): ReturnType<typeof vi.spyOn> {
+type FetchSpy = MockInstance<typeof globalThis.fetch>;
+
+export function mockFetchOnce(res: MockResponse): FetchSpy {
   return vi.spyOn(globalThis, 'fetch').mockImplementationOnce(async () => {
     if (res.delayMs) await new Promise((r) => setTimeout(r, res.delayMs));
     return new Response(res.body ?? '', {
@@ -17,13 +19,13 @@ export function mockFetchOnce(res: MockResponse): ReturnType<typeof vi.spyOn> {
   });
 }
 
-export function mockFetchNetworkError(message = 'network'): ReturnType<typeof vi.spyOn> {
+export function mockFetchNetworkError(message = 'network'): FetchSpy {
   return vi.spyOn(globalThis, 'fetch').mockImplementationOnce(() => {
     throw new TypeError(message);
   });
 }
 
-export function mockFetchAbortable(delayMs: number): ReturnType<typeof vi.spyOn> {
+export function mockFetchAbortable(delayMs: number): FetchSpy {
   return vi.spyOn(globalThis, 'fetch').mockImplementationOnce(
     (_input, init) =>
       new Promise<Response>((resolve, reject) => {
