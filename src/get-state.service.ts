@@ -21,6 +21,7 @@ export class GetStateService extends AbstractService {
   public data: GetStateData;
   private _hasData = false;
   private _next?: ReturnType<typeof setTimeout>;
+  private _polling = false;
   private _updateInterval: number;
   private _consecutiveFailsLimit: number;
   private _consecutiveFails = 0;
@@ -46,7 +47,7 @@ export class GetStateService extends AbstractService {
     this._updateInterval = ms;
   }
   public isRunning(): boolean {
-    return this._next !== undefined;
+    return this._polling;
   }
   public hasData(): boolean {
     return this._hasData;
@@ -90,26 +91,43 @@ export class GetStateService extends AbstractService {
     this._updateCallback = successCallback;
     this._errorCallback = errorCallback;
     this._stopOnError = stopOnError;
+    this._polling = true;
     this.autoUpdate();
   }
 
   public stop(): void {
-    if (this._next) clearTimeout(this._next);
-    this._next = undefined;
+    this._polling = false;
+    if (this._next !== undefined) {
+      clearTimeout(this._next);
+      this._next = undefined;
+    }
     this._updateCallback = undefined;
   }
 
+  /**
+   * Run one update, then (while the poll loop is active) schedule the next
+   * tick *after* the current request settles. This serialises requests so a
+   * slow update can't trigger overlapping in-flight fetches and skew
+   * `_consecutiveFails` bookkeeping. Effective interval becomes
+   * `max(updateInterval, request_time)`.
+   *
+   * Calling `autoUpdate()` directly also enters the poll loop; call
+   * {@link stop} to leave it.
+   */
   public autoUpdate(): void {
-    void this.update().catch((e: Error) => {
-      if (this._stopOnError) this.stop();
-      this._errorCallback?.(e);
-    });
-    if (this._next === undefined) {
-      this._next = setTimeout(() => {
-        this._next = undefined;
-        this.autoUpdate();
-      }, this._updateInterval);
-    }
+    this._polling = true;
+    void this.update()
+      .catch((e: Error) => {
+        if (this._stopOnError) this.stop();
+        this._errorCallback?.(e);
+      })
+      .finally(() => {
+        if (!this._polling) return;
+        this._next = setTimeout(() => {
+          this._next = undefined;
+          this.autoUpdate();
+        }, this._updateInterval);
+      });
   }
 
   public async update(): Promise<GetStateData> {

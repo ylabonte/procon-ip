@@ -76,6 +76,37 @@ describe('AbstractService', () => {
     expect(headers.get('authorization')).toBe('Basic ' + Buffer.from('u:p').toString('base64'));
   });
 
+  it('appends params raw (no URL encoding) so literal commas survive', async () => {
+    const spy = mockFetchOnce({ status: 200 });
+
+    class WithParams extends AbstractService {
+      _endpoint = '/test';
+      _method = 'GET' as const;
+      async run(): Promise<Response> {
+        return this.request({ params: { foo: 1, MAN_DOSAGE: '0,60' } });
+      }
+    }
+    const svc = new WithParams(baseConfig, new Logger());
+    await svc.run();
+    const url = spy.mock.calls[0]?.[0] as string;
+    expect(url).toBe('http://example.local/test?foo=1&MAN_DOSAGE=0,60');
+  });
+
+  it('forces _method even if init.method is provided', async () => {
+    const spy = mockFetchOnce({ status: 200 });
+
+    class TryOverride extends AbstractService {
+      _endpoint = '/test';
+      _method = 'GET' as const;
+      async run(): Promise<Response> {
+        return this.request({ method: 'POST' });
+      }
+    }
+    const svc = new TryOverride(baseConfig, new Logger());
+    await svc.run();
+    expect((spy.mock.calls[0]?.[1] as RequestInit).method).toBe('GET');
+  });
+
   it('honours an external AbortSignal and re-throws the original AbortError', async () => {
     // A long-running mock that the test will abort externally.
     vi.spyOn(globalThis, 'fetch').mockImplementationOnce(

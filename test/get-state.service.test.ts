@@ -50,6 +50,28 @@ describe('GetStateService', () => {
     await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
   });
 
+  it('serialises in-flight updates — next tick scheduled only after settle', async () => {
+    // A slow update (200ms) must not be overtaken by the next tick (50ms).
+    // Without the .finally()-based scheduling this would fire twice and we'd
+    // see overlapping callbacks. With it, only one tick fires before stop().
+    vi.useFakeTimers();
+    let resolveFetch!: (r: Response) => void;
+    vi.spyOn(globalThis, 'fetch').mockImplementation(() => new Promise<Response>((r) => (resolveFetch = r)));
+    const cb = vi.fn();
+    const svc = new GetStateService({ ...config, updateInterval: 50 }, new Logger());
+    svc.start(cb);
+    // Advance well past the would-be next-tick boundary while the first
+    // request is still in flight.
+    await vi.advanceTimersByTimeAsync(500);
+    expect(cb).not.toHaveBeenCalled(); // first update hasn't resolved yet
+    // Now resolve the first update.
+    resolveFetch(new Response(fixture, { status: 200 }));
+    await vi.advanceTimersByTimeAsync(0); // flush microtasks
+    expect(cb).toHaveBeenCalledTimes(1);
+    svc.stop();
+    vi.useRealTimers();
+  });
+
   it('start() invokes successCallback on each update', async () => {
     vi.useFakeTimers();
     mockFetchOnce({ body: fixture });

@@ -47,6 +47,15 @@ describe('GetDmxData', () => {
     expect(() => data.set(16, 0)).toThrow(RangeError);
   });
 
+  it('set() throws RangeError on a non-finite value (NaN / Infinity)', () => {
+    const data = new GetDmxData(fixture);
+    // Without the guard, Math.max/Math.min would propagate NaN into the channel
+    // and onward into toPostData() — sending an invalid value to the controller.
+    expect(() => data.set(0, NaN)).toThrow(RangeError);
+    expect(() => data.set(0, Infinity)).toThrow(RangeError);
+    expect(() => data.set(0, -Infinity)).toThrow(RangeError);
+  });
+
   it('toPostData returns the controller-shape form payload', () => {
     const data = new GetDmxData(fixture);
     const post = data.toPostData();

@@ -4,7 +4,6 @@
  */
 
 import { AbstractService, type HttpMethod } from './abstract-service';
-import { ProconIpError } from './errors';
 
 export enum DosageTarget {
   CHLORINE = 0,
@@ -67,23 +66,10 @@ export class CommandService extends AbstractService {
   }
 
   private async _setDosage(target: DosageTarget, duration: number): Promise<number> {
-    const url = `${this.url}?MAN_DOSAGE=${target},${Math.trunc(duration)}`;
-    const headers = new Headers(this._requestHeaders);
-    if (this._config.basicAuth) {
-      const creds = `${this._config.username ?? ''}:${this._config.password ?? ''}`;
-      headers.set('Authorization', `Basic ${Buffer.from(creds).toString('base64')}`);
-    }
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), this._config.timeout);
-    try {
-      const res = await fetch(url, { method: 'GET', headers, signal: controller.signal });
-      if (!res.ok) {
-        throw new ProconIpError(`Command.htm responded ${res.status} ${res.statusText}`);
-      }
-      this.log.info(`Command.htm OK (${res.status})`);
-      return duration;
-    } finally {
-      clearTimeout(timer);
-    }
+    const res = await this.request({
+      params: { MAN_DOSAGE: `${target},${Math.trunc(duration)}` },
+    });
+    this.log.info(`Command.htm OK (${res.status})`);
+    return duration;
   }
 }

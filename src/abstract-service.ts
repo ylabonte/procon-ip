@@ -55,18 +55,33 @@ export abstract class AbstractService {
   /**
    * Perform the HTTP request configured for this service.
    *
-   * @param init Optional `fetch` init overrides; merged on top of method/headers/auth.
-   *   If `init.signal` is provided, the request aborts when either the caller's
-   *   signal fires or the configured timeout elapses; an external abort re-throws
-   *   the original `AbortError` so callers can distinguish it from a timeout.
+   * The HTTP method, `Authorization` header (when `basicAuth` is enabled),
+   * and `signal` are **always controlled by this method** and cannot be
+   * overridden via `init`: an explicit `init.method` is ignored, and a
+   * caller-supplied `init.signal` is composed (via `AbortSignal.any`) with
+   * the internal timeout signal rather than replacing it. An external abort
+   * re-throws the original `AbortError` so callers can distinguish it from
+   * a timeout.
+   *
+   * Any other `fetch` init field (`body`, `headers`, `cache`, etc.) is
+   * passed through to `fetch`; caller `headers` are merged on top of the
+   * service's `_requestHeaders`.
+   *
+   * @param init Optional `fetch` init plus a `params` shortcut. `params`,
+   *   if provided, is serialised as `key=value&key=value` and appended to
+   *   the URL without URL-encoding — values must already be URL-safe
+   *   (numbers and ASCII letters are fine; spaces / special chars are not).
+   *   This matches the wire format the controller's legacy endpoints expect
+   *   (e.g. literal commas in `?MAN_DOSAGE=0,60`).
    * @returns The raw `Response` for the caller to parse.
    * @throws {@link BadCredentialsError} on HTTP 401 or 403.
    * @throws {@link BadStatusCodeError} on any other 4xx/5xx response.
    * @throws {@link RequestTimeoutError} if the request exceeds the configured timeout.
    */
-  protected async request(init: RequestInit = {}): Promise<Response> {
+  protected async request(init: RequestInit & { params?: Record<string, string | number> } = {}): Promise<Response> {
+    const { params, ...restInit } = init;
     const headers = new Headers(this._requestHeaders);
-    if (init.headers) new Headers(init.headers).forEach((v, k) => headers.set(k, v));
+    if (restInit.headers) new Headers(restInit.headers).forEach((v, k) => headers.set(k, v));
     if (this._config.basicAuth) {
       const creds = `${this._config.username ?? ''}:${this._config.password ?? ''}`;
       headers.set('Authorization', `Basic ${Buffer.from(creds).toString('base64')}`);
@@ -79,12 +94,22 @@ export abstract class AbstractService {
     // If the caller passed their own AbortSignal, honour both: the request
     // aborts when either signal fires. Distinguishes a caller-driven abort
     // from our timeout below.
-    const externalSignal = init.signal ?? null;
+    const externalSignal = restInit.signal ?? null;
     const signal = externalSignal ? AbortSignal.any([externalSignal, controller.signal]) : controller.signal;
 
+    // Build the request URL. `params` is appended raw (no URL encoding) to
+    // match the controller's wire format on its legacy GET endpoints.
+    let url = this.url;
+    if (params && Object.keys(params).length > 0) {
+      const qs = Object.entries(params)
+        .map(([k, v]) => `${k}=${v}`)
+        .join('&');
+      url = `${url}?${qs}`;
+    }
+
     try {
-      const res = await fetch(this.url, {
-        ...init,
+      const res = await fetch(url, {
+        ...restInit,
         method: this._method,
         headers,
         signal,

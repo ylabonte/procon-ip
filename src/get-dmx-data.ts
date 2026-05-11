@@ -46,8 +46,18 @@ export class GetDmxData implements Iterable<DmxChannelData> {
     return this.at(index).value;
   }
 
-  /** Update channel `index` to `value`, clamping to `[0, 255]`. */
+  /**
+   * Update channel `index` to `value`, clamping to `[0, 255]`.
+   *
+   * @throws `RangeError` if `index` is outside `[0, 15]` or if `value` is
+   *   not a finite number (`NaN` / `Infinity`). `Math.max`/`Math.min` would
+   *   silently propagate `NaN` into `toPostData()` otherwise, sending an
+   *   invalid value to the controller.
+   */
   set(index: number, value: number): void {
+    if (!Number.isFinite(value)) {
+      throw new RangeError(`value must be a finite number, got ${String(value)}`);
+    }
     const ch = this.at(index);
     ch.value = Math.max(0, Math.min(255, value));
   }
