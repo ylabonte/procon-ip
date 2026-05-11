@@ -45,14 +45,20 @@ export class CommandService extends AbstractService {
   }
 
   /**
-   * Trigger a manual dosage. Retries up to three times internally before
-   * giving up; no error is surfaced to the caller — per-attempt failures
-   * (timeouts, HTTP errors, etc.) are caught and logged, and the method
-   * returns `-1` after the third failure.
+   * Trigger a manual dosage.
+   *
+   * Two error modes, distinguished:
+   * - **Invalid input** (non-finite `dosageDuration`): throws `ProconIpError`
+   *   immediately, before any HTTP traffic. The caller's bug, surface it.
+   * - **Per-attempt request failure** (timeout, HTTP 5xx, network error):
+   *   caught internally and retried up to three times. Failures are logged
+   *   at `debug`; after the third attempt the method returns `-1`.
    *
    * @param dosageTarget Target relay (chlorine / pH-minus / pH-plus).
-   * @param dosageDuration Duration in **seconds**.
-   * @returns The duration on success, or `-1` after three failures.
+   * @param dosageDuration Duration in **seconds**. Fractional inputs are
+   *   truncated; the returned value reflects the truncated seconds.
+   * @returns The (truncated) duration on success, or `-1` after three failures.
+   * @throws {@link ProconIpError} if `dosageDuration` is not a finite number.
    */
   public async setDosage(dosageTarget: DosageTarget, dosageDuration: number): Promise<number> {
     if (!Number.isFinite(dosageDuration)) {

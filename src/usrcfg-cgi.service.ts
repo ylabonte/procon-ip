@@ -44,7 +44,9 @@ export class UsrcfgCgiService extends AbstractService {
    * const get = new GetStateService(config, log);
    * await get.update();
    * const relays = new UsrcfgCgiService(config, log, get, new RelayDataInterpreter(log));
-   * await relays.setOn(get.data.getDataObjectsByCategory(GetStateCategory.RELAYS)[0]);
+   * const [firstRelay] = get.data.getDataObjectsByCategory(GetStateCategory.RELAYS);
+   * if (!firstRelay) throw new Error('no relays in fixture');
+   * await relays.setOn(firstRelay);
    * ```
    */
   public async setOn(relay: GetStateDataObject): Promise<void> {

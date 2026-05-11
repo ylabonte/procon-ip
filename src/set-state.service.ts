@@ -12,9 +12,13 @@ export class SetStateService extends AbstractService {
 
   /**
    * Turn relay `relayNo` on for `duration` seconds via the controller's on-timer.
-   * Retries up to three times internally before giving up; no error is surfaced
-   * to the caller — per-attempt failures (timeouts, HTTP errors, etc.) are
-   * caught and logged.
+   *
+   * Two error modes, distinguished:
+   * - **Invalid input** (non-finite `duration`): throws `ProconIpError`
+   *   immediately, before any HTTP traffic. The caller's bug, surface it.
+   * - **Per-attempt request failure** (timeout, HTTP 5xx, network error):
+   *   caught internally and retried up to three times. Failures are logged
+   *   at `debug`; after the third attempt the method returns `-1`.
    *
    * @param relayNo Target relay number (1-based, matches the controller UI).
    * @param duration Timer duration in **seconds**. Fractional inputs are
