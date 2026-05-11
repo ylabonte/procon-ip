@@ -16,7 +16,22 @@ export class CommandService extends AbstractService {
   public _endpoint = '/Command.htm';
   public _method: HttpMethod = 'GET';
 
-  /** Manual chlorine dosage for `dosageTime` seconds. */
+  /**
+   * Manual chlorine dosage for `dosageTime` seconds.
+   *
+   * @example
+   * ```ts
+   * import { CommandService, Logger } from 'procon-ip';
+   *
+   * const svc = new CommandService(
+   *   { controllerUrl: 'http://192.168.2.3', basicAuth: false, timeout: 5000 },
+   *   new Logger(),
+   * );
+   * const seconds = await svc.setChlorineDosage(60); // dose for 60s
+   * ```
+   *
+   * @returns The dosage duration on success, or `-1` after three failed attempts.
+   */
   public async setChlorineDosage(dosageTime: number): Promise<number> {
     return this.setDosage(DosageTarget.CHLORINE, dosageTime);
   }

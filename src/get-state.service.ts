@@ -50,6 +50,36 @@ export class GetStateService extends AbstractService {
     return this._hasData;
   }
 
+  /**
+   * Start the polling loop. Calls `successCallback` on every successful update
+   * and `errorCallback` once the consecutive-failure tolerance is hit.
+   *
+   * @param successCallback Invoked with the freshly parsed {@link GetStateData}
+   *   after every successful poll.
+   * @param errorCallback Invoked with the most recent `Error` when the
+   *   `errorTolerance` is reached. The error is one of the typed classes
+   *   from `'procon-ip'` ({@link BadCredentialsError}, {@link BadStatusCodeError},
+   *   {@link RequestTimeoutError}) or a `TypeError` on network failure.
+   * @param stopOnError When `true`, calling the error callback also stops
+   *   the polling loop. Default `false` (loop keeps running, callback fires
+   *   each time the tolerance is hit).
+   *
+   * @example
+   * ```ts
+   * import { GetStateService, Logger } from 'procon-ip';
+   *
+   * const svc = new GetStateService(
+   *   { controllerUrl: 'http://192.168.2.3', basicAuth: false,
+   *     timeout: 5000, updateInterval: 5000, errorTolerance: 3 },
+   *   new Logger(),
+   * );
+   *
+   * svc.start(
+   *   (data) => console.log('uptime:', data.sysInfo.uptime),
+   *   (e) => console.error('poll failed:', e.message),
+   * );
+   * ```
+   */
   public start(
     successCallback?: (data: GetStateData) => void,
     errorCallback?: (e: Error) => void,
