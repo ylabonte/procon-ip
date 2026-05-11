@@ -18,7 +18,7 @@ describe('Logger', () => {
     log.debug('hidden');
     log.info('shown');
     expect(logSpy).toHaveBeenCalledTimes(1);
-    expect(String(logSpy.mock.calls[0][0])).toContain('INFO: shown');
+    expect(String(logSpy.mock.calls[0]?.[0])).toContain('INFO: shown');
   });
 
   it('honours the constructor log level', () => {
@@ -35,7 +35,7 @@ describe('Logger', () => {
     log.error('boom');
     expect(logSpy).not.toHaveBeenCalled();
     expect(errorSpy).toHaveBeenCalledTimes(1);
-    expect(String(errorSpy.mock.calls[0][0])).toContain('ERROR: boom');
+    expect(String(errorSpy.mock.calls[0]?.[0])).toContain('ERROR: boom');
   });
 
   it('setLogLevel mutates the active level', () => {
@@ -44,13 +44,13 @@ describe('Logger', () => {
     log.setLogLevel(LogLevel.WARN);
     log.warn('shown');
     expect(logSpy).toHaveBeenCalledTimes(1);
-    expect(String(logSpy.mock.calls[0][0])).toContain('WARNING: shown');
+    expect(String(logSpy.mock.calls[0]?.[0])).toContain('WARNING: shown');
   });
 
   it('emits an ISO 8601 timestamp prefix', () => {
     const log = new Logger(LogLevel.INFO);
     log.info('with-time');
-    const out = String(logSpy.mock.calls[0][0]);
+    const out = String(logSpy.mock.calls[0]?.[0]);
     expect(out).toMatch(/^\(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\)/);
   });
 });

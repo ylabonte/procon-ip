@@ -19,6 +19,6 @@ describe('GetDmxService', () => {
     const svc = new GetDmxService(config, new Logger());
     const data = await svc.update();
     expect(data).toBeInstanceOf(GetDmxData);
-    expect(String(spy.mock.calls[0][0] as string | URL)).toContain('/GetDmx.csv');
+    expect(String(spy.mock.calls[0]?.[0] as string | URL)).toContain('/GetDmx.csv');
   });
 });

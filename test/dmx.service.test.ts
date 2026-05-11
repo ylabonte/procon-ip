@@ -18,7 +18,9 @@ describe('DmxService', () => {
     const spy = mockFetchOnce({ status: 200 });
     const svc = new DmxService(config, new Logger());
     await svc.set(new GetDmxData(fixture));
-    const [url, init] = spy.mock.calls[0];
+    const call = spy.mock.calls[0];
+    if (!call) throw new Error('fetch was not called');
+    const [url, init] = call;
     expect(String(url as string | URL)).toContain('/usrcfg.cgi');
     const body = (init as RequestInit).body as string;
     expect(body).toContain('TYPE=0');

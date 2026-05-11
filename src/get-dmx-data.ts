@@ -30,8 +30,9 @@ export class GetDmxData implements Iterable<DmxChannelData> {
 
   /** Return the channel at the given zero-based index. Throws `RangeError` outside `[0, 15]`. */
   at(index: number): DmxChannelData {
-    if (index < 0 || index > 15) throw new RangeError('DMX index must be in [0, 15]');
-    return this._channels[index];
+    const ch = this._channels[index];
+    if (!ch) throw new RangeError('DMX index must be in [0, 15]');
+    return ch;
   }
 
   /** Read the current value at `index`. */

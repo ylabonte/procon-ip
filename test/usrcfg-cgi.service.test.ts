@@ -35,9 +35,12 @@ describe('UsrcfgCgiService', () => {
     const { svc, getStateService } = await buildService();
     const spy = mockFetchOnce({ status: 200 });
     const relay = getStateService.data.getDataObjectsByCategory(GetStateCategory.RELAYS)[0];
+    if (!relay) throw new Error('fixture has no relays');
     await svc.setOff(relay);
     expect(spy).toHaveBeenCalled();
-    const [url, init] = spy.mock.calls[0];
+    const call = spy.mock.calls[0];
+    if (!call) throw new Error('fetch was not called');
+    const [url, init] = call;
     expect(String(url as string | URL)).toContain('/usrcfg.cgi');
     expect((init as RequestInit).method).toBe('POST');
     const body = (init as RequestInit).body as string;
@@ -48,6 +51,7 @@ describe('UsrcfgCgiService', () => {
     const { svc, getStateService } = await buildService();
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('', { status: 200 }));
     const relay = getStateService.data.getDataObjectsByCategory(GetStateCategory.RELAYS)[0];
+    if (!relay) throw new Error('fixture has no relays');
     await expect(svc.setOn(relay)).resolves.toBeUndefined();
     await expect(svc.setOff(relay)).resolves.toBeUndefined();
     await expect(svc.setAuto(relay)).resolves.toBeUndefined();

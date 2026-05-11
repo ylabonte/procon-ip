@@ -17,7 +17,7 @@ describe('SetStateService', () => {
     const svc = new SetStateService(config, new Logger());
     const result = await svc.setTimer(3, 60);
     expect(result).toBe(60);
-    const u = spy.mock.calls[0][0] as string;
+    const u = spy.mock.calls[0]?.[0] as string;
     expect(u).toContain('R3=1');
     expect(u).toContain('RT3=60000');
   });

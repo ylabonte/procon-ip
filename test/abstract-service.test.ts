@@ -71,7 +71,7 @@ describe('AbstractService', () => {
     const spy = mockFetchOnce({ status: 200 });
     const svc = new TestService({ ...baseConfig, basicAuth: true, username: 'u', password: 'p' }, new Logger());
     await svc.run();
-    const init = spy.mock.calls[0][1] as RequestInit;
+    const init = spy.mock.calls[0]?.[1] as RequestInit;
     const headers = new Headers(init.headers);
     expect(headers.get('authorization')).toBe('Basic ' + Buffer.from('u:p').toString('base64'));
   });

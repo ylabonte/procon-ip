@@ -233,7 +233,7 @@ export class GetStateData {
       this.parsed = this.raw
         .split(/[\r\n]+/) // split rows
         .map((row) => row.split(/,/)) // split columns
-        .filter((row) => row.length > 1 || (row.length === 1 && row[0].trim().length > 1)); // remove blank lines
+        .filter((row) => row.length > 1 || (row.length === 1 && (row[0] ?? '').trim().length > 1)); // remove blank lines
       // Save common system information.
       this.sysInfo = new GetStateDataSysInfo(this.parsed);
       this.resolveObjects();
@@ -247,8 +247,8 @@ export class GetStateData {
    * @returns Category name or string `none` if no category could be identified.
    */
   public getCategory(index: number): string {
-    for (const category in GetStateData.categories) {
-      if (GetStateData.categories[category as keyof IGetStateCategories].indexOf(index) >= 0) {
+    for (const category of Object.keys(GetStateData.categories) as (keyof IGetStateCategories)[]) {
+      if (GetStateData.categories[category].indexOf(index) >= 0) {
         return category;
       }
     }
@@ -274,7 +274,7 @@ export class GetStateData {
    * @param id Object column index.
    */
   public getDataObject(id: number): GetStateDataObject {
-    return this.objects[id] ? this.objects[id] : new GetStateDataObject(id, '', '', '', '', '');
+    return this.objects[id] ?? new GetStateDataObject(id, '', '', '', '', '');
   }
 
   /**
@@ -353,7 +353,7 @@ export class GetStateData {
     this.parsed = csv
       .split(/[\r\n]+/) // split rows
       .map((row) => row.split(/,/)) // split columns
-      .filter((row) => row.length > 1 || (row.length === 1 && row[0].trim().length > 1)); // remove blank lines
+      .filter((row) => row.length > 1 || (row.length === 1 && (row[0] ?? '').trim().length > 1)); // remove blank lines
     // Save common system information.
     this.sysInfo = new GetStateDataSysInfo(this.parsed);
     this.resolveObjects();
@@ -365,29 +365,24 @@ export class GetStateData {
   private resolveObjects(): void {
     // Iterate data columns.
     this.active.length = 0;
-    this.parsed[1].forEach((name, index) => {
-      if (this.objects[index] === undefined) {
-        // Add object to the objects array.
-        this.objects[index] = new GetStateDataObject(
-          index,
-          name,
-          this.parsed[2][index],
-          this.parsed[3][index],
-          this.parsed[4][index],
-          this.parsed[5][index],
-        );
+    const names = this.parsed[1];
+    const units = this.parsed[2];
+    const offsets = this.parsed[3];
+    const gains = this.parsed[4];
+    const measures = this.parsed[5];
+    if (!names || !units || !offsets || !gains || !measures) return;
+    names.forEach((name, index) => {
+      const unit = units[index] ?? '';
+      const offset = offsets[index] ?? '0';
+      const gain = gains[index] ?? '1';
+      const measure = measures[index] ?? '0';
+      const existing = this.objects[index];
+      if (existing === undefined) {
+        this.objects[index] = new GetStateDataObject(index, name, unit, offset, gain, measure);
       } else {
-        this.objects[index].set(
-          index,
-          name,
-          this.parsed[2][index],
-          this.parsed[3][index],
-          this.parsed[4][index],
-          this.parsed[5][index],
-        );
+        existing.set(index, name, unit, offset, gain, measure);
       }
-
-      if (this.objects[index].active) {
+      if (this.objects[index]?.active) {
         this.active.push(index);
       }
     });
