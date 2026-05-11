@@ -138,11 +138,17 @@ export class GetStateService extends AbstractService {
         // Coerce to Error so the typed errorCallback signature holds at runtime
         // even if a non-Error value made it this far (e.g. a thrown string).
         const err = e instanceof Error ? e : new Error(String(e));
+        // Decide whether to fire the callback BEFORE stop() runs. Three cases:
+        //   - External stop while in-flight: _polling is already false here.
+        //     Consumer said "I'm done"; don't notify. (round-3 invariant)
+        //   - stopOnError = true: we're about to stop *because of* this error,
+        //     which is exactly when the consumer most wants to be told.
+        //   - Normal failure: just fire the callback and keep polling.
+        // We also capture the callback reference before stop() can clear it.
+        const shouldNotify = this._polling;
+        const cb = this._errorCallback;
         if (this._stopOnError) this.stop();
-        // Don't fire the error callback if stop() was called while this
-        // request was in flight — once "stopped" the consumer expects no
-        // further notifications, success or error.
-        if (this._polling) this._errorCallback?.(err);
+        if (shouldNotify) cb?.(err);
       })
       .finally(() => {
         if (!this._polling) return;

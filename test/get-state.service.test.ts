@@ -107,7 +107,7 @@ describe('GetStateService', () => {
     expect(cb).toHaveBeenCalledTimes(1);
   });
 
-it('isolates the success callback — a throwing callback is NOT a polling failure', async () => {
+  it('isolates the success callback — a throwing callback is NOT a polling failure', async () => {
     // A consumer bug in their success callback must not advance
     // _consecutiveFails or flip hasData -- the HTTP request succeeded.
     mockFetchOnce({ body: fixture });
@@ -145,6 +145,22 @@ it('isolates the success callback — a throwing callback is NOT a polling failu
     await svc.update(); // first failure: not yet consecutive, swallowed
     mockFetchNetworkError('boom');
     await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
+  });
+
+  it('stopOnError fires the error callback before stopping the loop', async () => {
+    // The whole point of stopOnError is "tell me and then stop" -- if the
+    // internal stop() ran first it would clear _errorCallback and silently
+    // swallow the very notification the consumer asked for.
+    vi.spyOn(globalThis, 'fetch').mockImplementation(() => Promise.reject(new TypeError('boom')));
+    const onError = vi.fn();
+    // Tiny updateInterval so we don't wait long for the second tick (the
+    // second consecutive same-message failure is what triggers the
+    // re-throw + stopOnError path).
+    const svc = new GetStateService({ ...config, updateInterval: 10, errorTolerance: 1 }, new Logger());
+    svc.start(undefined, onError, true);
+    await new Promise((r) => setTimeout(r, 50));
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(svc.isRunning()).toBe(false); // and the loop did stop
   });
 
   it('stop() prevents the error callback from firing for in-flight requests', async () => {
