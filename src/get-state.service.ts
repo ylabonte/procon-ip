@@ -33,9 +33,11 @@ export class GetStateService extends AbstractService {
   public constructor(config: IGetStateServiceConfig, logger: ILogger) {
     super(config, logger);
     this._updateInterval = config.updateInterval;
-    // errorTolerance is used as a modulo divisor in update(); clamp to >=1 so
-    // 0 or negative values don't produce NaN/Infinity behaviour silently.
-    this._consecutiveFailsLimit = Math.max(1, Math.trunc(config.errorTolerance));
+    // errorTolerance is used as a modulo divisor in update(); 0, negative, NaN,
+    // or Infinity would all break the tolerance check (NaN/Infinity never
+    // match, negatives flip the sign). Default to 1 in those cases.
+    const tolerance = config.errorTolerance;
+    this._consecutiveFailsLimit = Number.isFinite(tolerance) ? Math.max(1, Math.trunc(tolerance)) : 1;
     this._requestHeaders.Accept = 'text/csv,text/plain';
     this.data = new GetStateData();
   }

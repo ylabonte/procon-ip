@@ -97,6 +97,18 @@ describe('GetStateService', () => {
     expect(svc.hasData()).toBe(true); // request succeeded
   });
 
+  it('defaults a non-finite errorTolerance (NaN / Infinity) to 1', async () => {
+    // Without Number.isFinite guard, Math.max(1, Math.trunc(NaN)) is NaN,
+    // and `_consecutiveFails % NaN` never equals 0 -> failures swallowed
+    // indefinitely. Same with Infinity.
+    const svc = new GetStateService({ ...config, errorTolerance: Number.NaN }, new Logger());
+    mockFetchNetworkError('boom');
+    await svc.update(); // first failure: swallowed (not yet consecutive)
+    mockFetchNetworkError('boom');
+    // With the default of 1, the second consecutive same-message failure throws.
+    await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
+  });
+
   it('clamps a 0/negative errorTolerance to 1 so the modulo check stays valid', async () => {
     // Without the clamp, errorTolerance: 0 makes `_consecutiveFails % 0` NaN,
     // which is never === 0, so the service would silently swallow failures

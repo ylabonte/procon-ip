@@ -4,6 +4,7 @@
  */
 
 import { AbstractService, type HttpMethod } from './abstract-service';
+import { ProconIpError } from './errors';
 
 export enum DosageTarget {
   CHLORINE = 0,
@@ -54,9 +55,18 @@ export class CommandService extends AbstractService {
    * @returns The duration on success, or `-1` after three failures.
    */
   public async setDosage(dosageTarget: DosageTarget, dosageDuration: number): Promise<number> {
+    if (!Number.isFinite(dosageDuration)) {
+      throw new ProconIpError(
+        `Invalid dosage duration: ${String(dosageDuration)} (must be a finite number of seconds)`,
+      );
+    }
+    // Normalise once so the value sent to the controller and the value
+    // returned to the caller always agree (was previously truncated only in
+    // the URL while the original fractional input was returned).
+    const seconds = Math.trunc(dosageDuration);
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        return await this._setDosage(dosageTarget, dosageDuration);
+        return await this._setDosage(dosageTarget, seconds);
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : String(e);
         this.log.debug(`Dosage attempt ${attempt + 1} failed: ${msg}`);
@@ -65,11 +75,9 @@ export class CommandService extends AbstractService {
     return -1;
   }
 
-  private async _setDosage(target: DosageTarget, duration: number): Promise<number> {
-    const res = await this.request({
-      params: { MAN_DOSAGE: `${target},${Math.trunc(duration)}` },
-    });
+  private async _setDosage(target: DosageTarget, seconds: number): Promise<number> {
+    const res = await this.request({ params: { MAN_DOSAGE: `${target},${seconds}` } });
     this.log.info(`Command.htm OK (${res.status})`);
-    return duration;
+    return seconds;
   }
 }

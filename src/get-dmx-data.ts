@@ -47,7 +47,10 @@ export class GetDmxData implements Iterable<DmxChannelData> {
   }
 
   /**
-   * Update channel `index` to `value`, clamping to `[0, 255]`.
+   * Update channel `index` to `value`, rounding to the nearest integer and
+   * clamping to `[0, 255]`. DMX512 channels are 8-bit integers; the controller
+   * expects integer values in the form payload, so a fractional input
+   * (`12.5`) is rounded (`13`) rather than stored verbatim.
    *
    * @throws `RangeError` if `index` is outside `[0, 15]` or if `value` is
    *   not a finite number (`NaN` / `Infinity`). `Math.max`/`Math.min` would
@@ -59,7 +62,7 @@ export class GetDmxData implements Iterable<DmxChannelData> {
       throw new RangeError(`value must be a finite number, got ${String(value)}`);
     }
     const ch = this.at(index);
-    ch.value = Math.max(0, Math.min(255, value));
+    ch.value = Math.max(0, Math.min(255, Math.round(value)));
   }
 
   /** Form payload accepted by `/usrcfg.cgi` for a DMX512 update. */

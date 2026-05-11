@@ -47,6 +47,17 @@ describe('GetDmxData', () => {
     expect(() => data.set(16, 0)).toThrow(RangeError);
   });
 
+  it('set() rounds fractional values to integers (DMX channels are 8-bit ints)', () => {
+    // Without the round, toPostData() would emit "CH1_8=12.5,..." -- the
+    // controller expects integer channel values.
+    const data = new GetDmxData(fixture);
+    data.set(0, 12.5);
+    expect(data.getValue(0)).toBe(13);
+    data.set(1, 12.4);
+    expect(data.getValue(1)).toBe(12);
+    expect(data.toPostData().CH1_8).toMatch(/^13,12,/);
+  });
+
   it('set() throws RangeError on a non-finite value (NaN / Infinity)', () => {
     const data = new GetDmxData(fixture);
     // Without the guard, Math.max/Math.min would propagate NaN into the channel
