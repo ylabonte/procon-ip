@@ -6,6 +6,7 @@ import { GetStateData, GetStateCategory } from '../src/get-state-data';
 import { GetStateDataObject } from '../src/get-state-data-object';
 import { GetStateDataSysInfo } from '../src/get-state-data-sys-info';
 import { RelayDataObject } from '../src/relay-data-object';
+import { InvalidPayloadError } from '../src/errors';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixture = readFileSync(resolve(__dirname, 'fixtures/get-state.csv'), 'utf8');
@@ -105,5 +106,20 @@ describe('GetStateData', () => {
     d.parseCsv(fixture);
     // Re-parsing should not add new object slots — it should re-set existing ones.
     expect(d.objects.length).toBe(objectCountBefore);
+  });
+
+  it('throws InvalidPayloadError on a truncated CSV (missing rows)', () => {
+    // SYSINFO row only -- no names / units / offsets / gains / measures.
+    // Silently leaving the previous `objects` array intact would let
+    // consumers read stale values while raw/parsed already reflect the
+    // new bad payload. Make it loud instead.
+    expect(() => new GetStateData('SYSINFO,1.7.0,17132,1,65536,99,257,4,4,5')).toThrow(InvalidPayloadError);
+  });
+
+  it('clears objects on a re-parse failure so callers cannot observe stale state', () => {
+    const d = new GetStateData(fixture);
+    expect(d.objects.length).toBeGreaterThan(0);
+    expect(() => d.parseCsv('SYSINFO,1.7.0,17132,1,65536,99,257,4,4,5')).toThrow(InvalidPayloadError);
+    expect(d.objects.length).toBe(0);
   });
 });

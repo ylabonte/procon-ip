@@ -6,6 +6,7 @@
  * @packageDocumentation
  */
 
+import { InvalidPayloadError } from './errors';
 import { GetStateDataObject } from './get-state-data-object';
 import { GetStateDataSysInfo } from './get-state-data-sys-info';
 import { RelayDataObject } from './relay-data-object';
@@ -370,7 +371,16 @@ export class GetStateData {
     const offsets = this.parsed[3];
     const gains = this.parsed[4];
     const measures = this.parsed[5];
-    if (!names || !units || !offsets || !gains || !measures) return;
+    if (!names || !units || !offsets || !gains || !measures) {
+      // A truncated/empty CSV must not silently leave `objects` holding stale
+      // values from a previous successful parse while `raw`/`parsed` reflect
+      // the new (bad) payload. Throw so the polling layer treats it as a
+      // request failure and surfaces it via the error tolerance machinery.
+      this.objects.length = 0;
+      throw new InvalidPayloadError(
+        `GetState.csv must contain at least 6 rows (SYSINFO + names + units + offsets + gains + measures); got ${this.parsed.length}`,
+      );
+    }
     names.forEach((name, index) => {
       const unit = units[index] ?? '';
       const offset = offsets[index] ?? '0';

@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { AbstractService, type IServiceConfig } from '../src/abstract-service';
 import { Logger } from '../src/logger';
-import { BadCredentialsError, RequestTimeoutError } from '../src/errors';
+import { BadCredentialsError, ProconIpError, RequestTimeoutError } from '../src/errors';
 import { mockFetchOnce, mockFetchNetworkError, mockFetchAbortable } from './helpers/fetch-mock';
 
 class TestService extends AbstractService {
@@ -24,6 +24,26 @@ describe('AbstractService', () => {
   it('joins base url and endpoint correctly', () => {
     const svc = new TestService(baseConfig, new Logger());
     expect(svc.url).toBe('http://example.local/test');
+  });
+
+  it('rejects a malformed controllerUrl at construction time with a clear ProconIpError', () => {
+    // Catching the failure here -- rather than letting `new URL()` blow up
+    // with a generic TypeError on the first request -- makes misconfig easy
+    // to diagnose.
+    expect(() => new TestService({ ...baseConfig, controllerUrl: 'not a url' }, new Logger())).toThrow(ProconIpError);
+    expect(() => new TestService({ ...baseConfig, controllerUrl: '' }, new Logger())).toThrow(ProconIpError);
+  });
+
+  it('refuses params with unsafe characters in the value to prevent query-string injection', async () => {
+    class WithBadParams extends AbstractService {
+      _endpoint = '/test';
+      _method = 'GET' as const;
+      async run(): Promise<Response> {
+        return this.request({ params: { foo: 'a&b=c' } });
+      }
+    }
+    const svc = new WithBadParams(baseConfig, new Logger());
+    await expect(svc.run()).rejects.toBeInstanceOf(ProconIpError);
   });
 
   it('returns the Response on 2xx', async () => {

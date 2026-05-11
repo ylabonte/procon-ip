@@ -38,6 +38,22 @@ describe('GetStateService', () => {
     await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
   });
 
+  it('isolates the success callback — a throwing callback is NOT a polling failure', async () => {
+    // A consumer bug in their success callback must not advance
+    // _consecutiveFails or flip hasData -- the HTTP request succeeded.
+    mockFetchOnce({ body: fixture });
+    const cb = vi.fn(() => {
+      throw new Error('consumer-side bug');
+    });
+    const svc = new GetStateService(config, new Logger());
+    svc.start(cb);
+    // Drain microtasks so the in-flight update settles.
+    await new Promise((r) => setTimeout(r, 0));
+    svc.stop();
+    expect(cb).toHaveBeenCalledTimes(1);
+    expect(svc.hasData()).toBe(true); // request succeeded
+  });
+
   it('clamps a 0/negative errorTolerance to 1 so the modulo check stays valid', async () => {
     // Without the clamp, errorTolerance: 0 makes `_consecutiveFails % 0` NaN,
     // which is never === 0, so the service would silently swallow failures

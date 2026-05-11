@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BadCredentialsError, BadStatusCodeError, RequestTimeoutError } from './errors';
+import { BadCredentialsError, BadStatusCodeError, ProconIpError, RequestTimeoutError } from './errors';
 import type { ILogger } from './logger';
 
 export interface IServiceConfig {
@@ -37,6 +37,16 @@ export abstract class AbstractService {
   abstract _method: HttpMethod;
 
   public constructor(config: IServiceConfig, logger: ILogger) {
+    // Validate the controllerUrl once at construction time so a misconfigured
+    // base URL fails with a clear error here instead of throwing a generic
+    // `TypeError: Invalid URL` deep inside the first request().
+    try {
+      new URL(config.controllerUrl);
+    } catch {
+      throw new ProconIpError(
+        `Invalid controllerUrl: ${JSON.stringify(config.controllerUrl)} — must be a parseable URL (e.g. "http://192.168.2.3")`,
+      );
+    }
     this._config = config;
     this._requestHeaders = { ...(config.requestHeaders ?? {}) };
     this.log = logger;
@@ -98,11 +108,21 @@ export abstract class AbstractService {
     const signal = externalSignal ? AbortSignal.any([externalSignal, controller.signal]) : controller.signal;
 
     // Build the request URL. `params` is appended raw (no URL encoding) to
-    // match the controller's wire format on its legacy GET endpoints.
+    // match the controller's wire format on its legacy GET endpoints. Because
+    // there's no encoding, keys and values must not contain characters that
+    // would alter the query-string structure or fragment boundary.
     let url = this.url;
     if (params && Object.keys(params).length > 0) {
       const qs = Object.entries(params)
-        .map(([k, v]) => `${k}=${v}`)
+        .map(([k, v]) => {
+          const val = String(v);
+          if (/[&=?#\s]/.test(k) || /[&=?#\s]/.test(val)) {
+            throw new ProconIpError(
+              `Refusing to build query string with unsafe characters in param "${k}"=${JSON.stringify(val)} (& = ? # whitespace not allowed when raw-concat is in use)`,
+            );
+          }
+          return `${k}=${val}`;
+        })
         .join('&');
       url = `${url}?${qs}`;
     }

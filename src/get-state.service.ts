@@ -123,12 +123,15 @@ export class GetStateService extends AbstractService {
   public autoUpdate(): void {
     this._polling = true;
     void this.update()
-      .catch((e: Error) => {
+      .catch((e: unknown) => {
+        // Coerce to Error so the typed errorCallback signature holds at runtime
+        // even if a non-Error value made it this far (e.g. a thrown string).
+        const err = e instanceof Error ? e : new Error(String(e));
         if (this._stopOnError) this.stop();
         // Don't fire the error callback if stop() was called while this
         // request was in flight — once "stopped" the consumer expects no
         // further notifications, success or error.
-        if (this._polling) this._errorCallback?.(e);
+        if (this._polling) this._errorCallback?.(err);
       })
       .finally(() => {
         if (!this._polling) return;
@@ -140,6 +143,7 @@ export class GetStateService extends AbstractService {
   }
 
   public async update(): Promise<GetStateData> {
+    let succeeded = false;
     try {
       const res = await this.request();
       const text = await res.text();
@@ -147,7 +151,7 @@ export class GetStateService extends AbstractService {
       this._recentErrorMessage = null;
       this.data = new GetStateData(text);
       this._hasData = true;
-      this._updateCallback?.(this.data);
+      succeeded = true;
     } catch (e: unknown) {
       this._consecutiveFails += 1;
       const msg = e instanceof Error ? e.message : String(e);
@@ -163,6 +167,17 @@ export class GetStateService extends AbstractService {
         this.log.warn(`request failed: ${msg}`);
         this._recentErrorMessage = msg;
         this._consecutiveFails = 1;
+      }
+    }
+    // The success callback runs outside the request try/catch — a consumer
+    // bug in the callback must not be mistaken for a polling failure and
+    // must not advance _consecutiveFails or flip _hasData.
+    if (succeeded && this._updateCallback) {
+      try {
+        this._updateCallback(this.data);
+      } catch (cbErr) {
+        const msg = cbErr instanceof Error ? cbErr.message : String(cbErr);
+        this.log.warn(`successCallback threw, swallowed: ${msg}`);
       }
     }
     return this.data;
