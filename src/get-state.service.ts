@@ -91,6 +91,11 @@ export class GetStateService extends AbstractService {
     this._updateCallback = successCallback;
     this._errorCallback = errorCallback;
     this._stopOnError = stopOnError;
+    // Idempotent: if the loop is already running, just (potentially) refresh
+    // the callbacks above and return. Calling autoUpdate() again here would
+    // spawn an overlapping in-flight update() and a parallel timer chain,
+    // defeating the serialisation guarantee.
+    if (this._polling) return;
     this._polling = true;
     this.autoUpdate();
   }

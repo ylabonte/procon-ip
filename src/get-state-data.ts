@@ -234,7 +234,7 @@ export class GetStateData {
       this.parsed = this.raw
         .split(/[\r\n]+/) // split rows
         .map((row) => row.split(/,/)) // split columns
-        .filter((row) => row.length > 1 || (row.length === 1 && (row[0] ?? '').trim().length > 1)); // remove blank lines
+        .filter((row) => row.length > 1 || (row.length === 1 && (row[0] ?? '').trim().length > 0)); // remove blank lines
       // Save common system information.
       this.sysInfo = new GetStateDataSysInfo(this.parsed);
       this.resolveObjects();
@@ -354,7 +354,7 @@ export class GetStateData {
     this.parsed = csv
       .split(/[\r\n]+/) // split rows
       .map((row) => row.split(/,/)) // split columns
-      .filter((row) => row.length > 1 || (row.length === 1 && (row[0] ?? '').trim().length > 1)); // remove blank lines
+      .filter((row) => row.length > 1 || (row.length === 1 && (row[0] ?? '').trim().length > 0)); // remove blank lines
     // Save common system information.
     this.sysInfo = new GetStateDataSysInfo(this.parsed);
     this.resolveObjects();

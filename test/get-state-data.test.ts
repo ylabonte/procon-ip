@@ -122,4 +122,26 @@ describe('GetStateData', () => {
     expect(() => d.parseCsv('SYSINFO,1.7.0,17132,1,65536,99,257,4,4,5')).toThrow(InvalidPayloadError);
     expect(d.objects.length).toBe(0);
   });
+
+  it('blank-line filter keeps single-character rows (treats "blank" as whitespace-only, not length<=1)', () => {
+    // The filter's intent is "drop blank lines" -- a single-character row
+    // like "0" is meaningful, not blank. The previous predicate
+    // (trim().length > 1) silently dropped it; the new one (> 0) keeps it.
+    // We assert this by parsing a CSV whose otherwise-valid 6th data row is
+    // a single "0" and verifying the parser doesn't throw on a "missing row".
+    const tail = '0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0';
+    const csv = [
+      'SYSINFO,1.7.0,17132,1,65536,99,257,4,4,5',
+      'Time,n.a.,n.a.,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,aa,bb,cc,dd,ee,ff,gg,hh,ii,jj,kk,ll,mm',
+      tail,
+      tail,
+      tail,
+      '0', // single-character row -- not blank, must NOT be filtered out
+      '', // truly blank line -- SHOULD be filtered out
+    ].join('\n');
+    const d = new GetStateData(csv);
+    // parsed[5] is the "single-character row" — it survived the filter.
+    expect(d.parsed.length).toBe(6);
+    expect(d.parsed[5]?.[0]).toBe('0');
+  });
 });

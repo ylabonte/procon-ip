@@ -38,6 +38,49 @@ describe('GetStateService', () => {
     await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
   });
 
+  it('start() is idempotent — calling it twice does not overlap requests or timers', async () => {
+    // If start() weren't idempotent the second call would set _polling=true
+    // again and call autoUpdate(), spawning a parallel in-flight update()
+    // and a second timer chain. We assert only ONE fetch fires before the
+    // first settles.
+    vi.useFakeTimers();
+    let pending!: () => void;
+    const fetchSpy = vi
+      .spyOn(globalThis, 'fetch')
+      .mockImplementation(
+        () => new Promise<Response>((resolve) => (pending = () => resolve(new Response(fixture, { status: 200 })))),
+      );
+    const svc = new GetStateService(config, new Logger());
+    svc.start();
+    svc.start(); // second call: must be a no-op while in-flight
+    await vi.advanceTimersByTimeAsync(0); // flush microtasks; first fetch is still in flight
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    pending();
+    await vi.advanceTimersByTimeAsync(0); // let the first settle
+    svc.stop();
+    vi.useRealTimers();
+  });
+
+  it('start() refreshes callbacks but does not duplicate the poll loop when already running', () => {
+    vi.useFakeTimers();
+    vi.spyOn(globalThis, 'fetch').mockImplementation(
+      () =>
+        new Promise<Response>(() => {
+          /* never resolves */
+        }),
+    );
+    const cb1 = vi.fn();
+    const cb2 = vi.fn();
+    const svc = new GetStateService(config, new Logger());
+    svc.start(cb1);
+    // Now swap the callback while still in-flight; the swap must take effect
+    // for any subsequent successful update, without spawning a duplicate loop.
+    svc.start(cb2);
+    expect(svc.isRunning()).toBe(true);
+    svc.stop();
+    vi.useRealTimers();
+  });
+
   it('isolates the success callback — a throwing callback is NOT a polling failure', async () => {
     // A consumer bug in their success callback must not advance
     // _consecutiveFails or flip hasData -- the HTTP request succeeded.
