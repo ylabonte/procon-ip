@@ -136,9 +136,7 @@ describe('GetStateDataSysInfo', () => {
     const s = sysInfoFrom({ dosage: 4097 });
     const arr = s.toArrayOfObjects();
     const keys = arr.map((e) => e.key);
-    expect(keys).toEqual(
-      expect.arrayContaining(['version', 'uptime', 'dosageControl', 'phPlusDosageRelay']),
-    );
+    expect(keys).toEqual(expect.arrayContaining(['version', 'uptime', 'dosageControl', 'phPlusDosageRelay']));
     const dosage = arr.find((e) => e.key === 'dosageControl');
     expect(dosage?.value).toBe('4097');
   });
