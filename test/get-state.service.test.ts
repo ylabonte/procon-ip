@@ -81,7 +81,33 @@ describe('GetStateService', () => {
     vi.useRealTimers();
   });
 
-  it('isolates the success callback — a throwing callback is NOT a polling failure', async () => {
+  it('start() preserves existing callbacks when args are omitted', async () => {
+    // First call sets the success callback. Second call passes undefined for
+    // it (only flipping stopOnError, say) — the success callback must survive.
+    mockFetchOnce({ body: fixture });
+    const cb = vi.fn();
+    const svc = new GetStateService(config, new Logger());
+    svc.start(cb);
+    svc.start(undefined, undefined, true); // no callback args -> preserve cb
+    await new Promise((r) => setTimeout(r, 0));
+    svc.stop();
+    expect(cb).toHaveBeenCalledTimes(1);
+  });
+
+  it('start() allows flipping stopOnError without re-passing the callbacks', async () => {
+    // Set the success callback first, then call start() again with just
+    // stopOnError flipped — the success callback must still fire.
+    mockFetchOnce({ body: fixture });
+    const cb = vi.fn();
+    const svc = new GetStateService(config, new Logger());
+    svc.start(cb);
+    svc.start(undefined, undefined, true); // only flipping stopOnError
+    await new Promise((r) => setTimeout(r, 0));
+    svc.stop();
+    expect(cb).toHaveBeenCalledTimes(1);
+  });
+
+it('isolates the success callback — a throwing callback is NOT a polling failure', async () => {
     // A consumer bug in their success callback must not advance
     // _consecutiveFails or flip hasData -- the HTTP request succeeded.
     mockFetchOnce({ body: fixture });

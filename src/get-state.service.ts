@@ -88,11 +88,15 @@ export class GetStateService extends AbstractService {
   public start(
     successCallback?: (data: GetStateData) => void,
     errorCallback?: (e: Error) => void,
-    stopOnError = false,
+    stopOnError?: boolean,
   ): void {
-    this._updateCallback = successCallback;
-    this._errorCallback = errorCallback;
-    this._stopOnError = stopOnError;
+    // Only overwrite each knob when explicitly provided so a re-entry can
+    // update one without accidentally clearing the others (e.g. swap just the
+    // error callback, or flip stopOnError, without losing a success callback
+    // set on a previous call). Use `stop()` to clear callbacks explicitly.
+    if (successCallback !== undefined) this._updateCallback = successCallback;
+    if (errorCallback !== undefined) this._errorCallback = errorCallback;
+    if (stopOnError !== undefined) this._stopOnError = stopOnError;
     // Idempotent: if the loop is already running, just (potentially) refresh
     // the callbacks above and return. Calling autoUpdate() again here would
     // spawn an overlapping in-flight update() and a parallel timer chain,
