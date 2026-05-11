@@ -1,15 +1,16 @@
 {
   "name": "examples",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "procon-ip api examples",
-  "main": "requesting-data.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "requesting-data": "node requesting-data.js",
+    "switching-relays": "node switching-relays.js",
+    "dmx512": "node dmx512.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "procon-ip": "^1.7.6"
+    "dotenv": "^16",
+    "procon-ip": "^2.0.0"
   }
 }
