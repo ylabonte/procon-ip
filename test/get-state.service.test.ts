@@ -50,6 +50,22 @@ describe('GetStateService', () => {
     await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
   });
 
+  it('stop() prevents the error callback from firing for in-flight requests', async () => {
+    // Race: start a poll, fail the in-flight request, but call stop() BEFORE
+    // the rejection lands. The error callback must not fire afterwards.
+    let rejectFetch!: (e: Error) => void;
+    vi.spyOn(globalThis, 'fetch').mockImplementation(
+      () => new Promise<Response>((_resolve, reject) => (rejectFetch = reject)),
+    );
+    const onError = vi.fn();
+    const svc = new GetStateService(config, new Logger());
+    svc.start(undefined, onError, true);
+    svc.stop();
+    rejectFetch(new TypeError('after-stop failure'));
+    await new Promise((r) => setTimeout(r, 0)); // flush microtasks
+    expect(onError).not.toHaveBeenCalled();
+  });
+
   it('serialises in-flight updates — next tick scheduled only after settle', async () => {
     // A slow update (200ms) must not be overtaken by the next tick (50ms).
     // Without the .finally()-based scheduling this would fire twice and we'd

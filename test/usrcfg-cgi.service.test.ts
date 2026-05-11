@@ -33,23 +33,55 @@ async function buildService() {
 describe('UsrcfgCgiService', () => {
   it('POSTs ENA=<on>,<auto>&MANUAL=1 form-encoded body to /usrcfg.cgi', async () => {
     const { svc, getStateService } = await buildService();
-    const spy = mockFetchOnce({ status: 200 });
+    // Each set* call fires TWO fetches: the POST + a subsequent GetState refresh.
+    const calls: Array<[unknown, RequestInit | undefined]> = [];
+    vi.spyOn(globalThis, 'fetch').mockImplementation((input, init) => {
+      calls.push([input, init]);
+      const u = input as string;
+      const body = u.includes('/usrcfg.cgi') ? '' : fixture;
+      return Promise.resolve(new Response(body, { status: 200 }));
+    });
     const relay = getStateService.data.getDataObjectsByCategory(GetStateCategory.RELAYS)[0];
     if (!relay) throw new Error('fixture has no relays');
     await svc.setOff(relay);
-    expect(spy).toHaveBeenCalled();
-    const call = spy.mock.calls[0];
-    if (!call) throw new Error('fetch was not called');
-    const [url, init] = call;
+    // First call: POST to /usrcfg.cgi with the right body.
+    expect(calls.length).toBeGreaterThanOrEqual(1);
+    const [url, init] = calls[0]!;
     expect(String(url as string | URL)).toContain('/usrcfg.cgi');
-    expect((init as RequestInit).method).toBe('POST');
-    const body = (init as RequestInit).body as string;
+    expect(init?.method).toBe('POST');
+    const body = init?.body as string;
     expect(body).toMatch(/^ENA=\d+%2C\d+&MANUAL=1$/);
+  });
+
+  it('refreshes the shared GetStateService snapshot after a successful POST', async () => {
+    // Sequential setOn / setOff calls compute masks from the GetStateService
+    // snapshot; without a refresh in between the second call would see the
+    // pre-first-write state and could undo it (see RelayDataInterpreter.evaluate
+    // warning). Verify that each set* call performs a GET to /GetState.csv
+    // immediately after the /usrcfg.cgi POST.
+    const { svc, getStateService } = await buildService();
+    const calls: string[] = [];
+    vi.spyOn(globalThis, 'fetch').mockImplementation((input) => {
+      const u = input as string;
+      calls.push(u);
+      const body = u.includes('/usrcfg.cgi') ? '' : fixture;
+      return Promise.resolve(new Response(body, { status: 200 }));
+    });
+    const relay = getStateService.data.getDataObjectsByCategory(GetStateCategory.RELAYS)[0];
+    if (!relay) throw new Error('fixture has no relays');
+    await svc.setOff(relay);
+    expect(calls).toHaveLength(2);
+    expect(calls[0]).toContain('/usrcfg.cgi');
+    expect(calls[1]).toContain('/GetState.csv');
   });
 
   it('setOn / setOff / setAuto all reach the endpoint', async () => {
     const { svc, getStateService } = await buildService();
-    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('', { status: 200 }));
+    vi.spyOn(globalThis, 'fetch').mockImplementation((input) => {
+      const u = input as string;
+      const body = u.includes('/usrcfg.cgi') ? '' : fixture;
+      return Promise.resolve(new Response(body, { status: 200 }));
+    });
     const relay = getStateService.data.getDataObjectsByCategory(GetStateCategory.RELAYS)[0];
     if (!relay) throw new Error('fixture has no relays');
     await expect(svc.setOn(relay)).resolves.toBeUndefined();

@@ -69,5 +69,13 @@ export class UsrcfgCgiService extends AbstractService {
     params.set('ENA', `${masks[0]},${masks[1]}`);
     params.set('MANUAL', '1');
     await this.request({ body: params.toString() });
+    // Refresh the shared GetStateService snapshot so a follow-up setOn/Off/Auto
+    // computes its masks from the post-write state. Without this, sequential
+    // calls would all see the pre-write state and the second call's mask would
+    // re-assert the first relay's old position, undoing the previous change.
+    // See RelayDataInterpreter.evaluate() — "stateData should be as up-to-date
+    // as possible". A poll-loop running in parallel would eventually re-sync,
+    // but consumers shouldn't have to wait for a tick.
+    await this.getStateService.update();
   }
 }

@@ -101,7 +101,13 @@ export class GetStateService extends AbstractService {
       clearTimeout(this._next);
       this._next = undefined;
     }
+    // Clear both callbacks so a request in flight at stop() time can't fire
+    // either a success or error notification after the service is "stopped".
+    // The autoUpdate() catch handler also guards on _polling for the case
+    // where the callback hasn't been cleared yet (race between stop() and
+    // the rejection landing).
     this._updateCallback = undefined;
+    this._errorCallback = undefined;
   }
 
   /**
@@ -119,7 +125,10 @@ export class GetStateService extends AbstractService {
     void this.update()
       .catch((e: Error) => {
         if (this._stopOnError) this.stop();
-        this._errorCallback?.(e);
+        // Don't fire the error callback if stop() was called while this
+        // request was in flight — once "stopped" the consumer expects no
+        // further notifications, success or error.
+        if (this._polling) this._errorCallback?.(e);
       })
       .finally(() => {
         if (!this._polling) return;
