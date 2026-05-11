@@ -1,278 +1,202 @@
 /**
- * This file exports the {@link GetStateService} as central status update service
- * and the corresponding {@link IGetStateServiceConfig}.
+ * Polling service for the controller's `/GetState.csv` endpoint.
  * @packageDocumentation
  */
 
-import axios, { AxiosPromise, Method } from 'axios';
-import { AbstractService, IServiceConfig } from './abstract-service';
+import { AbstractService, type HttpMethod, type IServiceConfig } from './abstract-service';
 import { GetStateData } from './get-state-data';
-import { ILogger } from './logger';
+import type { ILogger } from './logger';
 
-/**
- * Extend common {@link IServiceConfig} with special parameters that only apply to
- * the polling characteristics of this service.
- */
 export interface IGetStateServiceConfig extends IServiceConfig {
-  /**
-   * Interval [ms] between two webservice polling requests.
-   */
+  /** Interval between polls, in milliseconds. */
   updateInterval: number;
-
-  /**
-   * Define how many HTTP request errors to tolerate before raising an error.
-   */
+  /** Number of consecutive identical failures tolerated before re-throwing. */
   errorTolerance: number;
 }
 
-/**
- * The {@link GetStateService} implements the {@link AbstractService} for the
- * `/GetState.csv` endpoint.
- */
 export class GetStateService extends AbstractService {
-  /**
-   * Specific service endpoint.
-   *
-   * A path relative to the {@link IServiceConfig.controllerUrl}.
-   */
   public _endpoint = '/GetState.csv';
+  public _method: HttpMethod = 'GET';
 
-  /**
-   * HTTP request method for this specific service endpoint.
-   * See: `axios/Method`
-   */
-  public _method: Method = 'get';
-
-  /**
-   * The actual service data object.
-   */
   public data: GetStateData;
-
-  /**
-   * False until the service retrieved its first data.
-   * @internal
-   */
   private _hasData = false;
-
-  /**
-   * @internal
-   */
-  private next?: number;
-
-  /**
-   * Initially set via {@link IGetStateServiceConfig}.
-   * Can be adjusted using the {@link setUpdateInterval} method.
-   */
+  private _next?: ReturnType<typeof setTimeout>;
+  private _polling = false;
   private _updateInterval: number;
-
-  /**
-   * An optional callback, that can be passed when calling the
-   * {@link start} method.
-   */
+  private _consecutiveFailsLimit: number;
+  private _consecutiveFails = 0;
+  private _stopOnError = false;
+  private _recentErrorMessage: string | null = null;
   private _updateCallback?: (data: GetStateData) => void;
-
-  /**
-   * @internal
-   */
   private _errorCallback?: (e: Error) => void;
 
-  /**
-   * @internal
-   */
-  private _consecutiveFailsLimit = 10;
-
-  /**
-   * @internal
-   */
-  private _consecutiveFails: number;
-
-  /**
-   * @internal
-   */
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
-  private _recentError: any;
-  /* eslint-enable  @typescript-eslint/no-explicit-any */
-
-  /**
-   * @internal
-   */
-  private _stopOnError: boolean;
-
-  /**
-   * Initialize a new {@link GetStateService}.
-   *
-   * @param config Service configuration.
-   * @param logger Service logger.
-   */
   public constructor(config: IGetStateServiceConfig, logger: ILogger) {
     super(config, logger);
-    this._stopOnError = false;
     this._updateInterval = config.updateInterval;
-    this._consecutiveFailsLimit = config.errorTolerance;
-    this._consecutiveFails = 0;
+    // errorTolerance is used as a modulo divisor in update(); 0, negative, NaN,
+    // or Infinity would all break the tolerance check (NaN/Infinity never
+    // match, negatives flip the sign). Default to 1 in those cases.
+    const tolerance = config.errorTolerance;
+    this._consecutiveFailsLimit = Number.isFinite(tolerance) ? Math.max(1, Math.trunc(tolerance)) : 1;
     this._requestHeaders.Accept = 'text/csv,text/plain';
-    this._updateCallback = () => {};
     this.data = new GetStateData();
   }
 
-  /**
-   * Get the update interval [ms].
-   */
   public getUpdateInterval(): number {
     return this._updateInterval;
   }
-
-  /**
-   * Set the update interval.
-   *
-   * @param milliseconds Update interval in milliseconds [ms].
-   */
-  public setUpdateInterval(milliseconds: number): void {
-    this._updateInterval = milliseconds;
+  public setUpdateInterval(ms: number): void {
+    this._updateInterval = ms;
   }
-
-  /**
-   * Check whether the service is running.
-   */
   public isRunning(): boolean {
-    return !Number.isNaN(this.next);
+    return this._polling;
+  }
+  public hasData(): boolean {
+    return this._hasData;
   }
 
   /**
-   * Start the service.
+   * Start the polling loop. Calls `successCallback` on every successful update
+   * and `errorCallback` once the consecutive-failure tolerance is hit.
    *
-   * This will periodically update the internal data and invoke the optional
-   * callables each time new data is received.
+   * @param successCallback Invoked with the freshly parsed {@link GetStateData}
+   *   after every successful poll.
+   * @param errorCallback Invoked with the most recent `Error` when the
+   *   `errorTolerance` is reached. The error is one of the typed classes
+   *   from `'procon-ip'` ({@link BadCredentialsError}, {@link BadStatusCodeError},
+   *   {@link RequestTimeoutError}) or a `TypeError` on network failure.
+   * @param stopOnError When `true`, calling the error callback also stops
+   *   the polling loop. Default `false` (loop keeps running, callback fires
+   *   each time the tolerance is hit).
    *
-   * @param successCallback Will be triggered everytime the service receives
-   *  new data. The current {@link GetStateData} object is passed as parameter
-   *  to the callback.
-   * @param errorCallback Error callback receives the most recent error as
-   *  parameter, in case the consecutive error tolerance is hit.
-   * @param stopOnError Whether to stop in case the consecutive error tolerance
-   *  is hit. Default behavior (for backward compatibility) is to keep running
-   *  in any case.
+   * @example
+   * ```ts
+   * import { GetStateService, Logger } from 'procon-ip';
+   *
+   * const svc = new GetStateService(
+   *   { controllerUrl: 'http://192.168.2.3', basicAuth: false,
+   *     timeout: 5000, updateInterval: 5000, errorTolerance: 3 },
+   *   new Logger(),
+   * );
+   *
+   * svc.start(
+   *   (data) => console.log('uptime:', data.sysInfo.uptime),
+   *   (e) => console.error('poll failed:', e.message),
+   * );
+   * ```
    */
   public start(
     successCallback?: (data: GetStateData) => void,
     errorCallback?: (e: Error) => void,
     stopOnError?: boolean,
   ): void {
-    if (successCallback !== undefined) {
-      this._updateCallback = successCallback;
-    }
-    if (errorCallback !== undefined) {
-      this._errorCallback = errorCallback;
-    }
-    if (stopOnError) {
-      this._stopOnError = stopOnError;
-    }
+    // Only overwrite each knob when explicitly provided so a re-entry can
+    // update one without accidentally clearing the others (e.g. swap just the
+    // error callback, or flip stopOnError, without losing a success callback
+    // set on a previous call). Use `stop()` to clear callbacks explicitly.
+    if (successCallback !== undefined) this._updateCallback = successCallback;
+    if (errorCallback !== undefined) this._errorCallback = errorCallback;
+    if (stopOnError !== undefined) this._stopOnError = stopOnError;
+    // Idempotent: if the loop is already running, just (potentially) refresh
+    // the callbacks above and return. Calling autoUpdate() again here would
+    // spawn an overlapping in-flight update() and a parallel timer chain,
+    // defeating the serialisation guarantee.
+    if (this._polling) return;
+    this._polling = true;
     this.autoUpdate();
   }
 
-  /**
-   * Stop the service.
-   */
   public stop(): void {
-    clearTimeout(this.next);
-    delete this.next;
-    delete this._updateCallback;
+    this._polling = false;
+    if (this._next !== undefined) {
+      clearTimeout(this._next);
+      this._next = undefined;
+    }
+    // Clear both callbacks so a request in flight at stop() time can't fire
+    // either a success or error notification after the service is "stopped".
+    // The autoUpdate() catch handler also guards on _polling for the case
+    // where the callback hasn't been cleared yet (race between stop() and
+    // the rejection landing).
+    this._updateCallback = undefined;
+    this._errorCallback = undefined;
   }
 
   /**
-   * Recursive wrapper for the polling mechanism. The next request/interval
-   * starts after the preceding one has ended. That means a big timeout
-   * ({@link IGetStateServiceConfig.timeout}) could cause an actual higher update
-   * interval ({@link IGetStateServiceConfig.updateInterval}).
+   * Run one update, then (while the poll loop is active) schedule the next
+   * tick *after* the current request settles. This serialises requests so a
+   * slow update can't trigger overlapping in-flight fetches and skew
+   * `_consecutiveFails` bookkeeping. Effective interval becomes
+   * `max(updateInterval, request_time)`.
+   *
+   * Calling `autoUpdate()` directly also enters the poll loop; call
+   * {@link stop} to leave it.
    */
   public autoUpdate(): void {
-    this.update().catch((e: Error) => {
-      if (this._stopOnError) this.stop();
-      if (this._errorCallback !== undefined) this._errorCallback(e);
-    });
-    if (this.next === undefined) {
-      this.next = Number(
-        setTimeout(() => {
-          delete this.next;
+    this._polling = true;
+    void this.update()
+      .catch((e: unknown) => {
+        // Coerce to Error so the typed errorCallback signature holds at runtime
+        // even if a non-Error value made it this far (e.g. a thrown string).
+        const err = e instanceof Error ? e : new Error(String(e));
+        // Decide whether to fire the callback BEFORE stop() runs. Three cases:
+        //   - External stop while in-flight: _polling is already false here.
+        //     Consumer said "I'm done"; don't notify. (round-3 invariant)
+        //   - stopOnError = true: we're about to stop *because of* this error,
+        //     which is exactly when the consumer most wants to be told.
+        //   - Normal failure: just fire the callback and keep polling.
+        // We also capture the callback reference before stop() can clear it.
+        const shouldNotify = this._polling;
+        const cb = this._errorCallback;
+        if (this._stopOnError) this.stop();
+        if (shouldNotify) cb?.(err);
+      })
+      .finally(() => {
+        if (!this._polling) return;
+        this._next = setTimeout(() => {
+          this._next = undefined;
           this.autoUpdate();
-        }, this.getUpdateInterval()),
-      );
-    }
+        }, this._updateInterval);
+      });
   }
 
-  /**
-   * Update data by staging an HTTP request to the pool controller.
-   *
-   * This method will be triggered periodically once the service
-   * has been started (see {@link GetStateService.start}). It also
-   * includes the part responsible for the execution of the
-   * [[`_updateCallback`]] (see {@link start}).
-   */
   public async update(): Promise<GetStateData> {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    /* eslint-disable  @typescript-eslint/no-unsafe-assignment */
-    /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
+    let succeeded = false;
     try {
-      const response = await this.getData();
+      const res = await this.request();
+      const text = await res.text();
       this._consecutiveFails = 0;
-      this._recentError = null;
-      this.data = new GetStateData(response.data);
+      this._recentErrorMessage = null;
+      this.data = new GetStateData(text);
       this._hasData = true;
-      if (this._updateCallback !== undefined) {
-        this._updateCallback(this.data);
-      }
-    } catch (e: any) {
+      succeeded = true;
+    } catch (e: unknown) {
       this._consecutiveFails += 1;
-      let isConsecutiveError: boolean;
-      let errorMessage: string;
-      if (e.isAxiosError && e.response && e.response.status) {
-        errorMessage = `${e.response.status} / ${e.response.statusMessage}`;
-        isConsecutiveError =
-          this._recentError &&
-          this._recentError.isAxiosError &&
-          this._recentError.response &&
-          this._recentError.response.status &&
-          this._recentError.response.status === e.response.status;
-      } else {
-        errorMessage = e.message;
-        isConsecutiveError = this._recentError && this._recentError.message && this._recentError.message === e.message;
-      }
-
-      if (isConsecutiveError && this._consecutiveFails % this._consecutiveFailsLimit === 0) {
-        this.log.warn(`${this._consecutiveFails} consecutive requests failed with error "${errorMessage}"`);
+      const msg = e instanceof Error ? e.message : String(e);
+      const consecutive = this._recentErrorMessage === msg;
+      if (consecutive && this._consecutiveFails % this._consecutiveFailsLimit === 0) {
+        this.log.warn(`${this._consecutiveFails} consecutive requests failed: ${msg}`);
         this._hasData = false;
         throw e;
-      } else if (isConsecutiveError) {
-        this.log.debug(`${this._consecutiveFails} request(s) failed: ${errorMessage}`);
+      }
+      if (consecutive) {
+        this.log.debug(`${this._consecutiveFails} request(s) failed: ${msg}`);
       } else {
-        this.log.warn(`request failed with error "${errorMessage}"`);
-        this._recentError = e;
+        this.log.warn(`request failed: ${msg}`);
+        this._recentErrorMessage = msg;
         this._consecutiveFails = 1;
       }
     }
-
+    // The success callback runs outside the request try/catch — a consumer
+    // bug in the callback must not be mistaken for a polling failure and
+    // must not advance _consecutiveFails or flip _hasData.
+    if (succeeded && this._updateCallback) {
+      try {
+        this._updateCallback(this.data);
+      } catch (cbErr) {
+        const msg = cbErr instanceof Error ? cbErr.message : String(cbErr);
+        this.log.warn(`successCallback threw, swallowed: ${msg}`);
+      }
+    }
     return this.data;
-    /* eslint-enable  @typescript-eslint/no-explicit-any */
-    /* eslint-enable  @typescript-eslint/no-unsafe-assignment */
-    /* eslint-enable  @typescript-eslint/no-unsafe-member-access */
-  }
-
-  /**
-   * Stage request and return the corresponding `AxiosPromise`.
-   */
-  public getData(): AxiosPromise<string> {
-    return axios.request(this.axiosRequestConfig);
-  }
-
-  /**
-   * Tells you whether the service has most recent status information or not.
-   *
-   * More accurately it tells you whether the most recent request succeeded or
-   * not. So it will return `true` if the request succeeded and your data is
-   * up-to-date. It will return `false` until the service retrieved its first
-   * data and again if a subsequent request fails.
-   */
-  public hasData(): boolean {
-    return this._hasData;
   }
 }

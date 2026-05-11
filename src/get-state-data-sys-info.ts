@@ -130,15 +130,17 @@ export class GetStateDataSysInfo {
    *             2-dimensional array (see: {@link GetStateData.parsed})
    */
   public setValuesFromArray(data: string[][]): void {
-    this.version = data[0][1];
-    this.uptime = Number(data[0][2]);
-    this.resetRootCause = Number(data[0][3]);
-    this.ntpFaultState = Number(data[0][4]);
-    this.configOtherEnable = Number(data[0][5]);
-    this.dosageControl = Number(data[0][6]);
-    this.phPlusDosageRelay = Number(data[0][7]);
-    this.phMinusDosageRelay = Number(data[0][8]);
-    this.chlorineDosageRelay = Number(data[0][9]);
+    const row = data[0];
+    if (!row) return;
+    this.version = row[1] ?? '';
+    this.uptime = Number(row[2]);
+    this.resetRootCause = Number(row[3]);
+    this.ntpFaultState = Number(row[4]);
+    this.configOtherEnable = Number(row[5]);
+    this.dosageControl = Number(row[6]);
+    this.phPlusDosageRelay = Number(row[7]);
+    this.phMinusDosageRelay = Number(row[8]);
+    this.chlorineDosageRelay = Number(row[9]);
   }
 
   /**

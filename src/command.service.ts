@@ -1,112 +1,89 @@
 /**
- * The {@link CommandService} uses the `/Command.htm` endpoint of the ProCon.IP
- * pool controller to enable manual dosage.
+ * Manual dosage commands via the controller's `/Command.htm` endpoint.
  * @packageDocumentation
  */
 
-import axios, { AxiosError, AxiosPromise, Method } from 'axios';
-import { AbstractService } from './abstract-service';
+import { AbstractService, type HttpMethod } from './abstract-service';
+import { ProconIpError } from './errors';
 
-/**
- * This enum can be used with the {@link CommandService.setDosage} method. But
- * there are also shorthand wrappers for all states ({@link CommandService.setChlorineDosage},
- * {@link CommandService.setPhPlusDosage}, {@link CommandService.setPhMinusDosage}) that can be used.
- */
 export enum DosageTarget {
   CHLORINE = 0,
   PH_MINUS = 1,
   PH_PLUS = 2,
 }
 
-/**
- * The {@link CommandService} uses the `/Command.htm` endpoint of the ProCon.IP
- * pool controller to turn on manual dosage for a given amount of time/seconds.
- */
 export class CommandService extends AbstractService {
-  /**
-   * Specific service endpoint.
-   *
-   * A path relative to the {@link IServiceConfig.controllerUrl}.
-   */
   public _endpoint = '/Command.htm';
+  public _method: HttpMethod = 'GET';
 
   /**
-   * HTTP request method for this specific service endpoint.
-   * See: `axios/Method`
-   */
-  public _method: Method = 'get';
-
-  /**
-   * Set manuel chlorine dosage for given amount of time in seconds.
+   * Manual chlorine dosage for `dosageTime` seconds.
    *
-   * @param dosageTime Dosage duration in seconds.
+   * @example
+   * ```ts
+   * import { CommandService, Logger } from 'procon-ip';
+   *
+   * const svc = new CommandService(
+   *   { controllerUrl: 'http://192.168.2.3', basicAuth: false, timeout: 5000 },
+   *   new Logger(),
+   * );
+   * const seconds = await svc.setChlorineDosage(60); // dose for 60s
+   * ```
+   *
+   * @returns The dosage duration on success, or `-1` after three failed attempts.
    */
   public async setChlorineDosage(dosageTime: number): Promise<number> {
     return this.setDosage(DosageTarget.CHLORINE, dosageTime);
   }
-
-  /**
-   * Set manuel pH minus dosage for given amount of time in seconds.
-   *
-   * @param dosageTime Dosage duration in seconds.
-   */
+  /** Manual pH-minus dosage for `dosageTime` seconds. */
   public async setPhMinusDosage(dosageTime: number): Promise<number> {
     return this.setDosage(DosageTarget.PH_MINUS, dosageTime);
   }
-
-  /**
-   * Set manuel pH plus dosage for given amount of time in seconds.
-   *
-   * @param dosageTime Dosage duration in seconds.
-   */
+  /** Manual pH-plus dosage for `dosageTime` seconds. */
   public async setPhPlusDosage(dosageTime: number): Promise<number> {
     return this.setDosage(DosageTarget.PH_PLUS, dosageTime);
   }
 
   /**
-   * Set the desired relay state.
+   * Trigger a manual dosage.
    *
-   * @param dosageTarget Dosage target (0 = chlorine, 1 = pH minus, 2 = pH plus).
-   * @param dosageDuration Desired duration in seconds.
+   * Two error modes, distinguished:
+   * - **Invalid input** (non-finite `dosageDuration`): throws `ProconIpError`
+   *   immediately, before any HTTP traffic. The caller's bug, surface it.
+   * - **Per-attempt request failure** (timeout, HTTP 5xx, network error):
+   *   caught internally and retried up to three times. Failures are logged
+   *   at `debug`; after the third attempt the method returns `-1`.
+   *
+   * @param dosageTarget Target relay (chlorine / pH-minus / pH-plus).
+   * @param dosageDuration Duration in **seconds**. Fractional inputs are
+   *   truncated; the returned value reflects the truncated seconds.
+   * @returns The (truncated) duration on success, or `-1` after three failures.
+   * @throws {@link ProconIpError} if `dosageDuration` is not a finite number.
    */
   public async setDosage(dosageTarget: DosageTarget, dosageDuration: number): Promise<number> {
-    for (let errors = 0; errors < 3; errors++) {
+    if (!Number.isFinite(dosageDuration)) {
+      throw new ProconIpError(
+        `Invalid dosage duration: ${String(dosageDuration)} (must be a finite number of seconds)`,
+      );
+    }
+    // Normalise once so the value sent to the controller and the value
+    // returned to the caller always agree (was previously truncated only in
+    // the URL while the original fractional input was returned).
+    const seconds = Math.trunc(dosageDuration);
+    for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        return await this._setDosage(dosageTarget, dosageDuration);
+        return await this._setDosage(dosageTarget, seconds);
       } catch (e: unknown) {
-        this.log.debug(`Error sending relay control command: ${String(e)}`);
+        const msg = e instanceof Error ? e.message : String(e);
+        this.log.debug(`Dosage attempt ${attempt + 1} failed: ${msg}`);
       }
     }
-
     return -1;
   }
 
-  private async _setDosage(dosageTarget: DosageTarget, dosageDuration: number): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
-      this.sendManualDosage(dosageTarget, dosageDuration)
-        .then((response) => {
-          this.log.info(`Command.htm response: ${JSON.stringify(response.data)}`);
-          this.log.info(`Command.htm status: (${response.status}) ${response.statusText}`);
-          if (response.status === 200) {
-            resolve(dosageDuration);
-          } else {
-            reject(
-              new Error(
-                `(${response.status}: ${response.statusText}) Error sending dosage control command: ${response.data}`,
-              ),
-            );
-          }
-        })
-        .catch((e: AxiosError) => {
-          reject(new Error(`Error sending dosage control command: ${e.response?.statusText ?? String(e)}`));
-        });
-    });
-  }
-
-  private sendManualDosage(dosageTarget: DosageTarget, dosageDuration: number): AxiosPromise {
-    const requestConfig = this.axiosRequestConfig;
-    requestConfig.url += `?MAN_DOSAGE=${dosageTarget},${Math.trunc(dosageDuration)}`;
-
-    return axios.request(requestConfig);
+  private async _setDosage(target: DosageTarget, seconds: number): Promise<number> {
+    const res = await this.request({ params: { MAN_DOSAGE: `${target},${seconds}` } });
+    this.log.info(`Command.htm OK (${res.status})`);
+    return seconds;
   }
 }

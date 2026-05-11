@@ -1,0 +1,6 @@
+dist
+site
+coverage
+docs
+examples/node_modules
+pnpm-lock.yaml

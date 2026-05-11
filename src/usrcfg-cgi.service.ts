@@ -1,67 +1,21 @@
 /**
- * The {@link UsrcfgCgiService} uses the `/usrcfg.cgi` endpoint of the ProCon.IP
- * pool controller to switch its relay states. The actual states can be read
- * from the {@link GetStateService}.
+ * Switches relay state via the controller's `/usrcfg.cgi` endpoint.
  * @packageDocumentation
  */
 
-import axios, { AxiosPromise, Method } from 'axios';
-import { AbstractService, IServiceConfig } from './abstract-service';
-import { GetStateService } from './get-state.service';
-import { GetStateData } from './get-state-data';
-import { GetStateDataObject } from './get-state-data-object';
-import { RelayDataInterpreter, RelayStateBitMask } from './relay-data-interpreter';
-import { ILogger } from './logger';
+import { AbstractService, type HttpMethod, type IServiceConfig } from './abstract-service';
+import type { GetStateService } from './get-state.service';
+import type { GetStateDataObject } from './get-state-data-object';
+import type { RelayDataInterpreter } from './relay-data-interpreter';
+import type { ILogger } from './logger';
 
-/**
- * This enum can be used with the {@link UsrcfgCgiService.setState} method. But
- * there are also shorthand wrappers for all states ({@link UsrcfgCgiService.setOn},
- * {@link UsrcfgCgiService.setOff}, {@link UsrcfgCgiService.setAuto}) that can be used.
- */
-export enum SetStateValue {
-  OFF = 0,
-  ON = 1,
-  AUTO = 2,
-}
-
-/**
- * The {@link UsrcfgCgiService} uses the `/usrcfg.cgi` endpoint of the ProCon.IP
- * pool controller to switch its relay states.
- *
- * It uses two bit patterns in decimal representation, to set on/off and auto
- * states for all relays at once. This means considering the states of all
- * relays, those which states should be changed as well as the ones which
- * states not gonna to be changed.
- */
 export class UsrcfgCgiService extends AbstractService {
-  /**
-   * Specific service endpoint.
-   *
-   * A path relative to the {@link IServiceConfig.controllerUrl}.
-   */
   public _endpoint = '/usrcfg.cgi';
-
-  /**
-   * HTTP request method for this specific service endpoint.
-   * See: `axios/Method`
-   */
-  public _method: Method = 'post';
-
-  private stateData: GetStateData;
+  public _method: HttpMethod = 'POST';
 
   private getStateService: GetStateService;
-
   private relayDataInterpreter: RelayDataInterpreter;
 
-  /**
-   * Initialize a new {@link UsrcfgCgiService}
-   *
-   * @param config The service config.
-   * @param logger The service logger.
-   * @param getStateService A corresponding {@link GetStateService} (must address
-   *                        the same pool controller)
-   * @param relayDataInterpreter An instance of {@link RelayDataInterpreter}.
-   */
   public constructor(
     config: IServiceConfig,
     logger: ILogger,
@@ -71,116 +25,59 @@ export class UsrcfgCgiService extends AbstractService {
     super(config, logger);
     this.relayDataInterpreter = relayDataInterpreter;
     this.getStateService = getStateService;
-    this.stateData = this.getStateService.data;
     this._requestHeaders['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
   }
 
   /**
-   * Switch the given relay on.
+   * Switch the given relay to manual ON.
    *
-   * @param relayData Relay data object.
-   */
-  public async setOn(relayData: GetStateDataObject): Promise<number> {
-    return this.setState(relayData, SetStateValue.ON);
-  }
-
-  /**
-   * Switch the given relay off.
+   * @example
+   * ```ts
+   * import {
+   *   GetStateService, UsrcfgCgiService, RelayDataInterpreter,
+   *   GetStateCategory, Logger,
+   * } from 'procon-ip';
    *
-   * @param relayData Relay data object.
+   * const log = new Logger();
+   * const config = { controllerUrl: 'http://192.168.2.3', basicAuth: false,
+   *                  timeout: 5000, updateInterval: 5000, errorTolerance: 2 };
+   * const get = new GetStateService(config, log);
+   * await get.update();
+   * const relays = new UsrcfgCgiService(config, log, get, new RelayDataInterpreter(log));
+   * const [firstRelay] = get.data.getDataObjectsByCategory(GetStateCategory.RELAYS);
+   * if (!firstRelay) throw new Error('no relays in fixture');
+   * await relays.setOn(firstRelay);
+   * ```
    */
-  public async setOff(relayData: GetStateDataObject): Promise<number> {
-    return this.setState(relayData, SetStateValue.OFF);
+  public async setOn(relay: GetStateDataObject): Promise<void> {
+    const masks = this.relayDataInterpreter.evaluate(this.getStateService.data).setOn(relay);
+    await this.send(masks);
   }
 
-  /**
-   * Set the given relay in auto mode.
-   *
-   * @param relayData Relay data object.
-   */
-  public async setAuto(relayData: GetStateDataObject): Promise<number> {
-    return this.setState(relayData, SetStateValue.AUTO);
+  /** Switch the given relay to manual OFF. See {@link setOn} for an example. */
+  public async setOff(relay: GetStateDataObject): Promise<void> {
+    const masks = this.relayDataInterpreter.evaluate(this.getStateService.data).setOff(relay);
+    await this.send(masks);
   }
 
-  /**
-   * Set the desired relay state.
-   *
-   * @param relay Relay data object.
-   * @param state The desired state.
-   */
-  private async setState(relay: GetStateDataObject, state: SetStateValue | number): Promise<number> {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    for (let errors = 0; errors < 3; errors++) {
-      try {
-        const returnValue = await this._setState(relay, state);
-        // return new Promise<number>(() => returnValue);
-        return returnValue;
-      } catch (e: any) {
-        this.log.debug(`Error sending relay control command: ${e}`);
-      }
-    }
-
-    // return new Promise<number>(() => -1);
-    return -1;
-    /* eslint-enable  @typescript-eslint/no-explicit-any */
+  /** Hand the given relay back to the controller's automatic schedule. See {@link setOn} for an example. */
+  public async setAuto(relay: GetStateDataObject): Promise<void> {
+    const masks = this.relayDataInterpreter.evaluate(this.getStateService.data).setAuto(relay);
+    await this.send(masks);
   }
 
-  private async _setState(relay: GetStateDataObject, state: SetStateValue | number): Promise<number> {
-    let data: [number, number] | undefined;
-    let desiredValue: number;
-    /* eslint-disable  @typescript-eslint/no-unsafe-enum-comparison */
-    switch (state) {
-      case SetStateValue.AUTO:
-        data = this.relayDataInterpreter.evaluate(this.getStateService.data).setAuto(relay);
-        desiredValue = relay.raw & ~RelayStateBitMask.manual;
-        break;
-      case SetStateValue.ON:
-        data = this.relayDataInterpreter.evaluate(this.getStateService.data).setOn(relay);
-        desiredValue = RelayStateBitMask.manual | RelayStateBitMask.on;
-        break;
-      case SetStateValue.OFF:
-      default:
-        data = this.relayDataInterpreter.evaluate(this.getStateService.data).setOff(relay);
-        desiredValue = RelayStateBitMask.manual | ~RelayStateBitMask.on;
-        break;
-    }
-    /* eslint-enable  @typescript-eslint/no-unsafe-enum-comparison */
-
-    this.log.info(`usrcfg.cgi data: ${JSON.stringify(data)}`);
-    return new Promise<number>((resolve, reject) => {
-      if (data === undefined) {
-        return reject(new Error('Cannot determine request data for relay switching'));
-      }
-
-      this.send(data)
-        .then((response) => {
-          this.log.info(`usrcfg.cgi response: ${JSON.stringify(response.data)}`);
-          this.log.info(`usrcfg.cgi status: (${response.status}) ${response.statusText}`);
-          // if (["continue", "done"].indexOf(response.data.toLowerCase()) >= 0) {
-          if (response.status === 200) {
-            this.getStateService.update().catch(() => {});
-            resolve(desiredValue);
-          } else {
-            reject(
-              new Error(
-                `(${response.status}: ${response.statusText}) Error sending relay control command: ${response.data}`,
-              ),
-            );
-          }
-        })
-        .catch((e) => {
-          /* eslint-disable  @typescript-eslint/no-unsafe-member-access */
-          reject(new Error(`Error sending relay control command: ${e.response ? e.response : e}`));
-          /* eslint-enable  @typescript-eslint/no-unsafe-member-access */
-        });
-    });
-  }
-
-  private send(bitTupel: [number, number]): AxiosPromise /* <{data: string; status: number; statusText: string}> */ {
-    // private send(bitTupel: [number, number]): /*Axios*/Promise<{data: string; status: number; statusText: string}> {
-    const requestConfig = this.axiosRequestConfig;
-    requestConfig.data = `ENA=${bitTupel.join(',')}&MANUAL=1`;
-
-    return axios.request(requestConfig);
+  private async send(masks: [number, number]): Promise<void> {
+    const params = new URLSearchParams();
+    params.set('ENA', `${masks[0]},${masks[1]}`);
+    params.set('MANUAL', '1');
+    await this.request({ body: params.toString() });
+    // Refresh the shared GetStateService snapshot so a follow-up setOn/Off/Auto
+    // computes its masks from the post-write state. Without this, sequential
+    // calls would all see the pre-write state and the second call's mask would
+    // re-assert the first relay's old position, undoing the previous change.
+    // See RelayDataInterpreter.evaluate() — "stateData should be as up-to-date
+    // as possible". A poll-loop running in parallel would eventually re-sync,
+    // but consumers shouldn't have to wait for a tick.
+    await this.getStateService.update();
   }
 }

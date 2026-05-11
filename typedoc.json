@@ -1,0 +1,21 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/index.ts"],
+  "entryPointStrategy": "expand",
+  "out": "site",
+  "readme": "docs/index.md",
+  "name": "procon-ip",
+  "includeVersion": true,
+  "excludeInternal": true,
+  "navigationLinks": {
+    "GitHub": "https://github.com/ylabonte/procon-ip",
+    "npm": "https://www.npmjs.com/package/procon-ip",
+    "Changelog": "https://github.com/ylabonte/procon-ip/blob/master/CHANGELOG.md"
+  },
+  "validation": {
+    "invalidLink": true,
+    "notExported": true
+  },
+  "treatWarningsAsErrors": true,
+  "githubPages": false
+}

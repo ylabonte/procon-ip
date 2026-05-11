@@ -1,68 +1,56 @@
 /**
- * The {@link SetStateService} uses the `/SetState.pl` endpoint of the ProCon.IP
- * pool controller to turn on relays for a specified time span.
+ * Relay on-timer via the controller's `/SetState.pl` endpoint.
  * @packageDocumentation
  */
 
-import axios, { AxiosError, Method } from 'axios';
-import { AbstractService } from './abstract-service';
+import { AbstractService, type HttpMethod } from './abstract-service';
+import { ProconIpError } from './errors';
 
-/**
- * The {@link CommandService} uses the `/SetState.pl` endpoint of the ProCon.IP
- * pool controller to turn on relays for a specified time span.
- */
 export class SetStateService extends AbstractService {
-  /**
-   * Specific service endpoint.
-   *
-   * A path relative to the {@link IServiceConfig.controllerUrl}.
-   */
   public _endpoint = '/SetState.pl';
+  public _method: HttpMethod = 'GET';
 
   /**
-   * HTTP request method for this specific service endpoint.
-   * See: `axios/Method`
-   */
-  public _method: Method = 'get';
-
-  /**
-   * Set relay on-timer.
+   * Turn relay `relayNo` on for `duration` seconds via the controller's on-timer.
    *
-   * @param relayNo Target relay number (count starting from 1).
-   * @param duration Desired timer duration in seconds.
+   * Two error modes, distinguished:
+   * - **Invalid input** (non-finite `duration`): throws `ProconIpError`
+   *   immediately, before any HTTP traffic. The caller's bug, surface it.
+   * - **Per-attempt request failure** (timeout, HTTP 5xx, network error):
+   *   caught internally and retried up to three times. Failures are logged
+   *   at `debug`; after the third attempt the method returns `-1`.
+   *
+   * @param relayNo Target relay number (1-based, matches the controller UI).
+   * @param duration Timer duration in **seconds**. Fractional inputs are
+   *   truncated; the returned value reflects the truncated seconds that were
+   *   actually sent to the controller.
+   * @returns The (truncated) duration on success, or `-1` after three failures.
+   * @throws {@link ProconIpError} if `duration` is not a finite number.
    */
   public async setTimer(relayNo: number, duration: number): Promise<number> {
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    for (let errors = 0; errors < 3; errors++) {
+    if (!Number.isFinite(duration)) {
+      throw new ProconIpError(`Invalid timer duration: ${String(duration)} (must be a finite number of seconds)`);
+    }
+    // Normalise once: integer seconds, then multiply by 1000 with integer-only
+    // arithmetic to avoid floating-point artefacts like `0.3 * 1000` producing
+    // "300.00000000000006" which would land verbatim in the query string.
+    const seconds = Math.trunc(duration);
+    const milliseconds = seconds * 1000;
+    for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        return await this._setTimer(relayNo, duration);
-      } catch (e: any) {
-        this.log.debug(`Error setting relay timer: ${e}`);
+        const res = await this.request({
+          params: {
+            [`R${relayNo}`]: 1,
+            [`RT${relayNo}`]: milliseconds,
+          },
+        });
+        this.log.info(`SetState.pl OK (${res.status})`);
+        return seconds;
+      } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : String(e);
+        this.log.debug(`SetState attempt ${attempt + 1} failed: ${msg}`);
       }
     }
-
     return -1;
-    /* eslint-enable  @typescript-eslint/no-explicit-any */
-  }
-
-  private async _setTimer(relayNo: number, duration: number): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
-      const requestConfig = this.axiosRequestConfig;
-      requestConfig.url += `?R${relayNo}=1&RT${relayNo}=${duration * 1000}`;
-      axios
-        .request(requestConfig)
-        .then((response) => {
-          this.log.info(`SetState.pl response: ${JSON.stringify(response.data)}`);
-          this.log.info(`SetState.pl status: (${response.status}) ${response.statusText}`);
-          if (response.status === 200) {
-            resolve(duration);
-          } else {
-            reject(new Error(`(${response.status}: ${response.statusText}): ${response.data}`));
-          }
-        })
-        .catch((e: AxiosError | Error) => {
-          reject(e);
-        });
-    });
   }
 }
