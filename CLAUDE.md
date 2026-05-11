@@ -4,95 +4,101 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-`procon-ip` is a TypeScript client library for the **ProCon.IP** pool controller. It is consumed by other Node projects (notably `ioBroker.procon-ip`) and published to both npmjs.com and the GitHub npm registry. There is no runtime application here — only library code under `src/`, build outputs, and auto-generated TypeDoc HTML in `docs/`.
+`procon-ip` is a TypeScript client library for the **ProCon.IP** pool controller. It is consumed by other Node projects (notably `ioBroker.procon-ip`) and published to npmjs.com. There is no runtime application here — only library code under `src/`, tests under `test/`, and the docs front-page at `docs/index.md` (TypeDoc-rendered into `site/` by CI).
 
-The pool controller exposes a small, undocumented HTTP surface (`/GetState.csv`, `/usrcfg.cgi`, `/Command.htm`, `/SetState.pl`). Most of this library is a thin, typed wrapper around those endpoints plus the bit-twiddling needed to interpret relay state.
+The pool controller exposes a small, undocumented HTTP surface (`/GetState.csv`, `/usrcfg.cgi`, `/Command.htm`, `/SetState.pl`, `/GetDmx.csv`). Most of this library is a thin, typed wrapper around those endpoints plus the bit-twiddling needed to interpret relay state.
 
 ## Common commands
 
-Package manager is **Yarn 1 (Classic)** — pinned via `packageManager` in `package.json`. Do not switch to npm or pnpm without an explicit ask.
+Package manager is **pnpm 9** — pinned via `packageManager` in `package.json`. The lockfile is `pnpm-lock.yaml`.
 
 ```bash
-yarn                    # install
-yarn run build          # build both ESM (module/) and CommonJS (lib/) outputs
-yarn run build:esmodule # ESM only — tsconfig.json -> module/
-yarn run build:commonjs # CJS only — tsconfig-commonjs.json -> lib/
-yarn run build:docs     # regenerate docs/ via TypeDoc (wipes docs/ first, then re-creates it with .nojekyll)
-yarn run build:all      # build + build:docs
-yarn run lint           # ESLint over src/**
-yarn run lint:fix       # ESLint --fix
-yarn run format         # Prettier write over src/**/*.ts
+pnpm install            # install
+pnpm build              # tsup -> dist/index.{mjs,cjs,d.ts,d.cts} + sourcemaps
+pnpm lint               # ESLint over src/ + test/
+pnpm lint:fix           # ESLint --fix
+pnpm format             # Prettier write over src/**/*.ts + test/**/*.ts
+pnpm format:check       # Prettier --check
+pnpm typecheck          # tsc --noEmit
+pnpm test               # vitest run
+pnpm test:watch         # vitest in watch mode
+pnpm coverage           # vitest run --coverage (CI gate ≥80% on all four metrics)
+pnpm coverage:report    # coverage with --reporter=verbose (per-line uncovered output)
+pnpm docs               # typedoc -> site/
+pnpm docs:check         # typedoc with --validation.invalidLink --validation.notExported --treatWarningsAsErrors
+pnpm changeset          # interactive: add a new changeset
+pnpm release            # build + changeset publish (used by release.yml only — don't run locally)
 ```
 
-There is **no test suite or test runner configured yet** — `yarn test` will fail. Don't claim "tests pass" until one exists.
+`prepack` runs `pnpm build` so `pnpm publish` flows trigger it automatically. Tests, lint, and docs validation are NOT in `prepack` — they're enforced by CI.
 
-`prepack` runs `build`, and `prepublishOnly` runs `lint`, so publish flows trigger both automatically.
+## Build / packaging model
 
-## Build / packaging model (important)
+The package ships **dual ESM + CJS in one tarball** via tsup:
 
-The package ships **two builds in one tarball** to support both module systems without consumers caring:
+- `package.json` `exports`: `import` → `./dist/index.mjs` (ESM), `require` → `./dist/index.cjs` (CJS), `types` → `./dist/index.d.ts`.
+- `main` points at `./dist/index.cjs`, `module` at `./dist/index.mjs`, `types` at `./dist/index.d.ts`.
+- `files` ships `dist/`, `README.md`, `CHANGELOG.md`, `LICENSE`.
+- Single `tsconfig.json` with `target: ES2022`, `module: ESNext`, `moduleResolution: Bundler`, `strict: true`, `noUncheckedIndexedAccess: true`, `isolatedModules: true`. tsup handles both module emissions from this one source of truth.
+- `tsup.config.ts` defines the build (entry, formats, dts, sourcemaps, target node20).
 
-- `package.json` `exports`: `import` -> `./module/index.js` (ESM), `require` -> `./lib/index.js` (CJS).
-- `main` and `module` both point at the ESM build; `files` ships `module/` and `lib/`.
-- ESM build: `tsconfig.json` -> `module/`, `module: ES2020`, `target: ES2015`.
-- CJS build: `tsconfig-commonjs.json` extends the ESM one and overrides `module: CommonJS`, `outDir: ./lib`.
-
-When changing TS config, change **both** files (or the extension chain) and verify both outputs still load. The README has CommonJS and ESM usage snippets that act as the de facto API contract — keep the public surface compatible with both.
-
-`docs/` is checked in. The `build:docs` script does `rm -rf docs && typedoc ... && touch docs/.nojekyll` — re-running it produces a large, noisy diff. Only regenerate when the public API actually changed, and commit the result in a dedicated commit.
+`docs/` holds only the docs front-page source (`docs/index.md`); TypeDoc output goes to `site/` (gitignored) and is uploaded to GitHub Pages by `docs.yml`. **Don't commit `docs/assets/`, `docs/classes/`, etc.** — those were the old hand-regenerated subtree.
 
 ## Architecture
 
 The library has two layers: **HTTP service classes** (one per controller endpoint) and **data/interpreter classes** (parse responses, manipulate bit-encoded relay state).
 
-**Service layer** — all extend `AbstractService` (`src/abstract-service.ts`), which centralizes the axios request config, basic-auth wiring, base URL joining, and the shared `IServiceConfig` shape (`controllerUrl`, `basicAuth`, `username`, `password`, `timeout`). Subclasses set `_endpoint` and `_method`:
+**Error model** (`src/errors.ts`): `ProconIpError` base + `BadCredentialsError` (HTTP 401/403), `BadStatusCodeError` (other 4xx/5xx, carries `status` + `statusText`), `RequestTimeoutError` (carries `timeoutMs`), `InvalidPayloadError` (parser failures). All exported from `'procon-ip'`. Network-level fetch failures propagate as native `TypeError`.
 
-- `GetStateService` (`/GetState.csv`, GET) — the polling engine. `start(successCb?, errorCb?, stopOnError?)` kicks off a self-rescheduling `setTimeout` loop driven by `updateInterval`. Tracks `_consecutiveFails` against `errorTolerance`; only invokes the error callback once the limit is hit. The recursive `autoUpdate()` schedules the next call **before** awaiting the current one, so a slow request can cause the effective interval to exceed `updateInterval`. Backwards compat: signature additions (e.g. `stopOnError`) must stay optional.
-- `UsrcfgCgiService` (`/usrcfg.cgi`, POST) — switches relays. Composed with a `GetStateService` and a `RelayDataInterpreter`; reads current relay states from the former, builds the on/off + auto/manual bit patterns via the latter, and POSTs both decimal values at once. `setOn` / `setOff` / `setAuto` are wrappers over `setState(SetStateValue)`.
-- `CommandService` (`/Command.htm`, GET) — manual dosage (`MAN_DOSAGE=<target>,<seconds>`). Targets: chlorine / pH-minus / pH-plus. Retries up to 3× internally before returning `-1`.
-- `SetStateService` (`/SetState.pl`, GET) — generic relay on-timer. Note the duration is sent as `RT{n}=<duration*1000>` (controller expects ms) while the public API takes seconds.
+**Service layer** — all extend `AbstractService` (`src/abstract-service.ts`), which centralizes the **native `fetch`** wiring, basic-auth, `AbortController`-based timeout, status-code → typed-error mapping, and the shared `IServiceConfig` shape (`controllerUrl`, `basicAuth`, `username?`, `password?`, `timeout`, `requestHeaders?`). Subclasses set `_endpoint` and `_method` (typed `HttpMethod`):
+
+- `GetStateService` (`/GetState.csv`, GET) — the polling engine. `start(successCb?, errorCb?, stopOnError?)` kicks off a self-rescheduling `setTimeout` loop driven by `updateInterval`. Tracks `_consecutiveFails` against `errorTolerance`; only invokes the error callback once the limit is hit. The recursive `autoUpdate()` schedules the next call **before** awaiting the current one, so a slow request can cause the effective interval to exceed `updateInterval`.
+- `UsrcfgCgiService` (`/usrcfg.cgi`, POST) — switches relays. Composed with a `GetStateService` and a `RelayDataInterpreter`; uses the fluent `interpreter.evaluate(stateData).setOn|setOff|setAuto(relay)` chain (returns `[onMask, autoMask]`) and POSTs `ENA=<on>,<auto>&MANUAL=1`. **`setOn` / `setOff` / `setAuto` return `Promise<void>`**; failures throw the typed errors above.
+- `CommandService` (`/Command.htm`, GET) — manual dosage (`MAN_DOSAGE=<target>,<seconds>`). Targets: chlorine / pH-minus / pH-plus. Bypasses `AbstractService.request()` because the URL needs a per-call query string; retries up to 3× internally before returning `-1`.
+- `SetStateService` (`/SetState.pl`, GET) — generic relay on-timer. Same per-call URL pattern as `CommandService`. Public API takes seconds; controller wants ms — we multiply.
+- `GetDmxService` (`/GetDmx.csv`, GET) — fetches and parses the 16 DMX channels into `GetDmxData`.
+- `DmxService` (`/usrcfg.cgi`, POST) — pushes a `GetDmxData` back to the controller using the form-encoded `TYPE=0&LEN=16&CH1_8=...&CH9_16=...&DMX512=1` shape from `GetDmxData.toPostData()`.
 
 **Data layer**:
 
-- `GetStateData` parses the CSV from `/GetState.csv` and exposes typed accessors. `GetStateCategory` enum groups items (analog, electrodes, temperatures, relays, digital input, external relays, canister, etc.); `getDataObjectsByCategory()` is the primary read API. `categories` is static (with a backward-compatible instance-side accessor — see v1.5.0 changelog).
+- `GetStateData` parses the CSV from `/GetState.csv` and exposes typed accessors. `GetStateCategory` enum groups items (analog, electrodes, temperatures, relays, digital input, external relays, canister, etc.); `getDataObjectsByCategory()` is the primary read API. `categories` is static (with an instance-side getter for ergonomics).
 - `GetStateDataObject` / `GetStateDataSysInfo` / `RelayDataObject` — typed views over individual rows / system-info bits. `GetStateDataSysInfo` exposes feature flags like `isElectrolysis()`, `isFlowSensorEnabled()`, `isDmxEnabled()`, plus accessors that map known dosage relays back to their indices.
-- `RelayDataInterpreter` — handles the two-bit relay encoding (`RelayStateBitMask.on = 1`, `manual = 2`) and produces the `[onMask, autoMask]` decimal pair `usrcfg.cgi` expects. All bit math lives here; `UsrcfgCgiService` should not duplicate it.
+- `RelayDataInterpreter` — handles the two-bit relay encoding (`RelayStateBitMask.on = 1`, `manual = 2`) and produces the `[onMask, autoMask]` decimal pair `usrcfg.cgi` expects. **All bit math lives here**; service classes should not duplicate it.
+- `GetDmxData` / `DmxChannelData` — mutable representation of all 16 DMX channels. Iterable, indexable via `at()`, mutable via `set()` (clamps `[0, 255]`, throws `RangeError` on bad index), produces the form payload via `toPostData()`. The controller only accepts full 16-channel writes; the API mirrors that constraint.
 - `Logger` / `ILogger` (`src/logger.ts`) — minimal default logger. **All services accept an `ILogger`** rather than calling `console` directly; preserve this when adding new services.
-- `mock-state.ts` — canned CSV used for offline/dev experimentation.
 
-**Adding a new controller endpoint**: subclass `AbstractService`, set `_endpoint` and `_method`, add `Accept` / `Content-Type` headers in the constructor if needed, take an `ILogger` (and any required collaborators) as constructor args. Re-export from `src/index.ts` — that file is the public API surface.
+**Adding a new controller endpoint**: subclass `AbstractService`, set `_endpoint` and `_method`, add `Accept` / `Content-Type` headers in the constructor if needed, take an `ILogger` (and any required collaborators) as constructor args, use `this.request()` for the call. Re-export from `src/index.ts` (alphabetical) — that file is the public API surface.
 
-## Versioning posture (v2.0.0 in flight)
+## Versioning
 
-The repo is being rebuilt toward a **v2.0.0 release** that explicitly allows breaking changes where they remove friction or unblock best practices. The historical "1.x is strictly additive" rule does **not** apply to work happening on this branch.
+Standard semver from 2.0.0 onward:
 
-Guidance for v2 work:
+- **Major bump** for any breaking change (renamed/removed exports, signature changes that break callers, behavior changes that break observed contracts).
+- **Minor bump** for new exports / new optional parameters / new behavior that doesn't break existing callers.
+- **Patch bump** for bug fixes that don't change behavior.
 
-- Breaking changes are allowed when they enable a meaningfully cleaner API, types, build, or test setup. Don't break things gratuitously, but don't contort the design to preserve every 1.x signature either.
-- **Every breaking change must be documented** in `CHANGELOG.md` (Keep-a-Changelog format) under the `Unreleased` / `2.0.0` section, with a short migration note (old → new).
-- The dual ESM + CJS contract via `exports` should be kept where it doesn't restrict the design — consumers in both module systems are real.
-- Once 2.0.0 ships, semver applies again strictly: 2.x stays additive.
+Every change ships with a **changeset** (`pnpm changeset` to add one) describing the bump type and a one-paragraph summary. Breaking changes need a migration block in `CHANGELOG.md` (Keep-a-Changelog format) showing `old → new`. The `release.yml` workflow consumes the changeset and opens a "Version Packages" PR; merging it publishes.
 
 ## Lint / style
 
-- ESLint **9.x flat config** in `eslint.config.mjs`, extends `@eslint/js` recommended + `typescript-eslint` recommendedTypeChecked + `eslint-config-prettier`, and runs Prettier as an ESLint rule (`prettier/prettier: error`).
-- The `@typescript-eslint/no-unsafe-*` family and `no-explicit-any` are downgraded to **warnings**, not errors — much of the existing code that interprets axios responses uses `any` with scoped `eslint-disable` blocks. Don't blanket-disable these globally; keep the localized disables when interacting with raw response shapes.
+- ESLint **9.x flat config** in `eslint.config.mjs`, extends `@eslint/js` recommended + `typescript-eslint` `recommendedTypeChecked` (scoped to `src/**/*.ts` + `test/**/*.ts` only) + `eslint-config-prettier`. Prettier runs as an ESLint rule (`prettier/prettier: error`).
+- The `@typescript-eslint/no-unsafe-*` family and `no-explicit-any` are **errors**, not warnings. Keep them that way — re-introducing `any` leaks should fail CI. If you need to interact with truly untyped data, use `unknown` + runtime guards.
 - Prettier: `printWidth: 120`, `singleQuote: true`, `trailingComma: 'all'`.
-- `tsconfig.json` has `strict: true`. Keep it on.
+- `tsconfig.json`: `strict: true`, `noUncheckedIndexedAccess: true`, `isolatedModules: true`. Keep all three on.
 
 ## CI / release
 
 `.github/workflows/`:
 
-- `ci.yml` — build + lint on Node 18 and 20, on push/PR to `master`/`develop`/`feature/*`.
+- `ci.yml` — pnpm install + format:check + lint + typecheck + build + coverage + docs:check on Node 20 and 22, on push/PR to `master`/`develop`/`feature/*`. Uploads `coverage/` artifact from the Node 22 job.
+- `docs.yml` — on push to `master` and on release: builds TypeDoc with strict validation, uploads as Pages artifact, deploys to GitHub Pages from Actions (Pages source = "GitHub Actions").
+- `release.yml` — on push to `master`, runs inside the **`release` GitHub environment** (deployment-branch policy restricts to `master`). Uses `changesets/action@v1` to either open a "Version Packages" PR or publish via `npm publish --provenance --access public`. **Publishes via npm Trusted Publishing (OIDC)**: `permissions: id-token: write` + `NPM_CONFIG_PROVENANCE: "true"`. No long-lived `NPM_TOKEN`.
 - `codeql.yml` — JS/TS CodeQL on master + weekly schedule.
-- `release-npmjs.yml` — triggered by GitHub Release; publishes to npmjs.com using `NPM_TOKEN`.
-- `release-github.yml` — triggered by completion of the npmjs release; rewrites the package name to `@ylabonte/procon-ip` via `sed` then publishes to the GitHub npm registry using `GITHUB_TOKEN`.
 - `automerge.yml` — auto-approves and auto-merges Dependabot PRs on master.
 
-Dependabot (`.github/dependabot.yml`) groups updates into `production` and `dev-dependencies` and runs daily.
+Dependabot (`.github/dependabot.yml`) groups npm updates into `production` and `dev-dependencies` (daily), and bumps GitHub Actions weekly.
 
-`.nvmrc` currently pins `v12.18.4` and is **stale** — actual supported Node is **18.18+** (per the v1.8.0 changelog; CI tests 18/20). Don't trust `.nvmrc` over `package.json` / CI.
+`.nvmrc` is **gitignored** (developer-local convenience). Node floor is `>=20.0.0` per `engines`.
 
 ## Workflow conventions for AI agents
 
@@ -106,6 +112,8 @@ When implementing work in this repo, Claude must:
 
 ## Repo-specific gotchas
 
-- `examples/` has its own `node_modules` and `package-lock.json` — it's a separate sandbox project, not part of the library build. Don't run library scripts from inside it.
-- `lib/` and `module/` are **gitignored build outputs**, but `docs/` is **checked in** — different rules, same kind of generated content.
-- `CONTRIBUTING.md` mentions a planned git-flow with a `develop` branch; the CI workflow already accepts `develop` and `feature/*` branches. Default branch is currently `master`.
+- `examples/` is a separate ESM sandbox project (`type: module`, depends on `procon-ip ^2.0.0`). It has its own `node_modules` (not committed); no `package-lock.json` is tracked. Don't run library scripts from inside it.
+- `dist/`, `site/`, `coverage/` are gitignored build outputs. `lib/` and `module/` are gone (legacy v1 outputs).
+- Test fixtures live in `test/fixtures/*.csv`. Don't inline CSV strings into test files.
+- `mock-state` is no longer a public export (was a v1 dev convenience). The fixture form lives in `test/fixtures/get-state.csv`.
+- `CONTRIBUTING.md` mentions a planned git-flow with a `develop` branch; the CI workflow already accepts `develop` and `feature/*` branches. Default branch is `master`.
