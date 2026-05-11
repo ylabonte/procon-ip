@@ -7,6 +7,11 @@ coverage
 # Local Node version pin (developer convenience, not a published artefact)
 .nvmrc
 
+# Local-only design notes / implementation plans (process artefacts, not part
+# of the published library or public docs site). Spec and writing-plans skills
+# default here; we keep the files on disk but out of the repo.
+docs/superpowers/
+
 # IDE-specific excludes
 .idea
 .vscode
