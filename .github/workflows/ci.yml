@@ -1,8 +1,7 @@
-name: "CI Workflow"
+name: "CI"
 
 permissions:
   contents: read
-  pull-requests: write
 
 on:
   push:
@@ -12,8 +11,48 @@ on:
   workflow_call:
 
 jobs:
+  lint:
+    name: "Lint + format"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+
+  typecheck:
+    name: "Typecheck"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+
   build:
-    name: "Build, lint, typecheck, test"
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+  test:
+    name: "Test (Node ${{ matrix.node-version }})"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -22,22 +61,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm format:check
-      - run: pnpm lint
-      - run: pnpm typecheck
-      - run: pnpm build
       - run: pnpm coverage
-      - run: pnpm docs:check
       - name: Upload coverage
         if: matrix.node-version == 22
         uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: coverage/
+
+  docs:
+    name: "Docs (validate)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm docs:check
