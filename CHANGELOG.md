@@ -1,5 +1,39 @@
 # Changelog
 
+## 2.0.0
+
+### Major Changes
+
+- 4993dbd: procon-ip 2.0.0 — toolchain modernisation, native fetch, DMX512 support.
+
+  Breaking changes:
+  - Drop Node ≤ 18 (`engines.node: ">=20.0.0"`).
+  - Replace `axios` with native `fetch`. Errors are now `BadCredentialsError`,
+    `BadStatusCodeError`, `RequestTimeoutError`, `InvalidPayloadError` (all
+    exported from `'procon-ip'`). `AxiosError` is no longer leaked.
+  - Drop deep imports — only `import { X } from 'procon-ip'` works. The
+    `procon-ip/lib/...` and `procon-ip/module/...` paths are removed.
+  - Build outputs move to `dist/` (was `lib/` + `module/`). The package
+    `exports` map preserves the public import surface.
+  - `mock-state` is no longer a public export.
+  - `UsrcfgCgiService.setOn` / `setOff` / `setAuto` now return `Promise<void>`.
+    The opaque numeric response code returned in 1.x is dropped; failures
+    throw the new typed error classes instead.
+
+  New:
+  - DMX512 support via `GetDmxService`, `DmxService`, `GetDmxData`,
+    `DmxChannelData`. Read-mutate-write idiom mirroring proconip-pypi.
+
+  Internal:
+  - pnpm 9 + tsup + Vitest + ESLint 9 flat + TypeDoc with strict validation.
+  - ≥80% coverage gate in CI; project targets 100% on parsers/interpreters/
+    error paths/DMX (currently 96.3% overall, 100% on parsers/interpreters/
+    errors/DMX).
+  - Releases publish via npm Trusted Publishing (OIDC + provenance) inside
+    the `release` GitHub environment. No long-lived `NPM_TOKEN` in CI.
+  - Docs are built and deployed to Pages from Actions; the previously
+    committed `docs/` HTML is removed.
+
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -11,6 +45,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 > 96.3% overall, 100% on parsers / interpreters / error classes / DMX module.
 
 ### Added
+
 - **DMX512 support** — new `GetDmxService` (`/GetDmx.csv`) and `DmxService`
   (`/usrcfg.cgi` with the `DMX512=1` form payload), plus `GetDmxData` /
   `DmxChannelData` for read-mutate-write workflows. Mirrors the proconip-pypi
@@ -22,6 +57,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `docs:check` script (TypeDoc with strict link / export validation).
 
 ### Changed
+
 - Single TypeScript config; build outputs to `dist/` via tsup (one source of
   truth for both ESM and CJS, with bundled `.d.ts` and source maps).
 - Released via changesets and npm Trusted Publishing (OIDC + provenance) from
@@ -33,6 +69,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Package manager: pnpm 9 (was Yarn 1 Classic, end-of-life).
 
 ### Removed (BREAKING)
+
 - **Node ≤ 18** (`engines.node` is `>=20.0.0`).
 - **`axios`** runtime dependency. All HTTP uses native `fetch`.
 - **Deep imports** (`procon-ip/lib/...`, `procon-ip/module/...`). Use
