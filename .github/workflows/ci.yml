@@ -73,7 +73,7 @@ jobs:
       - run: pnpm coverage
       - name: Publish test results
         if: always() && matrix.node-version == 22
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v3
         with:
           name: Vitest
           path: test-results/junit.xml
