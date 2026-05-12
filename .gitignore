@@ -3,6 +3,7 @@ node_modules
 dist
 site
 coverage
+test-results
 
 # Local Node version pin (developer convenience, not a published artefact)
 .nvmrc

@@ -54,6 +54,10 @@ jobs:
   test:
     name: "Test (Node ${{ matrix.node-version }})"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
     strategy:
       fail-fast: false
       matrix:
@@ -67,6 +71,16 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm coverage
+      - name: Publish test results
+        if: always() && matrix.node-version == 22
+        uses: dorny/test-reporter@v3
+        with:
+          name: Vitest
+          path: test-results/junit.xml
+          reporter: jest-junit
+      - name: Coverage summary
+        if: matrix.node-version == 22
+        uses: davelosert/vitest-coverage-report-action@v2
       - name: Upload coverage
         if: matrix.node-version == 22
         uses: actions/upload-artifact@v7
