@@ -8,6 +8,12 @@ permissions:
   contents: write
   pull-requests: write
   id-token: write
+  # Needed because release.yml invokes ci.yml via workflow_call, and the test
+  # job there requests checks: write (for dorny/test-reporter). Reusable
+  # workflows can only downgrade caller permissions, never expand them — so
+  # any permission the called job asks for must be granted here too, or the
+  # called workflow fails at startup.
+  checks: write
 
 concurrency:
   group: release-${{ github.ref }}
