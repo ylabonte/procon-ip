@@ -29,7 +29,7 @@ jobs:
       name: release
       url: https://www.npmjs.com/package/procon-ip
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           # Authenticate as the maintainer (via fine-grained PAT) rather than
@@ -39,8 +39,8 @@ jobs:
           # "Version Packages" PR. With GITHUB_TOKEN GitHub's
           # no-recursive-workflows rule would suppress CI on those PRs.
           token: ${{ secrets.CHANGESETS_TOKEN }}
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           registry-url: 'https://registry.npmjs.org'
