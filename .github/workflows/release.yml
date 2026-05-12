@@ -42,7 +42,13 @@ jobs:
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          # Node 24 (LTS) ships with npm 11.x. npm Trusted Publishing requires
+          # npm CLI >= 11.5.1 for the OIDC handshake; Node 22 ships with npm 10
+          # which falls back to a (then-empty) NODE_AUTH_TOKEN-based auth, the
+          # registry treats the request as anonymous, and we get a misleading
+          # 404 on PUT. See npm/cli#9088 for the surfaced-diagnostics request.
+          # CI matrix can stay on 20+22 -- this only matters for the publish step.
+          node-version: 24
           registry-url: 'https://registry.npmjs.org'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
