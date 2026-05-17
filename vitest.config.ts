@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['test/**/*.test.ts'],
-    reporters: process.env.CI ? ['default', 'junit'] : ['default'],
+    reporters: process.env.CI ? ['default', 'junit', 'github-actions'] : ['default'],
     outputFile: { junit: './test-results/junit.xml' },
     coverage: {
       provider: 'v8',
