@@ -40,7 +40,7 @@ The package ships **dual ESM + CJS in one tarball** via tsup:
 - `main` points at `./dist/index.cjs`, `module` at `./dist/index.mjs`, `types` at `./dist/index.d.ts`.
 - `files` ships `dist/`, `README.md`, `CHANGELOG.md`, `LICENSE`.
 - Single `tsconfig.json` with `target: ES2022`, `module: ESNext`, `moduleResolution: Bundler`, `strict: true`, `noUncheckedIndexedAccess: true`, `isolatedModules: true`. tsup handles both module emissions from this one source of truth.
-- `tsup.config.ts` defines the build (entry, formats, dts, sourcemaps, target node20).
+- `tsup.config.ts` defines the build (entry, formats, dts, sourcemaps, target node22).
 
 `docs/` holds only the docs front-page source (`docs/index.md`); TypeDoc output goes to `site/` (gitignored) and is uploaded to GitHub Pages by `docs.yml`. **Don't commit `docs/assets/`, `docs/classes/`, etc.** — those were the old hand-regenerated subtree.
 
@@ -90,7 +90,7 @@ Every change ships with a **changeset** (`pnpm changeset` to add one) describing
 
 `.github/workflows/`:
 
-- `ci.yml` — pnpm install + format:check + lint + typecheck + build + coverage + docs:check on Node 20 and 22, on push/PR to `master`/`develop`/`feature/*`. Uploads `coverage/` artifact from the Node 22 job.
+- `ci.yml` — pnpm install + format:check + lint + typecheck + build + coverage + docs:check on Node 22 and 24, on push/PR to `master`/`develop`/`feature/*`. Uploads `coverage/` artifact from the Node 24 job.
 - `docs.yml` — on push to `master` and on release: builds TypeDoc with strict validation, uploads as Pages artifact, deploys to GitHub Pages from Actions (Pages source = "GitHub Actions").
 - `release.yml` — on push to `master`, runs inside the **`release` GitHub environment** (deployment-branch policy restricts to `master`). Uses `changesets/action@v1` to either open a "Version Packages" PR or publish via `npm publish --provenance --access public`. **Publishes via npm Trusted Publishing (OIDC)**: `permissions: id-token: write` + `NPM_CONFIG_PROVENANCE: "true"`. No long-lived `NPM_TOKEN`.
 - `codeql.yml` — JS/TS CodeQL on master + weekly schedule.
@@ -98,7 +98,7 @@ Every change ships with a **changeset** (`pnpm changeset` to add one) describing
 
 Dependabot (`.github/dependabot.yml`) groups npm updates into `production` and `dev-dependencies` (daily), and bumps GitHub Actions weekly.
 
-`.nvmrc` is **gitignored** (developer-local convenience). Node floor is `>=20.0.0` per `engines`.
+`.nvmrc` is **gitignored** (developer-local convenience). Node floor is `>=22.0.0` per `engines`.
 
 ## Workflow conventions for AI agents
 

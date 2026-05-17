@@ -48,7 +48,7 @@ there are searchable for everyone with a similar question.
 
 ## Installation
 
-Requires **Node 20 LTS or newer**.
+Requires **Node 22 LTS or newer**.
 
 ```bash
 pnpm add procon-ip
