@@ -12,13 +12,3 @@ updates:
       production:
         dependency-type: "production"
     versioning-strategy: "increase"
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    assignees:
-      - "ylabonte"
-    groups:
-      actions:
-        patterns:
-          - "*"

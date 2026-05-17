@@ -35,16 +35,22 @@ jobs:
       name: release
       url: https://www.npmjs.com/package/procon-ip
     steps:
+      # Mint an installation access token from the "release" GitHub App so the
+      # commits and PR that changesets/action pushes are attributed to a bot
+      # identity rather than the default GITHUB_TOKEN. GitHub's
+      # no-recursive-workflows rule suppresses downstream CI for anything pushed
+      # by GITHUB_TOKEN — App tokens (and PATs) are exempt, which is what makes
+      # the bot-opened "Version Packages" PR auto-fire CI checks. The App's
+      # Client ID and private key are stored as repo secrets.
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ secrets.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          # Authenticate as the maintainer (via fine-grained PAT) rather than
-          # the default GITHUB_TOKEN, so the commits and PR that
-          # changesets/action makes from this checkout count as user actions
-          # for the purposes of triggering downstream workflows on the
-          # "Version Packages" PR. With GITHUB_TOKEN GitHub's
-          # no-recursive-workflows rule would suppress CI on those PRs.
-          token: ${{ secrets.CHANGESETS_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
@@ -68,7 +74,8 @@ jobs:
           commit: "chore: version packages"
           title: "chore: version packages"
         env:
-          # See checkout step above — same rationale. The PAT is what makes
-          # the bot-opened "Version Packages" PR auto-fire CI checks.
-          GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
+          # See the App-token step above — same rationale. Reusing the
+          # installation token here is what makes the bot-opened "Version
+          # Packages" PR auto-fire CI checks.
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           NPM_CONFIG_PROVENANCE: "true"

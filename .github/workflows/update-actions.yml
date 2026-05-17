@@ -1,0 +1,48 @@
+name: "Update GitHub Actions"
+
+on:
+  schedule:
+    - cron: "0 8 * * 1" # Mondays 08:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-actions
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: "Scan + PR"
+    runs-on: ubuntu-latest
+    steps:
+      # Mint a token from the "release" GitHub App so the auto-opened PR is
+      # authored by a bot identity that DOES trigger downstream CI. With the
+      # default GITHUB_TOKEN, GitHub's no-recursive-workflows rule would
+      # suppress checks on the PR and a human would have to push a no-op
+      # commit to get them running.
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ secrets.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+      - uses: ylabonte/github-actions-updater@v1
+        id: ghau
+        with:
+          write: true
+          commit: true
+      - uses: peter-evans/create-pull-request@v8
+        if: steps.ghau.outputs.changes > 0
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          branch: chore/update-github-actions
+          title: "chore(deps): update GitHub Actions"
+          body: |
+            Automated update of outdated GitHub Actions references.
+            See the commit message for the per-action breakdown.
+          delete-branch: true
