@@ -61,11 +61,11 @@
     "library"
   ],
   "devDependencies": {
-    "@changesets/cli": "^2",
+    "@changesets/cli": "^3",
     "@eslint/js": "^10",
-    "@types/node": "^25",
+    "@types/node": "^26",
     "@vitest/coverage-v8": "~4.1.11",
-    "eslint": "^10.8.1",
+    "eslint": "^10.9.0",
     "eslint-config-prettier": "^10",
     "eslint-plugin-prettier": "^5.5.6",
     "prettier": "^3.9.6",
