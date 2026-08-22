@@ -7,11 +7,14 @@ import { GetDmxData } from '../src/get-dmx-data';
 import { Logger } from '../src/logger';
 import { mockFetchOnce } from './helpers/fetch-mock';
 
+// AbstractService.request() uses undici.request(); mock that export.
+vi.mock('undici', async (orig) => ({ ...(await orig<typeof import('undici')>()), request: vi.fn() }));
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixture = readFileSync(resolve(__dirname, 'fixtures/get-dmx.csv'), 'utf8');
 const config = { controllerUrl: 'http://example.local', basicAuth: false, timeout: 1000 };
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => vi.resetAllMocks()); // resets the persistent undici vi.fn() (call history + impls) between tests
 
 describe('DmxService', () => {
   it('POSTs form-encoded DMX state to /usrcfg.cgi', async () => {
@@ -22,7 +25,7 @@ describe('DmxService', () => {
     if (!call) throw new Error('fetch was not called');
     const [url, init] = call;
     expect(String(url as string | URL)).toContain('/usrcfg.cgi');
-    const body = (init as RequestInit).body as string;
+    const body = init?.body as string;
     expect(body).toContain('TYPE=0');
     expect(body).toContain('LEN=16');
     expect(body).toContain('DMX512=1');

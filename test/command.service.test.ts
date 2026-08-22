@@ -1,7 +1,11 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
+import { request as undiciRequest } from 'undici';
 import { CommandService } from '../src/command.service';
 import { Logger } from '../src/logger';
-import { mockFetchOnce } from './helpers/fetch-mock';
+import { mockFetchOnce, mockUndiciResponse } from './helpers/fetch-mock';
+
+// AbstractService.request() uses undici.request(); mock that export.
+vi.mock('undici', async (orig) => ({ ...(await orig<typeof import('undici')>()), request: vi.fn() }));
 
 const config = {
   controllerUrl: 'http://example.local',
@@ -9,7 +13,7 @@ const config = {
   timeout: 1000,
 };
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => vi.resetAllMocks()); // resets the persistent undici vi.fn() (call history + impls) between tests
 
 describe('CommandService', () => {
   it('encodes MAN_DOSAGE in the URL and resolves with seconds', async () => {
@@ -22,10 +26,10 @@ describe('CommandService', () => {
 
   it('targets the correct dosage code per helper', async () => {
     const calls: string[] = [];
-    vi.spyOn(globalThis, 'fetch').mockImplementation((input) => {
-      const url = input instanceof Request ? input.url : String(input);
-      calls.push(url);
-      return Promise.resolve(new Response('', { status: 200 }));
+    vi.mocked(undiciRequest).mockImplementation((url) => {
+      // request() always builds a string URL; narrow for the string[] sink.
+      calls.push(url as string);
+      return Promise.resolve(mockUndiciResponse(200, ''));
     });
     const svc = new CommandService(config, new Logger());
     await svc.setPhMinusDosage(30);
@@ -53,9 +57,7 @@ describe('CommandService', () => {
   });
 
   it('returns -1 after three failures', async () => {
-    vi.spyOn(globalThis, 'fetch').mockImplementation(() =>
-      Promise.resolve(new Response('', { status: 500, statusText: 'oops' })),
-    );
+    vi.mocked(undiciRequest).mockImplementation(() => Promise.resolve(mockUndiciResponse(500, '')));
     const svc = new CommandService(config, new Logger());
     expect(await svc.setChlorineDosage(10)).toBe(-1);
   });

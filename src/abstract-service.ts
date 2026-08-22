@@ -3,6 +3,7 @@
  * @packageDocumentation
  */
 
+import { request as undiciRequest } from 'undici';
 import { BadCredentialsError, BadStatusCodeError, ProconIpError, RequestTimeoutError } from './errors';
 import type { ILogger } from './logger';
 
@@ -73,9 +74,10 @@ export abstract class AbstractService {
    * re-throws the original `AbortError` so callers can distinguish it from
    * a timeout.
    *
-   * Any other `fetch` init field (`body`, `headers`, `cache`, etc.) is
-   * passed through to `fetch`; caller `headers` are merged on top of the
-   * service's `_requestHeaders`.
+   * Only `body`, `headers`, and `signal` from `init` are honoured — the
+   * request is issued via `undici.request()` (not the global `fetch()`, which
+   * would inject browser headers the controller mishandles). Caller `headers`
+   * are merged on top of the service's `_requestHeaders`.
    *
    * @param init Optional `fetch` init plus a `params` shortcut. `params`,
    *   if provided, is serialised as `key=value&key=value` and appended to
@@ -128,27 +130,40 @@ export abstract class AbstractService {
     }
 
     try {
-      const res = await fetch(url, {
-        ...restInit,
+      // NOTE: we intentionally use undici.request(), NOT the global fetch().
+      // The WHATWG fetch() implementation injects browser-only request headers
+      // (`sec-fetch-mode`, `accept-language`, `connection: keep-alive`) that the
+      // controller's legacy firmware mishandles: it answers a relay/DMX write
+      // with "200 done" but silently ignores it (reads over fetch work fine).
+      // Those headers are on the fetch "forbidden header" list and cannot be
+      // stripped via the API, so we bypass fetch entirely. undici.request()
+      // sends only the headers assembled above. See the regression test in
+      // `test/abstract-service.wire.test.ts` that asserts they are absent.
+      const res = await undiciRequest(url, {
         method: this._method,
         headers,
+        body: (restInit.body ?? undefined) as string | undefined,
         signal,
       });
-      if (res.status === 401 || res.status === 403) {
-        throw new BadCredentialsError(`Authentication failed (${res.status} ${res.statusText})`);
+      const status = res.statusCode;
+      if (status === 401 || status === 403) {
+        await res.body.dump();
+        throw new BadCredentialsError(`Authentication failed (HTTP ${status})`);
       }
-      if (!res.ok) {
-        throw new BadStatusCodeError(
-          `Request failed: HTTP ${res.status} ${res.statusText}`,
-          res.status,
-          res.statusText,
-        );
+      if (status < 200 || status >= 300) {
+        await res.body.dump();
+        throw new BadStatusCodeError(`Request failed: HTTP ${status}`, status, String(status));
       }
-      return res;
+      // Read the body eagerly (consuming the undici stream) and re-wrap it in a
+      // standard `Response` so the return contract is unchanged for callers.
+      const text = await res.body.text();
+      return new Response(text, { status });
     } catch (e: unknown) {
-      if (e instanceof DOMException && e.name === 'AbortError') {
-        // Caller-driven abort: re-throw the original AbortError so consumers
-        // can distinguish it from our timeout.
+      const name = e instanceof Error ? e.name : '';
+      const code = (e as { code?: string } | null)?.code;
+      if (name === 'AbortError' || code === 'UND_ERR_ABORTED') {
+        // Caller-driven abort: re-throw the original error so consumers can
+        // distinguish it from our timeout.
         if (externalSignal?.aborted) throw e;
         throw new RequestTimeoutError(`Request timed out after ${timeoutMs}ms`, timeoutMs);
       }
