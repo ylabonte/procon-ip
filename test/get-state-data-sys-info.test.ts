@@ -83,9 +83,16 @@ describe('GetStateDataSysInfo', () => {
       expect(sysInfoFrom({ configOther: 64 }).isFlowSensorEnabled()).toBe(true);
       expect(sysInfoFrom({ configOther: 0 }).isFlowSensorEnabled()).toBe(false);
     });
-    it('isDmxEnabled = bit 8 (mask 256)', () => {
-      expect(sysInfoFrom({ configOther: 256 }).isDmxEnabled()).toBe(true);
+    it('isDmxEnabled = bit 2 (mask 4)', () => {
+      expect(sysInfoFrom({ configOther: 4 }).isDmxEnabled()).toBe(true);
       expect(sysInfoFrom({ configOther: 0 }).isDmxEnabled()).toBe(false);
+      // bit 8 (the SPI/DMX extension) must NOT be read as DMX output
+      expect(sysInfoFrom({ configOther: 256 }).isDmxEnabled()).toBe(false);
+    });
+    it('isDmxExtensionEnabled = bit 8 (mask 256)', () => {
+      expect(sysInfoFrom({ configOther: 256 }).isDmxExtensionEnabled()).toBe(true);
+      expect(sysInfoFrom({ configOther: 0 }).isDmxExtensionEnabled()).toBe(false);
+      expect(sysInfoFrom({ configOther: 4 }).isDmxExtensionEnabled()).toBe(false);
     });
   });
 
