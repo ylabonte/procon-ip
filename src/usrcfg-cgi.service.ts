@@ -67,10 +67,13 @@ export class UsrcfgCgiService extends AbstractService {
   }
 
   private async send(masks: [number, number]): Promise<void> {
-    const params = new URLSearchParams();
-    params.set('ENA', `${masks[0]},${masks[1]}`);
-    params.set('MANUAL', '1');
-    await this.request({ body: params.toString() });
+    // The controller's legacy /usrcfg.cgi parser requires a LITERAL comma in the
+    // ENA value (e.g. "ENA=1,2"). URLSearchParams would percent-encode it to
+    // "%2C", which the firmware cannot parse — it answers by resetting the TCP
+    // connection (ECONNRESET / "fetch failed") and the relay never switches.
+    // Build the body by hand so the comma stays literal (the wire format the
+    // controller's own web UI and the pre-2.x client used).
+    await this.request({ body: `ENA=${masks[0]},${masks[1]}&MANUAL=1` });
     // Refresh the shared GetStateService snapshot so a follow-up setOn/Off/Auto
     // computes its masks from the post-write state. Without this, sequential
     // calls would all see the pre-write state and the second call's mask would

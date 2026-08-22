@@ -30,7 +30,14 @@ export class DmxService extends AbstractService {
    * ```
    */
   async set(data: GetDmxData): Promise<void> {
-    const body = new URLSearchParams(data.toPostData()).toString();
+    // Same literal-comma requirement as UsrcfgCgiService: toPostData() returns
+    // comma-joined channel lists (CH1_8 / CH9_16) that the controller must
+    // receive verbatim. URLSearchParams would percent-encode the commas to
+    // "%2C" and the firmware would reject the request (connection reset), so
+    // serialise the form body by hand with literal commas.
+    const body = Object.entries(data.toPostData())
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
     await this.request({ body });
   }
 }

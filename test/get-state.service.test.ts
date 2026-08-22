@@ -2,10 +2,14 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { request as undiciRequest } from 'undici';
 import { GetStateService, type IGetStateServiceConfig } from '../src/get-state.service';
 import { Logger } from '../src/logger';
 import { GetStateData } from '../src/get-state-data';
-import { mockFetchOnce, mockFetchNetworkError } from './helpers/fetch-mock';
+import { mockFetchOnce, mockFetchNetworkError, mockUndiciResponse, type UndiciResponse } from './helpers/fetch-mock';
+
+// AbstractService.request() uses undici.request(); mock that export.
+vi.mock('undici', async (orig) => ({ ...(await orig<typeof import('undici')>()), request: vi.fn() }));
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const fixture = readFileSync(resolve(__dirname, 'fixtures/get-state.csv'), 'utf8');
@@ -17,7 +21,7 @@ const config: IGetStateServiceConfig = {
   errorTolerance: 2,
 };
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => vi.resetAllMocks()); // resets the persistent undici vi.fn() (call history + impls) between tests
 
 describe('GetStateService', () => {
   it('parses a valid CSV response into GetStateData', async () => {
@@ -34,8 +38,8 @@ describe('GetStateService', () => {
     await svc.update(); // first failure swallowed
     expect(svc.hasData()).toBe(false);
     mockFetchNetworkError('boom');
-    // second consecutive same error -> rethrow
-    await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
+    // second consecutive same error -> rethrow (original network error, message intact)
+    await expect(svc.update()).rejects.toThrow('boom');
   });
 
   it('start() is idempotent — calling it twice does not overlap requests or timers', async () => {
@@ -46,9 +50,9 @@ describe('GetStateService', () => {
     vi.useFakeTimers();
     let pending!: () => void;
     const fetchSpy = vi
-      .spyOn(globalThis, 'fetch')
+      .mocked(undiciRequest)
       .mockImplementation(
-        () => new Promise<Response>((resolve) => (pending = () => resolve(new Response(fixture, { status: 200 })))),
+        () => new Promise<UndiciResponse>((resolve) => (pending = () => resolve(mockUndiciResponse(200, fixture)))),
       );
     const svc = new GetStateService(config, new Logger());
     svc.start();
@@ -63,9 +67,9 @@ describe('GetStateService', () => {
 
   it('start() refreshes callbacks but does not duplicate the poll loop when already running', () => {
     vi.useFakeTimers();
-    vi.spyOn(globalThis, 'fetch').mockImplementation(
+    vi.mocked(undiciRequest).mockImplementation(
       () =>
-        new Promise<Response>(() => {
+        new Promise<UndiciResponse>(() => {
           /* never resolves */
         }),
     );
@@ -132,7 +136,7 @@ describe('GetStateService', () => {
     await svc.update(); // first failure: swallowed (not yet consecutive)
     mockFetchNetworkError('boom');
     // With the default of 1, the second consecutive same-message failure throws.
-    await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
+    await expect(svc.update()).rejects.toThrow('boom');
   });
 
   it('clamps a 0/negative errorTolerance to 1 so the modulo check stays valid', async () => {
@@ -144,14 +148,14 @@ describe('GetStateService', () => {
     mockFetchNetworkError('boom');
     await svc.update(); // first failure: not yet consecutive, swallowed
     mockFetchNetworkError('boom');
-    await expect(svc.update()).rejects.toBeInstanceOf(TypeError);
+    await expect(svc.update()).rejects.toThrow('boom');
   });
 
   it('stopOnError fires the error callback before stopping the loop', async () => {
     // The whole point of stopOnError is "tell me and then stop" -- if the
     // internal stop() ran first it would clear _errorCallback and silently
     // swallow the very notification the consumer asked for.
-    vi.spyOn(globalThis, 'fetch').mockImplementation(() => Promise.reject(new TypeError('boom')));
+    vi.mocked(undiciRequest).mockImplementation(() => Promise.reject(new Error('boom')));
     const onError = vi.fn();
     // Tiny updateInterval so we don't wait long for the second tick (the
     // second consecutive same-message failure is what triggers the
@@ -167,8 +171,8 @@ describe('GetStateService', () => {
     // Race: start a poll, fail the in-flight request, but call stop() BEFORE
     // the rejection lands. The error callback must not fire afterwards.
     let rejectFetch!: (e: Error) => void;
-    vi.spyOn(globalThis, 'fetch').mockImplementation(
-      () => new Promise<Response>((_resolve, reject) => (rejectFetch = reject)),
+    vi.mocked(undiciRequest).mockImplementation(
+      () => new Promise<UndiciResponse>((_resolve, reject) => (rejectFetch = reject)),
     );
     const onError = vi.fn();
     const svc = new GetStateService(config, new Logger());
@@ -184,8 +188,8 @@ describe('GetStateService', () => {
     // Without the .finally()-based scheduling this would fire twice and we'd
     // see overlapping callbacks. With it, only one tick fires before stop().
     vi.useFakeTimers();
-    let resolveFetch!: (r: Response) => void;
-    vi.spyOn(globalThis, 'fetch').mockImplementation(() => new Promise<Response>((r) => (resolveFetch = r)));
+    let resolveFetch!: (r: UndiciResponse) => void;
+    vi.mocked(undiciRequest).mockImplementation(() => new Promise<UndiciResponse>((r) => (resolveFetch = r)));
     const cb = vi.fn();
     const svc = new GetStateService({ ...config, updateInterval: 50 }, new Logger());
     svc.start(cb);
@@ -194,7 +198,7 @@ describe('GetStateService', () => {
     await vi.advanceTimersByTimeAsync(500);
     expect(cb).not.toHaveBeenCalled(); // first update hasn't resolved yet
     // Now resolve the first update.
-    resolveFetch(new Response(fixture, { status: 200 }));
+    resolveFetch(mockUndiciResponse(200, fixture));
     await vi.advanceTimersByTimeAsync(0); // flush microtasks
     expect(cb).toHaveBeenCalledTimes(1);
     svc.stop();

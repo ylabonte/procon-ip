@@ -3,6 +3,7 @@
  * @packageDocumentation
  */
 
+import { request as undiciRequest } from 'undici';
 import { BadCredentialsError, BadStatusCodeError, ProconIpError, RequestTimeoutError } from './errors';
 import type { ILogger } from './logger';
 
@@ -25,6 +26,20 @@ export interface IServiceConfig {
 
 /** HTTP methods accepted by `AbstractService._method`. */
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
+
+/**
+ * Options for {@link AbstractService.request}. Deliberately narrower than
+ * `RequestInit`: only a string `body`, `headers` and `signal` are honoured
+ * (a non-string body such as `URLSearchParams` would fail inside
+ * `undici.request()` — and, for these legacy endpoints, must never be
+ * percent-encoded anyway), plus the raw `params` query-string shortcut.
+ */
+export interface RequestOptions {
+  body?: string;
+  headers?: HeadersInit;
+  signal?: AbortSignal | null;
+  params?: Record<string, string | number>;
+}
 
 export abstract class AbstractService {
   protected _config: IServiceConfig;
@@ -73,9 +88,10 @@ export abstract class AbstractService {
    * re-throws the original `AbortError` so callers can distinguish it from
    * a timeout.
    *
-   * Any other `fetch` init field (`body`, `headers`, `cache`, etc.) is
-   * passed through to `fetch`; caller `headers` are merged on top of the
-   * service's `_requestHeaders`.
+   * Only `body`, `headers`, and `signal` from `init` are honoured — the
+   * request is issued via `undici.request()` (not the global `fetch()`, which
+   * would inject browser headers the controller mishandles). Caller `headers`
+   * are merged on top of the service's `_requestHeaders`.
    *
    * @param init Optional `fetch` init plus a `params` shortcut. `params`,
    *   if provided, is serialised as `key=value&key=value` and appended to
@@ -88,7 +104,7 @@ export abstract class AbstractService {
    * @throws {@link BadStatusCodeError} on any other 4xx/5xx response.
    * @throws {@link RequestTimeoutError} if the request exceeds the configured timeout.
    */
-  protected async request(init: RequestInit & { params?: Record<string, string | number> } = {}): Promise<Response> {
+  protected async request(init: RequestOptions = {}): Promise<Response> {
     const { params, ...restInit } = init;
     const headers = new Headers(this._requestHeaders);
     if (restInit.headers) new Headers(restInit.headers).forEach((v, k) => headers.set(k, v));
@@ -128,27 +144,49 @@ export abstract class AbstractService {
     }
 
     try {
-      const res = await fetch(url, {
-        ...restInit,
+      // NOTE: we intentionally use undici.request(), NOT the global fetch().
+      // The WHATWG fetch() implementation injects browser-only request headers
+      // (`sec-fetch-mode`, `accept-language`, `accept`, `user-agent`) that the
+      // controller's legacy firmware mishandles: it answers a relay/DMX write
+      // with "200 done" but silently ignores it (reads over fetch work fine).
+      // Those headers are on the fetch "forbidden header" list and cannot be
+      // stripped via the API, so we bypass fetch entirely. undici.request()
+      // sends only the headers assembled above (plus the standard host /
+      // content-length / connection every HTTP client adds — note `connection:
+      // keep-alive` is NOT a culprit here; undici sends it too). See the
+      // regression test in `test/abstract-service.wire.test.ts`.
+      const res = await undiciRequest(url, {
         method: this._method,
         headers,
+        body: restInit.body,
         signal,
       });
-      if (res.status === 401 || res.status === 403) {
-        throw new BadCredentialsError(`Authentication failed (${res.status} ${res.statusText})`);
+      const status = res.statusCode;
+      if (status === 401 || status === 403) {
+        await res.body.dump();
+        throw new BadCredentialsError(`Authentication failed (HTTP ${status})`);
       }
-      if (!res.ok) {
-        throw new BadStatusCodeError(
-          `Request failed: HTTP ${res.status} ${res.statusText}`,
-          res.status,
-          res.statusText,
-        );
+      if (status < 200 || status >= 300) {
+        await res.body.dump();
+        throw new BadStatusCodeError(`Request failed: HTTP ${status}`, status, String(status));
       }
-      return res;
+      // 204/205 are "null body status" codes: `new Response()` rejects a
+      // non-null body for them, so a successful 204 would otherwise crash with
+      // an opaque TypeError. Drain the (empty) stream and return a null body.
+      if (status === 204 || status === 205) {
+        await res.body.dump();
+        return new Response(null, { status });
+      }
+      // Read the body eagerly (consuming the undici stream) and re-wrap it in a
+      // standard `Response` so the return contract is unchanged for callers.
+      const text = await res.body.text();
+      return new Response(text, { status });
     } catch (e: unknown) {
-      if (e instanceof DOMException && e.name === 'AbortError') {
-        // Caller-driven abort: re-throw the original AbortError so consumers
-        // can distinguish it from our timeout.
+      const name = e instanceof Error ? e.name : '';
+      const code = (e as { code?: string } | null)?.code;
+      if (name === 'AbortError' || code === 'UND_ERR_ABORTED') {
+        // Caller-driven abort: re-throw the original error so consumers can
+        // distinguish it from our timeout.
         if (externalSignal?.aborted) throw e;
         throw new RequestTimeoutError(`Request timed out after ${timeoutMs}ms`, timeoutMs);
       }

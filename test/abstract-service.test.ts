@@ -1,13 +1,18 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { AbstractService, type IServiceConfig } from '../src/abstract-service';
+import { request as undiciRequest } from 'undici';
+import { AbstractService, type IServiceConfig, type RequestOptions } from '../src/abstract-service';
 import { Logger } from '../src/logger';
 import { BadCredentialsError, ProconIpError, RequestTimeoutError } from '../src/errors';
-import { mockFetchOnce, mockFetchNetworkError, mockFetchAbortable } from './helpers/fetch-mock';
+import { mockFetchOnce, mockFetchNetworkError, mockFetchAbortable, type UndiciResponse } from './helpers/fetch-mock';
+
+// AbstractService.request() now uses undici.request() (not global fetch), so we
+// mock undici's `request` export while keeping its other exports intact.
+vi.mock('undici', async (orig) => ({ ...(await orig<typeof import('undici')>()), request: vi.fn() }));
 
 class TestService extends AbstractService {
   _endpoint = '/test';
   _method = 'GET' as const;
-  async run(init?: RequestInit): Promise<Response> {
+  async run(init?: RequestOptions): Promise<Response> {
     return this.request(init);
   }
 }
@@ -18,7 +23,7 @@ const baseConfig: IServiceConfig = {
   timeout: 1000,
 };
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => vi.resetAllMocks()); // resets the persistent undici vi.fn() (call history + impls) between tests
 
 describe('AbstractService', () => {
   it('joins base url and endpoint correctly', () => {
@@ -66,12 +71,15 @@ describe('AbstractService', () => {
   });
 
   it('throws BadStatusCodeError on 5xx with status fields populated', async () => {
-    mockFetchOnce({ status: 503, statusText: 'Service Unavailable' });
+    // undici gives us only a numeric status (no reason phrase), so request()
+    // formats the error as `HTTP <status>` and fills statusText with the
+    // stringified status. Assert on the error TYPE and numeric status.
+    mockFetchOnce({ status: 503 });
     const svc = new TestService(baseConfig, new Logger());
     await expect(svc.run()).rejects.toMatchObject({
       name: 'BadStatusCodeError',
       status: 503,
-      statusText: 'Service Unavailable',
+      statusText: '503',
     });
   });
 
@@ -81,18 +89,22 @@ describe('AbstractService', () => {
     await expect(svc.run()).rejects.toBeInstanceOf(RequestTimeoutError);
   });
 
-  it('passes through TypeError network failures unchanged', async () => {
+  it('passes a network-layer failure through unchanged (not rewrapped as a Procon error)', async () => {
     mockFetchNetworkError('econnrefused');
     const svc = new TestService(baseConfig, new Logger());
-    await expect(svc.run()).rejects.toBeInstanceOf(TypeError);
+    const pending = svc.run();
+    // The original transport error propagates with its message intact...
+    await expect(pending).rejects.toThrow('econnrefused');
+    // ...and is NOT rewrapped as one of our typed errors (e.g. RequestTimeoutError).
+    await expect(pending).rejects.not.toBeInstanceOf(ProconIpError);
   });
 
   it('attaches Authorization header when basicAuth enabled', async () => {
     const spy = mockFetchOnce({ status: 200 });
     const svc = new TestService({ ...baseConfig, basicAuth: true, username: 'u', password: 'p' }, new Logger());
     await svc.run();
-    const init = spy.mock.calls[0]?.[1] as RequestInit;
-    const headers = new Headers(init.headers);
+    // request() passes a WHATWG `Headers` instance as undici's `headers` option.
+    const headers = spy.mock.calls[0]?.[1]?.headers as unknown as Headers;
     expect(headers.get('authorization')).toBe('Basic ' + Buffer.from('u:p').toString('base64'));
   });
 
@@ -112,27 +124,34 @@ describe('AbstractService', () => {
     expect(url).toBe('http://example.local/test?foo=1&MAN_DOSAGE=0,60');
   });
 
-  it('forces _method even if init.method is provided', async () => {
+  it('always uses _method — RequestOptions has no `method` to override it', async () => {
     const spy = mockFetchOnce({ status: 200 });
 
     class TryOverride extends AbstractService {
       _endpoint = '/test';
       _method = 'GET' as const;
       async run(): Promise<Response> {
+        // @ts-expect-error RequestOptions intentionally omits `method`; if this
+        // ever compiles, request() no longer controls the HTTP method exclusively.
         return this.request({ method: 'POST' });
       }
     }
     const svc = new TryOverride(baseConfig, new Logger());
     await svc.run();
-    expect((spy.mock.calls[0]?.[1] as RequestInit).method).toBe('GET');
+    expect(spy.mock.calls[0]?.[1]?.method).toBe('GET');
   });
 
   it('honours an external AbortSignal and re-throws the original AbortError', async () => {
     // A long-running mock that the test will abort externally.
-    vi.spyOn(globalThis, 'fetch').mockImplementationOnce(
-      (_input, init) =>
-        new Promise<Response>((_resolve, reject) => {
-          init?.signal?.addEventListener('abort', () => reject(new DOMException('aborted', 'AbortError')));
+    vi.mocked(undiciRequest).mockImplementationOnce(
+      (_url, opts) =>
+        new Promise<UndiciResponse>((_resolve, reject) => {
+          const signal = opts?.signal as AbortSignal | undefined;
+          signal?.addEventListener('abort', () => {
+            const err = new Error('aborted');
+            err.name = 'AbortError';
+            reject(err);
+          });
         }),
     );
     const external = new AbortController();
