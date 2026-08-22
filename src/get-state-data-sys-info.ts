@@ -253,9 +253,22 @@ export class GetStateDataSysInfo {
   }
 
   /**
-   * Check whether DMX is enabled or not.
+   * Check whether DMX512 output is enabled.
+   *
+   * DMX output is bit 2 of `configOtherEnable` (mask 4), verified against a real
+   * ProCon.IP: `configOtherEnable` reads 0 with DMX off and 4 with DMX on. (The
+   * previous implementation masked bit 8 / 256, which is the separate SPI/DMX
+   * *extension* flag — see {@link isDmxExtensionEnabled}.)
    */
   public isDmxEnabled(): boolean {
+    return (this.configOtherEnable & 4) === 4;
+  }
+
+  /**
+   * Check whether the SPI/DMX extension is enabled (bit 8, mask 256). This is a
+   * different flag from {@link isDmxEnabled} (DMX512 output, bit 2).
+   */
+  public isDmxExtensionEnabled(): boolean {
     return (this.configOtherEnable & 256) === 256;
   }
 }
