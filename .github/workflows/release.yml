@@ -67,15 +67,23 @@ jobs:
       - run: pnpm build
       - name: Create Release Pull Request or Publish
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
-          publish: pnpm release
-          version: pnpm version-packages
-          commit: "chore: version packages"
-          title: "chore: version packages"
+          publish-script: pnpm release
+          version-script: pnpm version-packages
+          commit-message: "chore: version packages"
+          pr-title: "chore: version packages"
+          # changesets/action v2 no longer reads the token from the GITHUB_TOKEN
+          # env var — it must be passed as the github-token input. Reusing the
+          # App installation token here is what pushes the release commit/tag,
+          # opens the bot-authored "Version Packages" PR (so downstream CI
+          # fires), and creates the GitHub release.
+          #
+          # Why v2: v1 is only compatible with @changesets/cli v1/v2. Once the
+          # CLI was bumped to v3, v1 could no longer parse the publish output,
+          # so it published to npm but silently skipped the git tag and the
+          # GitHub release (e.g. v2.1.2). v2 adds @changesets/cli v3 support and
+          # pushes tags/releases via the GitHub API by default.
+          github-token: ${{ steps.app-token.outputs.token }}
         env:
-          # See the App-token step above — same rationale. Reusing the
-          # installation token here is what makes the bot-opened "Version
-          # Packages" PR auto-fire CI checks.
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           NPM_CONFIG_PROVENANCE: "true"
