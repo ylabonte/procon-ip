@@ -26,6 +26,9 @@ describe('DmxService', () => {
     expect(body).toContain('TYPE=0');
     expect(body).toContain('LEN=16');
     expect(body).toContain('DMX512=1');
-    expect(body).toContain('CH1_8=0%2C16%2C32%2C48%2C64%2C80%2C96%2C112');
+    // Literal commas: URLSearchParams would send "%2C" and the controller would
+    // reject the request (see DmxService.set).
+    expect(body).toContain('CH1_8=0,16,32,48,64,80,96,112');
+    expect(body).not.toContain('%2C');
   });
 });

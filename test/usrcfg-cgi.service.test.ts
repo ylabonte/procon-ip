@@ -50,7 +50,10 @@ describe('UsrcfgCgiService', () => {
     expect(String(url as string | URL)).toContain('/usrcfg.cgi');
     expect(init?.method).toBe('POST');
     const body = init?.body as string;
-    expect(body).toMatch(/^ENA=\d+%2C\d+&MANUAL=1$/);
+    // The controller needs a LITERAL comma in ENA; a percent-encoded "%2C"
+    // makes the firmware reset the connection (see UsrcfgCgiService.send).
+    expect(body).toMatch(/^ENA=\d+,\d+&MANUAL=1$/);
+    expect(body).not.toContain('%2C');
   });
 
   it('refreshes the shared GetStateService snapshot after a successful POST', async () => {
