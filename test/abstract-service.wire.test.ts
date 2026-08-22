@@ -26,6 +26,7 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import http from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { AbstractService, type IServiceConfig } from '../src/abstract-service';
+import { RequestTimeoutError } from '../src/errors';
 import { Logger } from '../src/logger';
 
 /** Minimal concrete service that POSTs a raw body through `request()`. */
@@ -46,6 +47,9 @@ interface Received {
 let server: http.Server;
 let baseUrl: string;
 let received: Received[];
+// Per-test server behaviour (reset in beforeEach); lets a test force a 204 or
+// an unresponsive/slow controller.
+let behavior: { status: number; body: string | null; delayMs: number };
 
 beforeAll(async () => {
   server = http.createServer((req, res) => {
@@ -57,8 +61,16 @@ beforeAll(async () => {
         headers: req.headers,
         body: Buffer.concat(chunks).toString('utf8'),
       });
-      res.writeHead(200, { 'content-type': 'text/plain' });
-      res.end('done');
+      const respond = (): void => {
+        res.writeHead(behavior.status, { 'content-type': 'text/plain' });
+        res.end(behavior.body ?? undefined);
+      };
+      if (behavior.delayMs > 0) {
+        const t = setTimeout(respond, behavior.delayMs);
+        res.on('close', () => clearTimeout(t));
+      } else {
+        respond();
+      }
     });
   });
   await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
@@ -72,6 +84,7 @@ afterAll(async () => {
 
 beforeEach(() => {
   received = [];
+  behavior = { status: 200, body: 'done', delayMs: 0 };
 });
 
 describe('AbstractService real-wire request (undici, no mocks)', () => {
@@ -121,5 +134,21 @@ describe('AbstractService real-wire request (undici, no mocks)', () => {
     // Even with auth on, the browser headers stay absent.
     expect(got.headers['sec-fetch-mode']).toBeUndefined();
     expect(got.headers['accept-language']).toBeUndefined();
+  });
+
+  it('returns a null-body Response for a 204 No Content instead of throwing', async () => {
+    behavior = { status: 204, body: null, delayMs: 0 };
+    const config: IServiceConfig = { controllerUrl: baseUrl, basicAuth: false, timeout: 5000 };
+    const svc = new WireService(config, new Logger());
+    const res = await svc.send('ENA=7,2&MANUAL=1');
+    expect(res.status).toBe(204);
+    expect(await res.text()).toBe('');
+  });
+
+  it('maps an unresponsive controller to RequestTimeoutError', async () => {
+    behavior = { status: 200, body: 'done', delayMs: 1000 };
+    const config: IServiceConfig = { controllerUrl: baseUrl, basicAuth: false, timeout: 50 };
+    const svc = new WireService(config, new Logger());
+    await expect(svc.send('ENA=7,2&MANUAL=1')).rejects.toBeInstanceOf(RequestTimeoutError);
   });
 });

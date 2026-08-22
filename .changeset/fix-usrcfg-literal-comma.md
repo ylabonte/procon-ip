@@ -4,7 +4,9 @@
 
 Fix relay switching (`UsrcfgCgiService`) and DMX writes (`DmxService`), which were silently failing against real controllers since the 2.x rewrite. Two root causes, both now fixed:
 
-1. **Browser headers from `fetch()`.** `AbstractService.request()` used the global `fetch()`, whose WHATWG implementation injects browser-only request headers (`sec-fetch-mode`, `accept-language`, `connection: keep-alive`). The controller's legacy firmware accepts such a write with `200 "done"` but silently ignores it (reads were unaffected). Those headers are on the fetch "forbidden header" list and cannot be stripped via the API, so the HTTP layer now uses **`undici.request()`** (new runtime dependency), which sends only the headers we set. This is what `axios` (pre-2.x) and other working clients did.
+1. **Browser headers from `fetch()`.** `AbstractService.request()` used the global `fetch()`, whose WHATWG implementation injects browser-only request headers (`sec-fetch-mode`, `accept-language`, `accept`, `user-agent`). The controller's legacy firmware accepts such a write with `200 "done"` but silently ignores it (reads were unaffected). Those headers are on the fetch "forbidden header" list and cannot be stripped via the API, so the HTTP layer now uses **`undici.request()`** (new runtime dependency), which sends only the headers we set. This is what `axios` (pre-2.x) and other working clients did.
+
+   Side effects of the HTTP-client switch: `request()` no longer follows 3xx redirects (they surface as `BadStatusCodeError`), and `statusText` on `BadStatusCodeError` / the returned `Response` is now the numeric status. No caller relies on either.
 
 2. **Percent-encoded comma.** The `/usrcfg.cgi` POST body was serialised with `URLSearchParams`, encoding the literal comma in `ENA=<on>,<auto>` (and the DMX `CH1_8`/`CH9_16` channel lists) to `%2C`, which the controller cannot parse. The body is now built with literal commas.
 

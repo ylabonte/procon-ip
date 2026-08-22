@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { request as undiciRequest } from 'undici';
-import { AbstractService, type IServiceConfig } from '../src/abstract-service';
+import { AbstractService, type IServiceConfig, type RequestOptions } from '../src/abstract-service';
 import { Logger } from '../src/logger';
 import { BadCredentialsError, ProconIpError, RequestTimeoutError } from '../src/errors';
 import { mockFetchOnce, mockFetchNetworkError, mockFetchAbortable, type UndiciResponse } from './helpers/fetch-mock';
@@ -12,7 +12,7 @@ vi.mock('undici', async (orig) => ({ ...(await orig<typeof import('undici')>()),
 class TestService extends AbstractService {
   _endpoint = '/test';
   _method = 'GET' as const;
-  async run(init?: RequestInit): Promise<Response> {
+  async run(init?: RequestOptions): Promise<Response> {
     return this.request(init);
   }
 }
@@ -124,13 +124,15 @@ describe('AbstractService', () => {
     expect(url).toBe('http://example.local/test?foo=1&MAN_DOSAGE=0,60');
   });
 
-  it('forces _method even if init.method is provided', async () => {
+  it('always uses _method — RequestOptions has no `method` to override it', async () => {
     const spy = mockFetchOnce({ status: 200 });
 
     class TryOverride extends AbstractService {
       _endpoint = '/test';
       _method = 'GET' as const;
       async run(): Promise<Response> {
+        // @ts-expect-error RequestOptions intentionally omits `method`; if this
+        // ever compiles, request() no longer controls the HTTP method exclusively.
         return this.request({ method: 'POST' });
       }
     }
