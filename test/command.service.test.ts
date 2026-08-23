@@ -1,11 +1,14 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { request as undiciRequest } from 'undici';
+import { httpRequest } from '../src/http-transport';
 import { CommandService } from '../src/command.service';
 import { Logger } from '../src/logger';
 import { mockFetchOnce, mockUndiciResponse } from './helpers/fetch-mock';
 
-// AbstractService.request() uses undici.request(); mock that export.
-vi.mock('undici', async (orig) => ({ ...(await orig<typeof import('undici')>()), request: vi.fn() }));
+// AbstractService.request() uses httpRequest() (node:http); mock that export.
+vi.mock('../src/http-transport', async (orig) => ({
+  ...(await orig<typeof import('../src/http-transport')>()),
+  httpRequest: vi.fn(),
+}));
 
 const config = {
   controllerUrl: 'http://example.local',
@@ -13,7 +16,7 @@ const config = {
   timeout: 1000,
 };
 
-afterEach(() => vi.resetAllMocks()); // resets the persistent undici vi.fn() (call history + impls) between tests
+afterEach(() => vi.resetAllMocks()); // resets the persistent httpRequest vi.fn() (call history + impls) between tests
 
 describe('CommandService', () => {
   it('encodes MAN_DOSAGE in the URL and resolves with seconds', async () => {
@@ -26,9 +29,9 @@ describe('CommandService', () => {
 
   it('targets the correct dosage code per helper', async () => {
     const calls: string[] = [];
-    vi.mocked(undiciRequest).mockImplementation((url) => {
+    vi.mocked(httpRequest).mockImplementation((url) => {
       // request() always builds a string URL; narrow for the string[] sink.
-      calls.push(url as string);
+      calls.push(url);
       return Promise.resolve(mockUndiciResponse(200, ''));
     });
     const svc = new CommandService(config, new Logger());
@@ -57,7 +60,7 @@ describe('CommandService', () => {
   });
 
   it('returns -1 after three failures', async () => {
-    vi.mocked(undiciRequest).mockImplementation(() => Promise.resolve(mockUndiciResponse(500, '')));
+    vi.mocked(httpRequest).mockImplementation(() => Promise.resolve(mockUndiciResponse(500, '')));
     const svc = new CommandService(config, new Logger());
     expect(await svc.setChlorineDosage(10)).toBe(-1);
   });

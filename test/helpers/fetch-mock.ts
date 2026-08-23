@@ -1,5 +1,5 @@
 import { vi, type MockInstance } from 'vitest';
-import { request as undiciRequest } from 'undici';
+import { httpRequest, type HttpResponse } from '../../src/http-transport';
 
 export interface MockResponse {
   status?: number;
@@ -9,53 +9,51 @@ export interface MockResponse {
 }
 
 /**
- * The value `undici.request()` resolves to (`Dispatcher.ResponseData`). Used to
- * type the mock implementations so `AbstractService.request()` — which consumes
- * `res.statusCode` and `res.body.{text,dump}()` — is driven with a faithful shape.
+ * The value {@link httpRequest} resolves to. `AbstractService.request()` consumes
+ * `res.statusCode` and `res.text`, so the mocks are driven with that shape.
  */
-export type UndiciResponse = Awaited<ReturnType<typeof undiciRequest>>;
-
-type UndiciSpy = MockInstance<typeof undiciRequest>;
+export type MockedResponse = HttpResponse;
 
 /**
- * Build an object shaped like undici's response with just enough of `body`
- * implemented for the code under test to consume it. Cast because we only
- * populate the fields `AbstractService.request()` actually touches.
+ * Historical alias — the transport used to be `undici`; the tests still refer to
+ * the resolved value by this name. Kept to avoid churn across the service tests.
+ * @deprecated Use {@link MockedResponse}.
  */
-export function mockUndiciResponse(status: number, body = ''): UndiciResponse {
-  return {
-    statusCode: status,
-    headers: {},
-    body: {
-      text: (): Promise<string> => Promise.resolve(body),
-      json: (): Promise<unknown> => Promise.resolve(JSON.parse(body) as unknown),
-      arrayBuffer: (): Promise<ArrayBufferLike> => Promise.resolve(new TextEncoder().encode(body).buffer),
-      dump: (): Promise<undefined> => Promise.resolve(undefined),
-    },
-  } as unknown as UndiciResponse;
+export type UndiciResponse = HttpResponse;
+
+type HttpSpy = MockInstance<typeof httpRequest>;
+
+/** Build the object {@link httpRequest} resolves to for the code under test. */
+export function mockHttpResponse(status: number, text = ''): HttpResponse {
+  return { statusCode: status, text };
 }
 
 /**
+ * Historical alias of {@link mockHttpResponse}.
+ * @deprecated Use {@link mockHttpResponse}.
+ */
+export const mockUndiciResponse = mockHttpResponse;
+
+/**
  * Queue a single successful (or arbitrary-status) response on the mocked
- * `undici.request`. Returns the mock instance so callers can inspect
+ * `httpRequest`. Returns the mock instance so callers can inspect
  * `mock.calls[i]` = `[url, opts]` where `opts` = `{ method, headers, body, signal }`.
  */
-export function mockFetchOnce(res: MockResponse): UndiciSpy {
-  const spy = vi.mocked(undiciRequest);
-  spy.mockImplementationOnce(async (): Promise<UndiciResponse> => {
+export function mockFetchOnce(res: MockResponse): HttpSpy {
+  const spy = vi.mocked(httpRequest);
+  spy.mockImplementationOnce(async (): Promise<HttpResponse> => {
     if (res.delayMs) await new Promise((r) => setTimeout(r, res.delayMs));
-    return mockUndiciResponse(res.status ?? 200, res.body ?? '');
+    return mockHttpResponse(res.status ?? 200, res.body ?? '');
   });
   return spy;
 }
 
 /**
- * Queue a single network-layer failure. undici surfaces transport errors as a
- * plain `Error` (unlike WHATWG `fetch`, which throws `TypeError`), so that is
- * what we throw here; `AbstractService.request()` re-throws it unchanged.
+ * Queue a single network-layer failure. The transport surfaces such errors as a
+ * plain `Error`; `AbstractService.request()` re-throws it unchanged.
  */
-export function mockFetchNetworkError(message = 'network'): UndiciSpy {
-  const spy = vi.mocked(undiciRequest);
+export function mockFetchNetworkError(message = 'network'): HttpSpy {
+  const spy = vi.mocked(httpRequest);
   spy.mockImplementationOnce((): never => {
     throw new Error(message);
   });
@@ -67,14 +65,13 @@ export function mockFetchNetworkError(message = 'network'): UndiciSpy {
  * immediately (with an `AbortError`) if the request's `signal` fires first.
  * Lets a test drive the timeout / abort paths of `AbstractService.request()`.
  */
-export function mockFetchAbortable(delayMs: number): UndiciSpy {
-  const spy = vi.mocked(undiciRequest);
+export function mockFetchAbortable(delayMs: number): HttpSpy {
+  const spy = vi.mocked(httpRequest);
   spy.mockImplementationOnce(
     (_url, opts) =>
-      new Promise<UndiciResponse>((resolve, reject) => {
-        const t = setTimeout(() => resolve(mockUndiciResponse(200, 'late')), delayMs);
-        const signal = opts?.signal as AbortSignal | undefined;
-        signal?.addEventListener('abort', () => {
+      new Promise<HttpResponse>((resolve, reject) => {
+        const t = setTimeout(() => resolve(mockHttpResponse(200, 'late')), delayMs);
+        opts.signal?.addEventListener('abort', () => {
           clearTimeout(t);
           const err = new Error('aborted');
           err.name = 'AbortError';

@@ -1,13 +1,16 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { request as undiciRequest } from 'undici';
+import { httpRequest } from '../src/http-transport';
 import { AbstractService, type IServiceConfig, type RequestOptions } from '../src/abstract-service';
 import { Logger } from '../src/logger';
 import { BadCredentialsError, ProconIpError, RequestTimeoutError } from '../src/errors';
 import { mockFetchOnce, mockFetchNetworkError, mockFetchAbortable, type UndiciResponse } from './helpers/fetch-mock';
 
-// AbstractService.request() now uses undici.request() (not global fetch), so we
-// mock undici's `request` export while keeping its other exports intact.
-vi.mock('undici', async (orig) => ({ ...(await orig<typeof import('undici')>()), request: vi.fn() }));
+// AbstractService.request() delegates to httpRequest() (node:http); mock that
+// module's export while keeping its other exports intact.
+vi.mock('../src/http-transport', async (orig) => ({
+  ...(await orig<typeof import('../src/http-transport')>()),
+  httpRequest: vi.fn(),
+}));
 
 class TestService extends AbstractService {
   _endpoint = '/test';
@@ -23,7 +26,7 @@ const baseConfig: IServiceConfig = {
   timeout: 1000,
 };
 
-afterEach(() => vi.resetAllMocks()); // resets the persistent undici vi.fn() (call history + impls) between tests
+afterEach(() => vi.resetAllMocks()); // resets the persistent httpRequest vi.fn() (call history + impls) between tests
 
 describe('AbstractService', () => {
   it('joins base url and endpoint correctly', () => {
@@ -147,10 +150,10 @@ describe('AbstractService', () => {
 
   it('honours an external AbortSignal and re-throws the original AbortError', async () => {
     // A long-running mock that the test will abort externally.
-    vi.mocked(undiciRequest).mockImplementationOnce(
+    vi.mocked(httpRequest).mockImplementationOnce(
       (_url, opts) =>
         new Promise<UndiciResponse>((_resolve, reject) => {
-          const signal = opts?.signal as AbortSignal | undefined;
+          const signal = opts?.signal;
           signal?.addEventListener('abort', () => {
             const err = new Error('aborted');
             err.name = 'AbortError';

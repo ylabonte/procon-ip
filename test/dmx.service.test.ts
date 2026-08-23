@@ -7,14 +7,17 @@ import { GetDmxData } from '../src/get-dmx-data';
 import { Logger } from '../src/logger';
 import { mockFetchOnce } from './helpers/fetch-mock';
 
-// AbstractService.request() uses undici.request(); mock that export.
-vi.mock('undici', async (orig) => ({ ...(await orig<typeof import('undici')>()), request: vi.fn() }));
+// AbstractService.request() uses httpRequest() (node:http); mock that export.
+vi.mock('../src/http-transport', async (orig) => ({
+  ...(await orig<typeof import('../src/http-transport')>()),
+  httpRequest: vi.fn(),
+}));
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixture = readFileSync(resolve(__dirname, 'fixtures/get-dmx.csv'), 'utf8');
 const config = { controllerUrl: 'http://example.local', basicAuth: false, timeout: 1000 };
 
-afterEach(() => vi.resetAllMocks()); // resets the persistent undici vi.fn() (call history + impls) between tests
+afterEach(() => vi.resetAllMocks()); // resets the persistent httpRequest vi.fn() (call history + impls) between tests
 
 describe('DmxService', () => {
   it('POSTs form-encoded DMX state to /usrcfg.cgi', async () => {
