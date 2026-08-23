@@ -41,6 +41,9 @@ class WireService extends AbstractService {
 interface Received {
   method?: string;
   headers: http.IncomingHttpHeaders;
+  // Original on-the-wire header names/values (node lowercases `headers`), needed
+  // to assert case-sensitive header names such as `Authorization`.
+  rawHeaders: string[];
   body: string;
 }
 
@@ -59,6 +62,7 @@ beforeAll(async () => {
       received.push({
         method: req.method,
         headers: req.headers,
+        rawHeaders: req.rawHeaders,
         body: Buffer.concat(chunks).toString('utf8'),
       });
       const respond = (): void => {
@@ -131,6 +135,14 @@ describe('AbstractService real-wire request (undici, no mocks)', () => {
     expect(received).toHaveLength(1);
     const got = received[0]!;
     expect(got.headers['authorization']).toBe('Basic ' + Buffer.from('pooluser:s3cr3t').toString('base64'));
+
+    // The header NAME must reach the wire capitalised as `Authorization`. The
+    // controller's legacy firmware is case-sensitive and 401s a write carrying a
+    // lowercase `authorization` (which WHATWG `Headers` would produce). node
+    // lowercases `req.headers`, so assert against the raw wire names.
+    expect(got.rawHeaders).toContain('Authorization');
+    expect(got.rawHeaders).not.toContain('authorization');
+
     // Even with auth on, the browser headers stay absent.
     expect(got.headers['sec-fetch-mode']).toBeUndefined();
     expect(got.headers['accept-language']).toBeUndefined();
