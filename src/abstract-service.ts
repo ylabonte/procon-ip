@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { request as undiciRequest } from 'undici';
+import { httpRequest } from './http-transport';
 import { BadCredentialsError, BadStatusCodeError, ProconIpError, RequestTimeoutError } from './errors';
 import type { ILogger } from './logger';
 
@@ -30,9 +30,8 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 
 /**
  * Options for {@link AbstractService.request}. Deliberately narrower than
  * `RequestInit`: only a string `body`, `headers` and `signal` are honoured
- * (a non-string body such as `URLSearchParams` would fail inside
- * `undici.request()` — and, for these legacy endpoints, must never be
- * percent-encoded anyway), plus the raw `params` query-string shortcut.
+ * (for these legacy endpoints a body must never be percent-encoded), plus the
+ * raw `params` query-string shortcut.
  */
 export interface RequestOptions {
   body?: string;
@@ -105,9 +104,10 @@ export abstract class AbstractService {
    * a timeout.
    *
    * Only `body`, `headers`, and `signal` from `init` are honoured — the
-   * request is issued via `undici.request()` (not the global `fetch()`, which
-   * would inject browser headers the controller mishandles). Caller `headers`
-   * are merged on top of the service's `_requestHeaders`.
+   * request is issued via Node's built-in http/https ({@link httpRequest}), not
+   * the global `fetch()` or `undici`, both of which mangle header-name casing
+   * the controller's firmware depends on. Caller `headers` are merged on top of
+   * the service's `_requestHeaders`.
    *
    * @param init Optional `fetch` init plus a `params` shortcut. `params`,
    *   if provided, is serialised as `key=value&key=value` and appended to
@@ -123,12 +123,11 @@ export abstract class AbstractService {
   protected async request(init: RequestOptions = {}): Promise<Response> {
     const { params, ...restInit } = init;
     // Assemble the outgoing headers as a plain object so their exact name casing
-    // reaches the wire. WHATWG `Headers` lowercases every header name, but the
-    // controller's legacy firmware is case-sensitive on `Authorization`: it 401s
-    // a write carrying `authorization` and only honours `Authorization`. Routing
-    // request headers through `Headers` (as this once did) therefore broke every
-    // authenticated write, while unauthenticated reads still worked. undici
-    // preserves the casing of a plain-object header map, so we build one by hand.
+    // reaches the wire. The controller's legacy firmware is case-sensitive on
+    // header names: it 401s a write carrying `authorization` (only `Authorization`
+    // is honoured) and ignores the body of a write carrying `content-length`
+    // (only `Content-Length` is honoured). {@link httpRequest} preserves the
+    // casing of this plain-object map, so we build it by hand.
     const headers: Record<string, string> = { ...this._requestHeaders };
     if (restInit.headers) {
       for (const [name, value] of toHeaderEntries(restInit.headers)) {
@@ -171,18 +170,12 @@ export abstract class AbstractService {
     }
 
     try {
-      // NOTE: we intentionally use undici.request(), NOT the global fetch().
-      // The WHATWG fetch() implementation injects browser-only request headers
-      // (`sec-fetch-mode`, `accept-language`, `accept`, `user-agent`) that the
-      // controller's legacy firmware mishandles: it answers a relay/DMX write
-      // with "200 done" but silently ignores it (reads over fetch work fine).
-      // Those headers are on the fetch "forbidden header" list and cannot be
-      // stripped via the API, so we bypass fetch entirely. undici.request()
-      // sends only the headers assembled above (plus the standard host /
-      // content-length / connection every HTTP client adds — note `connection:
-      // keep-alive` is NOT a culprit here; undici sends it too). See the
-      // regression test in `test/abstract-service.wire.test.ts`.
-      const res = await undiciRequest(url, {
+      // Issue the request via Node's built-in http/https (see ./http-transport).
+      // The controller's legacy firmware is case-sensitive on header names, which
+      // both the global fetch() and undici break by lowercasing the header names
+      // they generate (a lowercase `content-length` makes the firmware drop the
+      // body and silently no-op the write while still answering 200 "done").
+      const res = await httpRequest(url, {
         method: this._method,
         headers,
         body: restInit.body,
@@ -190,28 +183,23 @@ export abstract class AbstractService {
       });
       const status = res.statusCode;
       if (status === 401 || status === 403) {
-        await res.body.dump();
         throw new BadCredentialsError(`Authentication failed (HTTP ${status})`);
       }
       if (status < 200 || status >= 300) {
-        await res.body.dump();
         throw new BadStatusCodeError(`Request failed: HTTP ${status}`, status, String(status));
       }
       // 204/205 are "null body status" codes: `new Response()` rejects a
-      // non-null body for them, so a successful 204 would otherwise crash with
-      // an opaque TypeError. Drain the (empty) stream and return a null body.
+      // non-null body for them, so return an explicit null body.
       if (status === 204 || status === 205) {
-        await res.body.dump();
         return new Response(null, { status });
       }
-      // Read the body eagerly (consuming the undici stream) and re-wrap it in a
-      // standard `Response` so the return contract is unchanged for callers.
-      const text = await res.body.text();
-      return new Response(text, { status });
+      // Re-wrap the already-read body in a standard `Response` so the return
+      // contract is unchanged for callers.
+      return new Response(res.text, { status });
     } catch (e: unknown) {
       const name = e instanceof Error ? e.name : '';
       const code = (e as { code?: string } | null)?.code;
-      if (name === 'AbortError' || code === 'UND_ERR_ABORTED') {
+      if (name === 'AbortError' || code === 'ABORT_ERR') {
         // Caller-driven abort: re-throw the original error so consumers can
         // distinguish it from our timeout.
         if (externalSignal?.aborted) throw e;

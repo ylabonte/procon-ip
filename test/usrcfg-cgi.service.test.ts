@@ -2,7 +2,7 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { request as undiciRequest } from 'undici';
+import { httpRequest } from '../src/http-transport';
 import { UsrcfgCgiService } from '../src/usrcfg-cgi.service';
 import { GetStateService, type IGetStateServiceConfig } from '../src/get-state.service';
 import { RelayDataInterpreter } from '../src/relay-data-interpreter';
@@ -10,8 +10,11 @@ import { GetStateCategory } from '../src/get-state-data';
 import { Logger } from '../src/logger';
 import { mockFetchOnce, mockUndiciResponse } from './helpers/fetch-mock';
 
-// AbstractService.request() uses undici.request(); mock that export.
-vi.mock('undici', async (orig) => ({ ...(await orig<typeof import('undici')>()), request: vi.fn() }));
+// AbstractService.request() uses httpRequest() (node:http); mock that export.
+vi.mock('../src/http-transport', async (orig) => ({
+  ...(await orig<typeof import('../src/http-transport')>()),
+  httpRequest: vi.fn(),
+}));
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixture = readFileSync(resolve(__dirname, 'fixtures/get-state.csv'), 'utf8');
@@ -23,7 +26,7 @@ const config: IGetStateServiceConfig = {
   errorTolerance: 2,
 };
 
-afterEach(() => vi.resetAllMocks()); // resets the persistent undici vi.fn() (call history + impls) between tests
+afterEach(() => vi.resetAllMocks()); // resets the persistent httpRequest vi.fn() (call history + impls) between tests
 
 async function buildService() {
   mockFetchOnce({ body: fixture });
@@ -38,9 +41,9 @@ describe('UsrcfgCgiService', () => {
   it('POSTs ENA=<on>,<auto>&MANUAL=1 form-encoded body to /usrcfg.cgi', async () => {
     const { svc, getStateService } = await buildService();
     // Each set* call fires TWO requests: the POST + a subsequent GetState refresh.
-    const spy = vi.mocked(undiciRequest);
+    const spy = vi.mocked(httpRequest);
     spy.mockImplementation((url) => {
-      const u = url as string;
+      const u = url;
       const body = u.includes('/usrcfg.cgi') ? '' : fixture;
       return Promise.resolve(mockUndiciResponse(200, body));
     });
@@ -70,8 +73,8 @@ describe('UsrcfgCgiService', () => {
     // immediately after the /usrcfg.cgi POST.
     const { svc, getStateService } = await buildService();
     const calls: string[] = [];
-    vi.mocked(undiciRequest).mockImplementation((url) => {
-      const u = url as string;
+    vi.mocked(httpRequest).mockImplementation((url) => {
+      const u = url;
       calls.push(u);
       const body = u.includes('/usrcfg.cgi') ? '' : fixture;
       return Promise.resolve(mockUndiciResponse(200, body));
@@ -86,8 +89,8 @@ describe('UsrcfgCgiService', () => {
 
   it('setOn / setOff / setAuto all reach the endpoint', async () => {
     const { svc, getStateService } = await buildService();
-    vi.mocked(undiciRequest).mockImplementation((url) => {
-      const u = url as string;
+    vi.mocked(httpRequest).mockImplementation((url) => {
+      const u = url;
       const body = u.includes('/usrcfg.cgi') ? '' : fixture;
       return Promise.resolve(mockUndiciResponse(200, body));
     });

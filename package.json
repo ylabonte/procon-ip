@@ -75,7 +75,5 @@
     "typescript-eslint": "^8.67.0",
     "vitest": "~4.1.11"
   },
-  "dependencies": {
-    "undici": "^8.10.0"
-  }
+  "dependencies": {}
 }

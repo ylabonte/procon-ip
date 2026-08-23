@@ -1,26 +1,23 @@
-// REAL-WIRE regression test — intentionally does NOT mock undici.
+// REAL-WIRE regression test — intentionally does NOT mock the transport. It
+// drives the real `node:http` path (see src/http-transport.ts) against a local
+// server and asserts the exact bytes on the wire.
 //
-// This guards against the two concrete bugs that silently broke relay/DMX
-// writes on the ProCon.IP controller's legacy firmware:
+// Guards the concrete bugs that silently broke relay/DMX writes on the
+// ProCon.IP's case-sensitive legacy firmware:
 //
-//   1. Browser-only request headers. When AbstractService.request() used the
-//      WHATWG `fetch()`, Node injected `sec-fetch-mode`, `accept`,
-//      `accept-language`, `user-agent`, `content-type`, etc. onto the wire.
-//      The firmware answered such writes with "200 done" but silently ignored
-//      them. Switching to `undici.request()` sends ONLY the headers we set.
-//      This test drives the *real* undici path against a local node:http
-//      server and asserts those fetch-injected headers are absent — so it goes
-//      red the moment anyone switches `request()` back to `fetch()`.
+//   1. Header-name casing. The firmware only honours `Authorization` and
+//      `Content-Length` capitalised. WHATWG `fetch()` and `undici` both
+//      lowercase the header names they generate (and `fetch()` additionally
+//      injects browser-only headers), so writes were dropped with a bogus
+//      "200 done". `node:http` preserves our casing. This test asserts
+//      `Authorization` and `Content-Length` reach the wire capitalised (via
+//      `req.rawHeaders`, since node lowercases `req.headers`) and that no
+//      browser-only headers appear.
 //
 //   2. Comma encoding. The controller needs a LITERAL comma in bodies like
 //      `ENA=7,2&MANUAL=1`; a percent-encoded `%2C` makes the firmware reset
 //      the connection. This test asserts the received body is byte-for-byte
 //      `ENA=7,2&MANUAL=1`.
-//
-// NOTE on `connection: keep-alive`: undici sends that header too (verified
-// against a real socket), so it is NOT a fetch-vs-undici discriminator and is
-// deliberately not asserted here. The `sec-fetch-*` / `accept-language` /
-// `accept` / `user-agent` headers below ARE fetch-only and do the guarding.
 
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import http from 'node:http';
@@ -91,7 +88,7 @@ beforeEach(() => {
   behavior = { status: 200, body: 'done', delayMs: 0 };
 });
 
-describe('AbstractService real-wire request (undici, no mocks)', () => {
+describe('AbstractService real-wire request (node:http, no mocks)', () => {
   it('POSTs a clean request: no browser-injected headers, literal comma preserved', async () => {
     const config: IServiceConfig = { controllerUrl: baseUrl, basicAuth: false, timeout: 5000 };
     const svc = new WireService(config, new Logger());
@@ -109,9 +106,16 @@ describe('AbstractService real-wire request (undici, no mocks)', () => {
     expect(got.body).toBe('ENA=7,2&MANUAL=1');
     expect(got.body).not.toContain('%2C');
 
-    // (2) The headers that WHATWG fetch() injects and undici does NOT must be
-    //     absent. If someone reverts request() to fetch(), these reappear and
-    //     this test fails.
+    // (2) `Content-Length` must reach the wire CAPITALISED. The firmware ignores
+    //     the body of a write carrying a lowercase `content-length` (which undici
+    //     emits) — dropping the write while still answering 200. node lowercases
+    //     `req.headers`, so assert against the raw wire names.
+    expect(got.rawHeaders).toContain('Content-Length');
+    expect(got.rawHeaders).not.toContain('content-length');
+
+    // (3) The browser-only headers that WHATWG fetch() injects must be absent.
+    //     If someone routes request() through fetch(), these reappear and this
+    //     test fails.
     expect(got.headers['sec-fetch-mode']).toBeUndefined();
     expect(got.headers['sec-fetch-dest']).toBeUndefined();
     expect(got.headers['sec-fetch-site']).toBeUndefined();

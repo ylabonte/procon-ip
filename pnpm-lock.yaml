@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      undici:
-        specifier: ^8.10.0
-        version: 8.10.0
     devDependencies:
       '@changesets/cli':
         specifier: ^3
@@ -1443,10 +1439,6 @@ packages:
   undici-types@8.3.0:
     resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
-  undici@8.10.0:
-    resolution: {integrity: sha512-HvltHd7avK13QIw/oLe4qoOLyoVSoafqJ2jYOrtMRBkbYT31eiBQ8O0ehRKZiEZCMEyLFQNIADpgCWC5fALvYQ==}
-    engines: {node: '>=22.19.0'}
-
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
@@ -2834,8 +2826,6 @@ snapshots:
   ufo@1.6.4: {}
 
   undici-types@8.3.0: {}
-
-  undici@8.10.0: {}
 
   uri-js@4.4.1:
     dependencies:
