@@ -104,10 +104,10 @@ export abstract class AbstractService {
    * a timeout.
    *
    * Only `body`, `headers`, and `signal` from `init` are honoured — the
-   * request is issued via Node's built-in http/https ({@link httpRequest}), not
-   * the global `fetch()` or `undici`, both of which mangle header-name casing
-   * the controller's firmware depends on. Caller `headers` are merged on top of
-   * the service's `_requestHeaders`.
+   * request is issued via Node's built-in http/https (`httpRequest`), not the
+   * global `fetch()` or `undici`, both of which mangle header-name casing the
+   * controller's firmware depends on. Caller `headers` are merged on top of the
+   * service's `_requestHeaders`.
    *
    * @param init Optional `fetch` init plus a `params` shortcut. `params`,
    *   if provided, is serialised as `key=value&key=value` and appended to
@@ -126,8 +126,8 @@ export abstract class AbstractService {
     // reaches the wire. The controller's legacy firmware is case-sensitive on
     // header names: it 401s a write carrying `authorization` (only `Authorization`
     // is honoured) and ignores the body of a write carrying `content-length`
-    // (only `Content-Length` is honoured). {@link httpRequest} preserves the
-    // casing of this plain-object map, so we build it by hand.
+    // (only `Content-Length` is honoured). `httpRequest` preserves the casing of
+    // this plain-object map, so we build it by hand.
     const headers: Record<string, string> = { ...this._requestHeaders };
     if (restInit.headers) {
       for (const [name, value] of toHeaderEntries(restInit.headers)) {

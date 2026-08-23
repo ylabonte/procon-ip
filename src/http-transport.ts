@@ -27,7 +27,7 @@
 import http from 'node:http';
 import https from 'node:https';
 
-/** Options for {@link httpRequest}. */
+/** Options for `httpRequest`. */
 export interface HttpRequestOptions {
   /** HTTP method (e.g. `"GET"` / `"POST"`). */
   method: string;
