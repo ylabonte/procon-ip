@@ -1,9 +1,9 @@
 # procon-ip
 
-[![NPM](https://nodei.co/npm/procon-ip.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/procon-ip/)
+[![NPM](https://nodei.co/npm/procon-ip.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/procon-ip)
 
 Package info  
-[![npm version](https://badge.fury.io/js/procon-ip.svg)](https://badge.fury.io/js/procon-ip)
+[![npm version](https://badge.fury.io/js/procon-ip.svg)](https://www.npmjs.com/package/procon-ip)
 [![GitHub](https://img.shields.io/github/license/ylabonte/procon-ip)](https://github.com/ylabonte/procon-ip/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues-raw/ylabonte/procon-ip)](https://github.com/ylabonte/procon-ip/issues)
 [![Known Vulnerabilities](https://snyk.io/test/github/ylabonte/procon-ip/badge.svg)](https://snyk.io/test/github/ylabonte/procon-ip)  
