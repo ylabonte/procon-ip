@@ -41,6 +41,22 @@ export interface RequestOptions {
   params?: Record<string, string | number>;
 }
 
+/**
+ * Normalise a {@link HeadersInit} into `[name, value]` pairs, preserving the
+ * caller's original name casing for the plain-object and tuple-array forms. A
+ * WHATWG `Headers` instance has already lowercased its names (unavoidable), but
+ * the service classes never pass one, so case-sensitive headers such as
+ * `Authorization` are unaffected in practice.
+ *
+ * @param init the headers to normalise.
+ * @returns the header entries as `[name, value]` tuples.
+ */
+function toHeaderEntries(init: HeadersInit): [string, string][] {
+  if (init instanceof Headers) return [...init.entries()];
+  if (Array.isArray(init)) return init.map((pair) => [pair[0], pair[1]] as [string, string]);
+  return Object.entries(init);
+}
+
 export abstract class AbstractService {
   protected _config: IServiceConfig;
   protected _requestHeaders: Record<string, string>;
@@ -106,11 +122,22 @@ export abstract class AbstractService {
    */
   protected async request(init: RequestOptions = {}): Promise<Response> {
     const { params, ...restInit } = init;
-    const headers = new Headers(this._requestHeaders);
-    if (restInit.headers) new Headers(restInit.headers).forEach((v, k) => headers.set(k, v));
+    // Assemble the outgoing headers as a plain object so their exact name casing
+    // reaches the wire. WHATWG `Headers` lowercases every header name, but the
+    // controller's legacy firmware is case-sensitive on `Authorization`: it 401s
+    // a write carrying `authorization` and only honours `Authorization`. Routing
+    // request headers through `Headers` (as this once did) therefore broke every
+    // authenticated write, while unauthenticated reads still worked. undici
+    // preserves the casing of a plain-object header map, so we build one by hand.
+    const headers: Record<string, string> = { ...this._requestHeaders };
+    if (restInit.headers) {
+      for (const [name, value] of toHeaderEntries(restInit.headers)) {
+        headers[name] = value;
+      }
+    }
     if (this._config.basicAuth) {
       const creds = `${this._config.username ?? ''}:${this._config.password ?? ''}`;
-      headers.set('Authorization', `Basic ${Buffer.from(creds).toString('base64')}`);
+      headers['Authorization'] = `Basic ${Buffer.from(creds).toString('base64')}`;
     }
 
     const controller = new AbortController();

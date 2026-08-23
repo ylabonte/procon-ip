@@ -99,13 +99,17 @@ describe('AbstractService', () => {
     await expect(pending).rejects.not.toBeInstanceOf(ProconIpError);
   });
 
-  it('attaches Authorization header when basicAuth enabled', async () => {
+  it('attaches a capitalised Authorization header when basicAuth enabled', async () => {
     const spy = mockFetchOnce({ status: 200 });
     const svc = new TestService({ ...baseConfig, basicAuth: true, username: 'u', password: 'p' }, new Logger());
     await svc.run();
-    // request() passes a WHATWG `Headers` instance as undici's `headers` option.
-    const headers = spy.mock.calls[0]?.[1]?.headers as unknown as Headers;
-    expect(headers.get('authorization')).toBe('Basic ' + Buffer.from('u:p').toString('base64'));
+    // request() passes a PLAIN OBJECT as undici's `headers` so header-name case
+    // is preserved on the wire — the controller is case-sensitive on the
+    // `Authorization` name and 401s a lowercase `authorization`.
+    const headers = spy.mock.calls[0]?.[1]?.headers as Record<string, string>;
+    expect(headers['Authorization']).toBe('Basic ' + Buffer.from('u:p').toString('base64'));
+    expect(Object.keys(headers)).toContain('Authorization');
+    expect(Object.keys(headers)).not.toContain('authorization');
   });
 
   it('appends params raw (no URL encoding) so literal commas survive', async () => {
