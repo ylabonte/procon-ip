@@ -64,16 +64,16 @@
     "@changesets/cli": "^3",
     "@eslint/js": "^10",
     "@types/node": "^26",
-    "@vitest/coverage-v8": "~4.1.11",
-    "eslint": "^10.9.0",
+    "@vitest/coverage-v8": "~5.0.1",
+    "eslint": "^10.10.0",
     "eslint-config-prettier": "^10",
     "eslint-plugin-prettier": "^5.5.6",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.8",
     "tsup": "^8",
     "typedoc": "~0.28.20",
-    "typescript": "~6.0",
-    "typescript-eslint": "^8.67.0",
-    "vitest": "~4.1.11"
+    "typescript": "~7.0",
+    "typescript-eslint": "^8.70.0",
+    "vitest": "~5.0.1"
   },
   "dependencies": {}
 }
