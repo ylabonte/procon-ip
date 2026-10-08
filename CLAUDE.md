@@ -36,7 +36,7 @@ pnpm release            # build + changeset publish (used by release.yml only �
 
 The package ships **dual ESM + CJS in one tarball** via tsdown (Rolldown-based successor of tsup):
 
-- `package.json` `exports`: `import` → `./dist/index.mjs` (ESM), `require` → `./dist/index.cjs` (CJS), `types` → `./dist/index.d.ts`.
+- `package.json` `exports`: `import` → `{ types: ./dist/index.d.ts, default: ./dist/index.mjs }`, `require` → `{ types: ./dist/index.d.cts, default: ./dist/index.cjs }`. Keep `types` **per condition** — a single top-level `types` makes CJS consumers on `node16`/`nodenext` resolution see the ESM declarations (TS1471, attw "Masquerading as ESM"). Verify with `npx -p @arethetypeswrong/cli attw --pack .`.
 - `main` points at `./dist/index.cjs`, `module` at `./dist/index.mjs`, `types` at `./dist/index.d.ts`.
 - `files` ships `dist/`, `README.md`, `CHANGELOG.md`, `LICENSE`.
 - Single `tsconfig.json` with `target: ES2022`, `module: ESNext`, `moduleResolution: Bundler`, `strict: true`, `noUncheckedIndexedAccess: true`, `isolatedModules: true`. tsdown handles both module emissions from this one source of truth.
