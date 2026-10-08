@@ -90,7 +90,7 @@ Every change ships with a **changeset** (`pnpm changeset` to add one) describing
 
 `.github/workflows/`:
 
-- `ci.yml` — pnpm install + format:check + lint + typecheck + build + coverage + docs:check on Node 22 and 24, on push/PR to `master`/`develop`/`feature/*`. Uploads `coverage/` artifact from the Node 24 job.
+- `ci.yml` — pnpm install + format:check + lint + typecheck + build + coverage + docs:check on Node 22, 24 and 26 (26 is the default for all single-version jobs, incl. `docs.yml` / `release.yml`), on push/PR to `master`/`develop`/`feature/*`. Uploads `coverage/` artifact from the Node 26 job.
 - `docs.yml` — on push to `master` and on release: builds TypeDoc with strict validation, uploads as Pages artifact, deploys to GitHub Pages from Actions (Pages source = "GitHub Actions").
 - `release.yml` — on push to `master`, runs inside the **`release` GitHub environment** (deployment-branch policy restricts to `master`). Uses `changesets/action@v1` to either open a "Version Packages" PR or publish via `npm publish --provenance --access public`. **Publishes via npm Trusted Publishing (OIDC)**: `permissions: id-token: write` + `NPM_CONFIG_PROVENANCE: "true"`. No long-lived `NPM_TOKEN`.
 - `codeql.yml` — JS/TS CodeQL on master + weekly schedule.
@@ -112,6 +112,7 @@ When implementing work in this repo, Claude must:
 
 ## Repo-specific gotchas
 
+- **TypeScript 7 split toolchain.** `typescript@7` (native Go compiler) drives `tsc` / `pnpm typecheck`, but it no longer ships the JS compiler API. `.pnpmfile.cjs` rewires the API consumers (typescript-eslint, typedoc, tsup's dts step) to `@typescript/typescript6` via a `readPackage` hook — pnpm `overrides` / `packageExtensions` do **not** work here because those tools declare `typescript` as a peer. Remove a package from the hook's list once its `typescript` peer range admits 7.
 - `examples/` is a separate ESM sandbox project (`type: module`, depends on `procon-ip ^2.0.0`). It has its own `node_modules` (not committed); no `package-lock.json` is tracked. Don't run library scripts from inside it.
 - `dist/`, `site/`, `coverage/` are gitignored build outputs. `lib/` and `module/` are gone (legacy v1 outputs).
 - Test fixtures live in `test/fixtures/*.csv`. Don't inline CSV strings into test files.
