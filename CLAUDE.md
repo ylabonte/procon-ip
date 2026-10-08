@@ -14,7 +14,7 @@ Package manager is **pnpm 9** — pinned via `packageManager` in `package.json`.
 
 ```bash
 pnpm install            # install
-pnpm build              # tsup -> dist/index.{mjs,cjs,d.ts,d.cts} + sourcemaps
+pnpm build              # tsdown -> dist/index.{mjs,cjs,d.ts,d.cts} + sourcemaps
 pnpm lint               # ESLint over src/ + test/
 pnpm lint:fix           # ESLint --fix
 pnpm format             # Prettier write over src/**/*.ts + test/**/*.ts
@@ -34,13 +34,13 @@ pnpm release            # build + changeset publish (used by release.yml only �
 
 ## Build / packaging model
 
-The package ships **dual ESM + CJS in one tarball** via tsup:
+The package ships **dual ESM + CJS in one tarball** via tsdown (Rolldown-based successor of tsup):
 
 - `package.json` `exports`: `import` → `./dist/index.mjs` (ESM), `require` → `./dist/index.cjs` (CJS), `types` → `./dist/index.d.ts`.
 - `main` points at `./dist/index.cjs`, `module` at `./dist/index.mjs`, `types` at `./dist/index.d.ts`.
 - `files` ships `dist/`, `README.md`, `CHANGELOG.md`, `LICENSE`.
-- Single `tsconfig.json` with `target: ES2022`, `module: ESNext`, `moduleResolution: Bundler`, `strict: true`, `noUncheckedIndexedAccess: true`, `isolatedModules: true`. tsup handles both module emissions from this one source of truth.
-- `tsup.config.ts` defines the build (entry, formats, dts, sourcemaps, target node22).
+- Single `tsconfig.json` with `target: ES2022`, `module: ESNext`, `moduleResolution: Bundler`, `strict: true`, `noUncheckedIndexedAccess: true`, `isolatedModules: true`. tsdown handles both module emissions from this one source of truth.
+- `tsdown.config.ts` defines the build (entry, formats, dts, sourcemaps, target node22). `outExtensions` pins the file names to what `package.json` `exports` expects, and a `build:done` hook strips the dangling `sourceMappingURL` comment rolldown-plugin-dts leaves in the `.d.ts`/`.d.cts`. Declarations are emitted by the TS 7 binary (tsdown warns that the TS 7 API is experimental — expected).
 
 `docs/` holds only the docs front-page source (`docs/index.md`); TypeDoc output goes to `site/` (gitignored) and is uploaded to GitHub Pages by `docs.yml`. **Don't commit `docs/assets/`, `docs/classes/`, etc.** — those were the old hand-regenerated subtree.
 
@@ -112,7 +112,7 @@ When implementing work in this repo, Claude must:
 
 ## Repo-specific gotchas
 
-- **TypeScript 7 split toolchain.** `typescript@7` (native Go compiler) drives `tsc` / `pnpm typecheck`, but it no longer ships the JS compiler API. `.pnpmfile.cjs` rewires the API consumers (typescript-eslint, typedoc, tsup's dts step) to `@typescript/typescript6` via a `readPackage` hook — pnpm `overrides` / `packageExtensions` do **not** work here because those tools declare `typescript` as a peer. Remove a package from the hook's list once its `typescript` peer range admits 7.
+- **TypeScript 7 split toolchain.** `typescript@7` (native Go compiler) drives `tsc` / `pnpm typecheck`, but it no longer ships the JS compiler API. `.pnpmfile.cjs` rewires the API consumers (typescript-eslint, typedoc) to `@typescript/typescript6` via a `readPackage` hook — pnpm `overrides` / `packageExtensions` do **not** work here because those tools declare `typescript` as a peer. Remove a package from the hook's list once its `typescript` peer range admits 7.
 - `examples/` is a separate ESM sandbox project (`type: module`, depends on `procon-ip ^2.0.0`). It has its own `node_modules` (not committed); no `package-lock.json` is tracked. Don't run library scripts from inside it.
 - `dist/`, `site/`, `coverage/` are gitignored build outputs. `lib/` and `module/` are gone (legacy v1 outputs).
 - Test fixtures live in `test/fixtures/*.csv`. Don't inline CSV strings into test files.

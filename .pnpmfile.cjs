@@ -1,5 +1,5 @@
 // TypeScript 7 (the native Go compiler) no longer ships the JS compiler API
-// that typescript-eslint, typedoc and tsup's dts bundler are built on.
+// that typescript-eslint and typedoc are built on.
 // `tsc` (typecheck) runs on TS 7; these tools get Microsoft's side-by-side
 // TS 6 API package instead. Drop a package from the list once it supports
 // TS 7 natively (watch its `typescript` peer range).
@@ -15,7 +15,6 @@ const NEEDS_TS6_API = new Set([
   '@typescript-eslint/utils',
   'ts-api-utils',
   'typedoc',
-  'tsup',
 ]);
 
 function readPackage(pkg) {
